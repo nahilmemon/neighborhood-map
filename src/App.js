@@ -14,15 +14,16 @@ class App extends Component {
     this.searchForVenuesRequestId = 'searchForVenues';
     /*
     FoursquareAPI.searchForVenues(this.searchForVenuesRequestId, {
-      near: 'Abu Dhabi,UAE',
-      query: 'parks',
-      limit: 10
+      near: 'asd',
+      query: 'fads',
+      limit: 'asd'
     }).then((response) => {
       console.log('Results: ');
       console.log(response.status);
       console.log(response.data.response);
     }).catch((error) => {
-      console.log('Error: ', error);
+      console.log('Error in completing: ', this.searchForVenuesRequestId);
+      console.log(error);
     });
     */
   }
