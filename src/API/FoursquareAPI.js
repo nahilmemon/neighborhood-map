@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const API = 'https://api.foursquare.com/v2';
 
 const CLIENT_ID = 'A54UP4TD2KHDSEXPGJPMOSQLD02AS2L0LWS1MKDYPLZWKTVW';
@@ -28,35 +30,35 @@ function determineURLEnding(parameters) {
 // endpoint refers to any of the API endpoints detailed in the Foursquare Places API
 // method can be 'GET' or 'POST'
 // parameters refers to an object detailing the specifics of the desired request
-function basicFetchTemplate(endpoint, method, parameters) {
+function basicFetchTemplate(requestId, endpoint, method, parameters) {
   const REQUEST_SETTINGS = {
     method: method,
-    headers: HEADERS
+    headers: HEADERS,
+    requestId: requestId
   }
   const URL_ENDING = determineURLEnding(parameters);
   const RESOURCE_TO_FETCH = `${API}${endpoint}?${API_KEYS}&${URL_ENDING}`;
-  return fetch(RESOURCE_TO_FETCH, REQUEST_SETTINGS)
-    .then(results => results.json())
+  return axios(RESOURCE_TO_FETCH, REQUEST_SETTINGS);
 }
 
 // Actual request specifics using the Foursquare API
 
 // Search for venues
-export function searchForVenues(parameters) {
-  return basicFetchTemplate('/venues/search', 'GET', parameters);
+export function searchForVenues(requestId, parameters) {
+  return basicFetchTemplate(requestId, '/venues/search', 'GET', parameters);
 }
 
 // Get details about a specific venue
-export function getVenueDetails(venueId) {
-  return basicFetchTemplate(`/venues/${venueId}`, 'GET');
+export function getVenueDetails(requestId, venueId) {
+  return basicFetchTemplate(requestId, `/venues/${venueId}`, 'GET');
 }
 
 // Get photos from a specific venue
-export function getVenuePhotos(venueId) {
-  return basicFetchTemplate(`/venues/${venueId}/photos`, 'GET');
+export function getVenuePhotos(requestId, venueId) {
+  return basicFetchTemplate(requestId, `/venues/${venueId}/photos`, 'GET');
 }
 
 // Get tips from a speicific venue
-export function getVenueTips(venueId) {
-  return basicFetchTemplate(`/venues/${venueId}/tips`, 'GET');
+export function getVenueTips(requestId, venueId) {
+  return basicFetchTemplate(requestId, `/venues/${venueId}/tips`, 'GET');
 }
