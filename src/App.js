@@ -3,6 +3,7 @@ import axios from 'axios';
 import axiosCancel from 'axios-cancel';
 import './App.css';
 import * as FoursquareAPI from './API/FoursquareAPI.js';
+import loadGoogleMapsAPI from './API/loadGoogleMapsAPI.js';
 
 class App extends Component {
   componentDidMount() {
@@ -11,8 +12,8 @@ class App extends Component {
       debug: false
     });
 
-    this.searchForVenuesRequestId = 'searchForVenues';
     /*
+    this.searchForVenuesRequestId = 'searchForVenues';
     FoursquareAPI.searchForVenues(this.searchForVenuesRequestId, {
       near: 'asd',
       query: 'fads',
@@ -26,6 +27,28 @@ class App extends Component {
       console.log(error);
     });
     */
+
+    // Load Google Maps API
+    let loadGoogleMapsAPIPromise = loadGoogleMapsAPI();
+
+    // After all the necessary data has been loaded,
+    // create and display the map
+    Promise.all([
+      loadGoogleMapsAPIPromise
+    ])
+    .then((promiseResults) => {
+      // Save the promises' results
+      this.google = promiseResults[0];
+      this.map = new this.google.maps.Map(document.getElementById('map'), {
+        center: {lat: 40.7413549, lng: -73.9980244},
+        zoom: 13,
+        // styles: mapStyles,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+          style: this.google.maps.MapTypeControlStyle.HORIZONTAL_BAR
+        }
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -37,7 +60,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="map" id="map">
       </div>
     );
   }
