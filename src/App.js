@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import axiosCancel from 'axios-cancel';
 import './App.css';
+import { mapStyles } from './mapStyles.js';
 import * as FoursquareAPI from './API/FoursquareAPI.js';
 import loadGoogleMapsAPI from './API/loadGoogleMapsAPI.js';
 
@@ -40,9 +41,9 @@ class App extends Component {
       // Save the promises' results
       this.google = promiseResults[0];
       this.map = new this.google.maps.Map(document.getElementById('map'), {
-        center: {lat: 40.7413549, lng: -73.9980244},
+        center: {lat: 24.5172938, lng: 54.370662},
         zoom: 13,
-        // styles: mapStyles,
+        styles: mapStyles,
         mapTypeControl: true,
         mapTypeControlOptions: {
           style: this.google.maps.MapTypeControlStyle.HORIZONTAL_BAR
