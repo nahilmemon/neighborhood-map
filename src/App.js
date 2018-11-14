@@ -3,6 +3,7 @@ import axios from 'axios';
 import axiosCancel from 'axios-cancel';
 import './App.css';
 import { mapStyles } from './mapStyles.js';
+import { localLocationsData } from './data/localLocationsData.js';
 import * as FoursquareAPI from './API/FoursquareAPI.js';
 import loadGoogleMapsAPI from './API/loadGoogleMapsAPI.js';
 
