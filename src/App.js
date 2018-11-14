@@ -1,14 +1,31 @@
-import React, { Component } from 'react';
+// React
+import React, { Component, Fragment } from 'react';
+// Packages
 import axios from 'axios';
 import axiosCancel from 'axios-cancel';
+// Styling
 import './App.css';
 import { mapStyles } from './mapStyles.js';
+// Local, initial data
 import { localLocationsData } from './data/localLocationsData.js';
+// API helpers
 import * as FoursquareAPI from './API/FoursquareAPI.js';
 import loadGoogleMapsAPI from './API/loadGoogleMapsAPI.js';
+// Other components
+import Header from './components/Header.js';
+import SideBar from './components/SideBar.js';
 
 class App extends Component {
+  state = {
+    locationsData: [],
+    visibleLocations: []
+  }
+
   componentDidMount() {
+    this.setState({
+      locationsData: localLocationsData
+    });
+
     // Add the cancel prototype method from axios-cancel onto axios
     axiosCancel(axios, {
       debug: false
