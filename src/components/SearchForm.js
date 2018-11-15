@@ -1,19 +1,14 @@
 import React, { Component } from 'react';
 
+import SearchByName from './SearchByName.js';
+
 class SearchForm extends Component {
   render() {
     return (
       <section>
         <h2 className="side-bar-heading">Filter Locations</h2>
         <form className="padding-inline-start">
-          <h3 className="side-bar-heading">Filter by Name</h3>
-          <input
-            className="filter-locations-by-name-input"
-            type="text"
-            placeholder="Filter locations by name:"
-            name="Filter locations by name:"
-            aria-label="Filter locations by name:"
-          ></input>
+          <SearchByName />
 
           <h3 className="side-bar-heading">Filter by Category</h3>
           <select
