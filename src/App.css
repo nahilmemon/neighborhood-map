@@ -345,6 +345,7 @@
     padding: var(--side-bar-padding-x);
     flex: 0 0 var(--side-bar-max-width);
     order: 2;
+    overflow: auto;
   }
 
   @media screen and (max-width: 600px) {

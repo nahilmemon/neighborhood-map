@@ -83,7 +83,9 @@ class App extends Component {
       <Fragment>
         <Header />
         <main>
-          <SideBar />
+          <SideBar
+            locationsData={this.state.locationsData}
+          />
           <section className="map-container">
             <map
               id="map"

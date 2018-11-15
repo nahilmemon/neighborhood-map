@@ -31,7 +31,9 @@ class SideBar extends Component {
           </form>
         </section>
 
-        <SearchResultsList />
+        <SearchResultsList
+          locationsData={this.props.locationsData}
+        />
       </aside>
     );
   }
