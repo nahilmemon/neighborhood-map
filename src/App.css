@@ -1,7 +1,600 @@
-.map {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
+/* ====================== CSS Variables ====================== */
+  :root {
+    /* ==== Layout ==== */
+    /* Header */
+    --header-padding-y: 1em;
+    --header-button-height: 50px;
+    --header-breakpoint: 400px;
+    --header-title-mobile-font-size: calc(1em*1.75);
+    --header-title-mobile-line-height: 1.25;
+
+    /* Side Bar */
+    --side-bar-max-width: 300px;
+    --side-bar-padding-x: 1em;
+
+    /* ==== Color Palette ==== */
+    --primary-color: #ef9a9a;
+    --primary-light-color: #ffcccb;
+    --primary-dark-color: #ba6b6c;
+    --secondary-color: #dedede;
+    --secondary-light-color: #fff;
+    --secondary-dark-color: #000;
+   --primary-color-overlay: rgba(239, 154, 154, 0.8);
+    --primary-light-color-overlay: rgba(255, 204, 203, 0.8);
+    --primary-dark-color-overlay: rgba(186, 107, 108, 0.8);
+    /*--primary-color: #cc8f80;
+    --primary-light-color: #ffc0af;
+    --primary-dark-color: #996154;
+    --primary-color-overlay: rgba(204, 143, 128, 0.8);
+    --primary-light-color-overlay: rgba(255, 192, 175, 0.8);
+    --primary-dark-color-overlay: rgba(153, 97, 84, 0.8);*/
+  }
+
+/* ====================== General ====================== */
+  /* Make everything a border-box*/
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  .root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    /*overflow: overlay;*/
+
+    display: flex;
+    flex-flow: column wrap;
+  }
+
+  body {
+    line-height: 1.5;
+  }
+
+  body,
+  .app {
+    background: white;
+  }
+
+  a {
+    color: var(--primary-color);
+    transition: all 0.25s ease-in-out;
+  }
+
+  @media (max-width: 767px) {
+    a {
+      padding: 2px;
+    }
+  }
+
+  a:visited {
+    color: var(--primary-dark-color);
+  }
+
+  a:hover,
+  a:focus {
+    outline: none;
+    box-shadow: 0px 0px 0px 2px var(--primary-dark-color-overlay);
+    transition: all 0.25s ease-in-out;
+  }
+
+/* ====================== Typography ====================== */
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size-adjust: 0.5;
+  }
+
+  body,
+  td,
+  th,
+  p,
+  ul,
+  li,
+  button,
+  input,
+  select,
+  option {
+    font: 1em/1.25 'Montserrat', sans-serif;
+    color: var(--secondary-dark-color);
+  }
+
+  body {
+    background-color: #fdfdfd;
+    margin: 0;
+    position: relative;
+  }
+
+  h1 {
+    font-size: 2em;
+    line-height: 1.25;
+  }
+
+  h2 {
+    font-size: 1.625em;
+    line-height: 1.15384615;
+  }
+
+  h3 {
+    font-size: 1.375em;
+    line-height: 1.13636364;
+  }
+
+  h4 {
+    font-size: 1.125em;
+    line-height: 1.11111111;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      font-size: 1em;
+      line-height: 1.375;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      line-height: 1.125;
+    }
+
+    h2 {
+      font-size: 2em;
+      line-height: 1.25;
+    }
+
+    h3 {
+      font-size: 1.5em;
+      line-height: 1.25;
+    }
+
+    h4 {
+      line-height: 1.22222222;
+    }
+  }
+
+  @media (min-width: 992px) {
+    h1 {
+      font-size: 3em;
+      line-height: 1.05;
+    }
+
+    h2 {
+      font-size: 2.25em;
+      line-height: 1.25;
+    }
+
+    h3 {
+      font-size: 1.75em;
+      line-height: 1.25;
+    }
+  }
+
+/* ====================== Basic Resets ====================== */
+  .unstyled-button {
+    background: none;
+    outline: none;
+    color: var(--secondary-dark-color);
+    border: none;
+    cursor: pointer;
+  }
+
+/* ====================== Skip Link ====================== */
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    background: var(--secondary-light-color);
+    color: var(--primary-color);
+    padding: 8px;
+    z-index: 100;
+  }
+
+  .skip-link:focus {
+    top: 0;
+    box-shadow: 0px 0px 0px 2px rgba(92, 107, 192, 1);
+    transition: all 0.25s ease-in-out;
+  }
+
+/* ====================== Header ====================== */
+  .header {
+    background: var(--primary-dark-color);
+    color: var(--secondary-light-color);
+    padding: var(--header-padding-y);
+    box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.5);;
+    z-index: 10000;
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+  }
+
+  .site-heading {
+    display: inline-block;
+    margin: auto;
+  }
+
+  @media (max-width: 400px /*var(--header-breakpoint)*/ ) {
+    .site-heading {
+      order: 2;
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 550px) {
+    .site-heading {
+      font-size: var(--header-title-mobile-font-size);
+      line-height: var(--header-title-mobile-line-height);
+    }
+  }
+
+  .header-button {
+    display: inline-block;
+    width: var(--header-button-height);
+    height: var(--header-button-height);
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 28px;
+    font-size: 0;
+    transition: all 0.25s ease-in-out;
+  }
+
+  .header-search-button {
+    background-image: url('./icons/filter.svg');
+  }
+
+  .header-about-button {
+    background: url('./icons/info.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 28px;
+  }
+
+  .header-button:hover,
+  .header-button:focus {
+    outline: none;
+    background: var(--secondary-light-color);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 28px;
+    box-shadow: 0 3px 6px rgba(38, 65, 143, 0.16), 0 3px 6px rgba(38, 65, 143, 0.23);
+    transition: all 0.25s ease-in-out;
+  }
+
+  .header-search-button:hover,
+  .header-search-button:focus {
+    background-image: url('./icons/filter-inverted.svg');
+  }
+
+  .header-about-button:hover,
+  .header-about-button:focus {
+    background-image: url('./icons/info-inverted.svg');
+  }
+
+/* ====================== Main ====================== */
+  main {
+    flex: 2;
+
+    background: green;
+
+    display: flex;
+    flex-flow: row wrap;
+    align-items: stretch;
+
+    height: calc(100vh - 2*var(--header-padding-y) - var(--header-button-height));
+  }
+
+  @media (max-width: 400px /*var(--header-breakpoint)*/ ) {
+    main {
+      height: calc(100vh - 2*var(--header-padding-y) - var(--header-button-height) - var(--header-title-mobile-font-size)*var(--header-title-mobile-line-height));
+    }
+  }
+
+/* ====================== Form Controls ====================== */
+  select,
+  input[type="text"],
+  .search-results-entry {
+    padding: 5px;
+    font-size: 1em;
+    border: 1px solid var(--secondary-dark-color);
+    margin-bottom: 0.5em;
+    width: 100%;
+    transition: all 0.25s ease-in-out;
+  }
+
+  select:hover,
+  select:focus,
+  input[type="text"]:hover,
+  input[type="text"]:focus,
+  .search-results-entry:hover,
+  .search-results-entry:focus {
+    outline: none;
+    border: 1px solid var(--primary-dark-color);
+    box-shadow: inset 0px 0px 0px 2px var(--primary-dark-color-overlay);
+    transition: all 0.25s ease-in-out;
+  }
+
+  @media (max-width: 768px) {
+    select,
+    input[type="text"] {
+      min-height: 48px;
+      min-width: 48px;
+    }
+  }
+
+/* ====================== Side Bar ====================== */
+  .side-bar-container {
+    background: var(--secondary-light-color);
+    padding: var(--side-bar-padding-x);
+    flex: 0 0 var(--side-bar-max-width);
+    order: 2;
+  }
+
+  @media screen and (max-width: 600px) {
+    .side-bar-container {
+      flex: 0 0 100%;
+    }
+  }
+
+  .side-bar-heading {
+    margin: 0.75em 0 0.5em;
+  }
+
+  .side-bar-heading-centered {
+    text-align: center;
+  }
+
+  .padding-inline-start {
+    padding-inline-start:40px;
+  }
+
+  .form-button {
+    width: 48%;
+  }
+
+/* ====================== Side Bar - Results ====================== */
+  .search-results {
+    list-style-type: none;
+  }
+
+  .search-results li {
+    padding: 2px 0;
+  }
+
+  .search-results-entry {
+    text-align: center;
+  }
+
+  .search-results h4 {
+    margin: 0;
+  }
+
+  .search-results p {
+    margin: 0;
+    font-style: italic;
+  }
+
+  .search-results-entry-selected {
+    background: var(--primary-light-color);
+    transition: all 0.25s ease-in-out;
+  }
+
+  .search-results-entry-selected:hover,
+  .search-results-entry-selected:focus {
+    outline: none;
+    border: 1px solid var(--primary-dark-color);
+    box-shadow: inset 0px 0px 0px 2px var(--primary-dark-color-overlay);
+    transition: all 0.25s ease-in-out;
+  }
+
+/* ====================== Map ====================== */
+  .map-container {
+    order: 3;
+    height: 100%;
+    background: blue;
+    position: relative;
+    flex: 2 1 auto;
+  }
+
+  .map {
+    background: var(--secondary-dark-color);
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+  }
+
+/* ====================== Modal Content ====================== */
+  /* Note: Modal CSS and JS inspired by
+    - https://tympanus.net/Development/ModalWindowEffects/
+    - https://alligator.io/react/modal-component/
+    - https://assortment.io/posts/accessible-modal-component-react-portals-part-1
+    - https://github.com/udacity/ud891/tree/gh-pages/lesson5-semantics-aria/21-dialog
+  */
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 90vw;
+    max-width: 630px;
+    height: auto;
+    z-index: 2000;
+    backface-visibility: hidden;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(-50%);
+  }
+
+  .modal-show {
+    visibility: visible;
+  }
+
+  /* Modal Overlay */
+  .modal-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.3s;
+    background: var(--primary-dark-color-overlay);
+  }
+
+  .modal-show ~ .modal-overlay {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Modal Opening/Closing Effect:
+     Fade in and scale up */
+  .modal-effect .modal-content {
+    transform: scale(0.7);
+    opacity: 0;
+    transition: all 0.3s;
+  }
+
+  .modal-show.modal-effect .modal-content {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  /* Lock the scroll position on everything behind the modal (<html> element) */
+  .disable-scrolling {
+    overflow: hidden !important;
+  }
+
+  /* Modal Content */
+  .modal-content {
+    position: relative;
+    border-radius: 3px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  }
+
+  /* Modal Header */
+  .modal-header {
+    text-align: center;
+    border-radius: 3px 3px 0 0;
+    padding: 1em;
+    background: var(--primary-dark-color);
+    color: var(--secondary-light-color);
+    position: relative;
+  }
+
+  .button-close-modal {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    color: var(--secondary-light-color);
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 2.5em;
+    min-width: 48px;
+    min-height: 48px;
+    transition: all 0.25s ease-in-out;
+  }
+
+  .button-close-modal:hover,
+  .button-close-modal:focus {
+    outline: none;
+    color: var(--primary-dark-color);
+    background-color: var(--secondary-light-color);
+    transition: all 0.25s ease-in-out;
+  }
+
+  .modal-heading {
+    margin: 0.3333em 32px 0.3333em 0;
+  }
+
+  /* Modal Body */
+  .modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 2em;
+    text-align: center;
+    background: var(--secondary-light-color);
+    color: var(--secondary-dark-color);
+    text-align: left;
+  }
+
+/* ====================== Image Links ====================== */
+  .link-with-image {
+    transition: all 0.25s ease-in-out;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+    overflow: hidden;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-bottom: 2em;
+    text-decoration: underline;
+  }
+
+  .link-with-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    position: relative;
+    text-align: center;
+    text-decoration: underline;
+  }
+
+  .link-with-image img:after {
+    display: block;
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: attr(alt);
+    background-color: var(--secondary-light-color);
+  }
+
+  .link-with-image-preview {
+    min-width: 136px;
+  }
+
+  .link-with-image-buy {
+    min-width: 165px;
+  }
+
+  .link-with-image:hover,
+  .link-with-image:focus {
+    outline: none;
+    transform: scale(1.02);
+  }
+
+  @media (max-width: 600px) {
+    .link-with-image {
+      margin-bottom: 1em;
+    }
+  }
+
+/* ====================== Resources Used ====================== */
+  /* Note: All icons taken from:
+   * https://www.materialui.co/icons
+   * https://www.behance.net/gallery/31234507/Open-source-Loading-GIF-Icons-Vol-1
+   * http://gifs.duhnnae.com/2017/apr/14927052542-Science-Gears-loadinggears-loading-gear-3-3-gif.php
+   */
+
+  /* CSS Resources
+   *
+  */
+
+  /* JS Resources
+   * https://github.com/ryanwaite28/script-store/blob/master/js/react_resolve_google_maps.js
+   *
+  */
