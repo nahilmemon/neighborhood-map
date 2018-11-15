@@ -9,8 +9,9 @@ class SideBar extends Component {
       <aside className="side-bar-container">
         <SearchForm
           locationCategories={this.props.locationCategories}
+          filterByNameText={this.props.filterByNameText}
+          filterByCategoryOption={this.props.filterByCategoryOption}
         />
-
         <SearchResultsList
           locationsData={this.props.locationsData}
         />

@@ -9,7 +9,7 @@ class SearchByCategory extends Component {
           className="filter-locations-by-category-input"
           name="Filter locations by category:"
           aria-label="Filter locations by category:"
-          value="none"
+          value={this.props.filterByCategoryOption}
         >
           {/* Default option - signifies not to filter by category */}
           <option value="none">None</option>

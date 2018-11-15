@@ -11,6 +11,7 @@ class SearchByName extends Component {
           placeholder="Filter locations by name:"
           name="Filter locations by name:"
           aria-label="Filter locations by name:"
+          value={this.props.filterByNameText}
         ></input>
       </Fragment>
     );

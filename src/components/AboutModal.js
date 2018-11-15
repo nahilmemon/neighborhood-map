@@ -2,13 +2,14 @@ import React, { Component, Fragment } from 'react';
 
 class AboutModal extends Component {
   render() {
+    let modalClassName = this.props.showAboutModal ? 'modal modal-effect modal-show' : 'modal modal-effect';
     return (
       <Fragment>
         <section
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-heading"
-          className="modal modal-effect">
+          className={modalClassName}>
           <div className="modal-content">
             <div className="modal-header">
               <h2

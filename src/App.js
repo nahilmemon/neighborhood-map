@@ -20,7 +20,10 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      showSideBar: (window.innerWidth > 600) ? true : false,
+      showAboutModal: false,
+      filterByNameText: '',
+      filterByCategoryOption: 'none'
     };
 
     // To store compulsory information about each location
@@ -86,14 +89,32 @@ class App extends Component {
   }
 
   render() {
+    // Determine which locations to show based on the user-selected
+    // inputs in the search form.
+    let filteredLocations = this.locationsData;
+    if (this.state.filterByNameText !== '') {
+      filteredLocations = filteredLocations.filter(location => {
+        return location.name.toLowerCase().includes(this.state.filterByNameText.toLowerCase());
+      });
+    }
+    if (this.state.filterByCategoryOption !== 'none') {
+      filteredLocations = filteredLocations.filter(location => {
+        return location.category.toLowerCase() === this.state.filterByCategoryOption;
+      });
+    }
+
     return (
       <Fragment>
         <Header />
         <main>
-          <SideBar
-            locationsData={this.locationsData}
-            locationCategories={this.locationCategories}
-          />
+          {this.state.showSideBar &&
+            <SideBar
+              locationsData={filteredLocations}
+              locationCategories={this.locationCategories}
+              filterByNameText={this.state.filterByNameText}
+              filterByCategoryOption={this.state.filterByCategoryOption}
+            />
+          }
           <section className="map-container">
             <map
               id="map"
@@ -104,7 +125,9 @@ class App extends Component {
             ></map>
           </section>
         </main>
-        <AboutModal />
+        <AboutModal
+          showAboutModal={this.state.showAboutModal}
+        />
       </Fragment>
     );
   }
