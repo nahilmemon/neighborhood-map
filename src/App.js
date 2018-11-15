@@ -80,8 +80,9 @@ class App extends Component {
   render() {
     return (
       <Fragment>
-        <Header/>
+        <Header />
         <main>
+          <SideBar />
           <section className="map-container">
             <map
               id="map"
