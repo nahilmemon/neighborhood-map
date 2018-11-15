@@ -14,6 +14,7 @@ import loadGoogleMapsAPI from './API/loadGoogleMapsAPI.js';
 // Other components
 import Header from './components/Header.js';
 import SideBar from './components/SideBar.js';
+import AboutModal from './components/AboutModal.js';
 
 class App extends Component {
   state = {
@@ -93,6 +94,7 @@ class App extends Component {
             ></map>
           </section>
         </main>
+        <AboutModal />
       </Fragment>
     );
   }
