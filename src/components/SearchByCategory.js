@@ -10,9 +10,16 @@ class SearchByCategory extends Component {
           name="Filter locations by category:"
           aria-label="Filter locations by category:"
         >
-          <option value="parks">Parks</option>
-          <option value="restaurants">Restaurants</option>
-          <option value="shopping">Shopping</option>
+          {this.props.locationCategories.map((category) => {
+            return(
+              <option
+                key={category}
+                value={category.toLowerCase()}
+              >
+                {category}
+              </option>
+            );
+          })}
         </select>
       </Fragment>
     );

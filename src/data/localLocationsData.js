@@ -7,7 +7,7 @@ const localLocationsData = [
     },
     "description": "Warehouse421 is a...cultural destination in Abu Dhabi’s port area of Mina Zayed, in which transformed warehouses become a platform for artistic expression, understanding, and further development of the UAE’s creative community. Workshops also take place here.",
     "descriptionLink": "https://www.warehouse421.ae/en/",
-    "category": "Restaurant"
+    "category": "Art"
   },
   {
     "name": "Abu Dhabi History Museum and Aquarium",
@@ -17,7 +17,7 @@ const localLocationsData = [
     },
     "description": "Lovers of all things underwater will enjoy a tour around this small aquarium, where tropical fish, stingrays and manta rays cruise around the artificial reef. There’s also a museum that showcases the history of the UAE. Entry AED 3.",
     "descriptionLink": "http://www.adwonline.ae/unexpected-abu-dhabi-42-places-you-didnt-know-about/amp/",
-    "category": "Restaurant"
+    "category": "History"
   },
   {
     "name": "Emirates National Auto Museum",
@@ -27,7 +27,7 @@ const localLocationsData = [
     },
     "description": "It’s out of town – 50km south, off the road to Tarif and Saudi – but it’s a must-visit. The tone is set by the parked decommissioned passenger jet and the giant Land Rover; the private collection of Sheikh Hamad Bin Hamdan Al Nahyan, it features a mass of cars and other vehicles, mostly customised and some outsized (one with a golf range on top). Great fun. ",
     "descriptionLink": "http://www.adwonline.ae/unexpected-abu-dhabi-42-places-you-didnt-know-about/amp/",
-    "category": "Restaurant"
+    "category": "History"
   },
   {
     "name": "Zayed Heritage Centre ",
@@ -37,7 +37,7 @@ const localLocationsData = [
     },
     "description": "Until the National Museum is built on Saadiyat, the Zayed Centre – housed in a beautiful traditional building in Al Bateen – is the best place to experience the life of HH Sheikh Zayed. It’s mostly a photographic collection, from formal encounters with heads of state to personal family moments; other personal memorabilia include Sheikh Zayed’s cars and his favourite rifles. Free entry.",
     "descriptionLink": "http://www.adwonline.ae/unexpected-abu-dhabi-42-places-you-didnt-know-about/amp/",
-    "category": "Restaurant"
+    "category": "History"
   },
   {
     "name": "Heritage Park",
@@ -47,7 +47,7 @@ const localLocationsData = [
     },
     "description": "This attractive family park straddles both sides of the far eastern end of the Corniche, with great views of the traditional dhow harbour across the water in Al Mina. With fountains and faux grottoes, barbecue facilities and play areas, it is a popular picnic site at weekends.",
     "descriptionLink": "https://www.lonelyplanet.com/united-arab-emirates/abu-dhabi/attractions/heritage-park/a/poi-sig/1509545/361165",
-    "category": "Restaurant"
+    "category": "Park"
   },
   {
     "name": "Heritage Village",
@@ -57,7 +57,7 @@ const localLocationsData = [
     },
     "description": "This reconstruction of a traditional oasis village offers a glimpse into Abu Dhabi’s past. As well as a spice shop selling a range of herbs and handmade soaps, there are workshops where craftsmen demonstrate traditional skills, such as metal work, pottery and weaving. A campfire with coffee pots, a goats’ hair tent and a falaj irrigation system are on display, showcasing traditional aspects of the desert way of life. Open Sat-Thurs 9am-4pm; Fri 3.30pm-9pm. Near Marina Mall, Abu Dhabi Corniche Breakwater.",
     "descriptionLink": "https://www.timeoutabudhabi.com/aroundtown/features/79594-the-best-hidden-gems-in-abu-dhabi",
-    "category": "Restaurant"
+    "category": "History"
   },
   {
     "name": "Art House Cafe",
@@ -67,7 +67,7 @@ const localLocationsData = [
     },
     "description": "Next door to the Etihad Gallery and under the same ownership, this café is an example of how art can be used in our daily lives. Everything in the café – from the furniture to the lights – is made from recycled materials such as old billboards, gas cylinders and suitcases.",
     "descriptionLink": "http://www.adwonline.ae/unexpected-abu-dhabi-42-places-you-didnt-know-about/amp/",
-    "category": "Restaurant"
+    "category": "Art"
   },
   {
     "name": "The Third Place Café",

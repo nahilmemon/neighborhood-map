@@ -10,7 +10,9 @@ class SearchForm extends Component {
         <h2 className="side-bar-heading">Filter Locations</h2>
         <form className="padding-inline-start">
           <SearchByName />
-          <SearchByCategory />
+          <SearchByCategory
+            locationCategories={this.props.locationCategories}
+          />
         </form>
       </section>
     );

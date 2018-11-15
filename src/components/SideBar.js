@@ -7,7 +7,9 @@ class SideBar extends Component {
   render() {
     return (
       <aside className="side-bar-container">
-        <SearchForm />
+        <SearchForm
+          locationCategories={this.props.locationCategories}
+        />
 
         <SearchResultsList
           locationsData={this.props.locationsData}

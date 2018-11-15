@@ -17,16 +17,23 @@ import SideBar from './components/SideBar.js';
 import AboutModal from './components/AboutModal.js';
 
 class App extends Component {
-  state = {
-    locationsData: [],
-    visibleLocations: []
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    };
+
+    // To store compulsory information about each location
+    this.locationsData = localLocationsData;
+
+    // Figure out the location categories
+    let locationCategoriesWithDuplicates = localLocationsData.map((location) => location.category);
+    this.locationCategories = locationCategoriesWithDuplicates.filter(function(item, index){
+      return locationCategoriesWithDuplicates.indexOf(item) >= index;
+    });
   }
 
   componentDidMount() {
-    this.setState({
-      locationsData: localLocationsData
-    });
-
     // Add the cancel prototype method from axios-cancel onto axios
     axiosCancel(axios, {
       debug: false
@@ -84,7 +91,8 @@ class App extends Component {
         <Header />
         <main>
           <SideBar
-            locationsData={this.state.locationsData}
+            locationsData={this.locationsData}
+            locationCategories={this.locationCategories}
           />
           <section className="map-container">
             <map
