@@ -216,6 +216,11 @@
   .site-heading {
     display: inline-block;
     margin: auto;
+    content: "AD ";
+  }
+
+  .site-heading:before {
+    content: "AD ";
   }
 
   @media (max-width: 400px /*var(--header-breakpoint)*/ ) {
@@ -230,6 +235,12 @@
     .site-heading {
       font-size: var(--header-title-mobile-font-size);
       line-height: var(--header-title-mobile-line-height);
+    }
+  }
+
+  @media (min-width: 600px) {
+    .site-heading:before {
+      content: "Abu Dhabi ";
     }
   }
 
