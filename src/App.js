@@ -79,8 +79,20 @@ class App extends Component {
 
   render() {
     return (
-      <div className="map" id="map">
-      </div>
+      <Fragment>
+        <Header/>
+        <main>
+          <section className="map-container">
+            <map
+              id="map"
+              className="map"
+              name="map"
+              tabIndex="0"
+              aria-label="Map showing the locations of some hidden gems in Abu Dhabi, UAE."
+            ></map>
+          </section>
+        </main>
+      </Fragment>
     );
   }
 }
