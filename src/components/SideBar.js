@@ -11,6 +11,8 @@ class SideBar extends Component {
           locationCategories={this.props.locationCategories}
           filterByNameText={this.props.filterByNameText}
           filterByCategoryOption={this.props.filterByCategoryOption}
+          onFilterByNameTextChange={this.props.onFilterByNameTextChange}
+          onFilterByCategoryOptionChange={this.props.onFilterByCategoryOptionChange}
         />
         <SearchResultsList
           locationsData={this.props.locationsData}

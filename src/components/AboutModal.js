@@ -1,6 +1,15 @@
 import React, { Component, Fragment } from 'react';
 
 class AboutModal extends Component {
+  constructor(props) {
+    super(props);
+    this.handleCloseButtonClick = this.handleCloseButtonClick.bind(this);
+  }
+
+  handleCloseButtonClick(event) {
+    this.props.onCloseButtonClick(event.target.value);
+  }
+
   render() {
     let modalClassName = this.props.showAboutModal ? 'modal modal-effect modal-show' : 'modal modal-effect';
     return (
@@ -19,7 +28,10 @@ class AboutModal extends Component {
               </h2>
               <button
                 aria-label="Close Modal"
-                className="button-close-modal">
+                className="button-close-modal"
+                type="button"
+                value="AboutModal"
+                onClick={this.handleCloseButtonClick}>
                 ×
               </button>
             </div>

@@ -34,6 +34,10 @@ class App extends Component {
     this.locationCategories = locationCategoriesWithDuplicates.filter(function(item, index){
       return locationCategoriesWithDuplicates.indexOf(item) >= index;
     });
+
+    this.handleFilterByNameTextChange = this.handleFilterByNameTextChange.bind(this);
+    this.handleFilterByCategoryOptionChange = this.handleFilterByCategoryOptionChange.bind(this);
+    this.handleButtonClickToToggleComponentDisplay = this.handleButtonClickToToggleComponentDisplay.bind(this);
   }
 
   componentDidMount() {
@@ -88,6 +92,26 @@ class App extends Component {
     axios.cancelAll();
   }
 
+  handleFilterByNameTextChange(filterByNameText) {
+    this.setState({
+      filterByNameText: filterByNameText
+    });
+  }
+
+  handleFilterByCategoryOptionChange(filterByCategoryOption) {
+    this.setState({
+      filterByCategoryOption: filterByCategoryOption
+    });
+  }
+
+  // Toggle the display of the input component when a button is clicked
+  handleButtonClickToToggleComponentDisplay(componentName) {
+    let componentNameDisplayProperty = `show${componentName}`;
+    this.setState((state) => ({
+      [`show${componentName}`]: !state[`show${componentName}`]
+    }));
+  }
+
   render() {
     // Determine which locations to show based on the user-selected
     // inputs in the search form.
@@ -105,7 +129,9 @@ class App extends Component {
 
     return (
       <Fragment>
-        <Header />
+        <Header
+          onButtonClick={this.handleButtonClickToToggleComponentDisplay}
+        />
         <main>
           {this.state.showSideBar &&
             <SideBar
@@ -113,6 +139,8 @@ class App extends Component {
               locationCategories={this.locationCategories}
               filterByNameText={this.state.filterByNameText}
               filterByCategoryOption={this.state.filterByCategoryOption}
+              onFilterByNameTextChange={this.handleFilterByNameTextChange}
+              onFilterByCategoryOptionChange={this.handleFilterByCategoryOptionChange}
             />
           }
           <section className="map-container">
@@ -127,6 +155,7 @@ class App extends Component {
         </main>
         <AboutModal
           showAboutModal={this.state.showAboutModal}
+          onCloseButtonClick={this.handleButtonClickToToggleComponentDisplay}
         />
       </Fragment>
     );

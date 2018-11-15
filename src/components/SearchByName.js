@@ -1,6 +1,15 @@
 import React, { Component, Fragment } from 'react';
 
 class SearchByName extends Component {
+  constructor(props) {
+    super(props);
+    this.handleFilterByNameTextChange = this.handleFilterByNameTextChange.bind(this);
+  }
+
+  handleFilterByNameTextChange(event) {
+    this.props.onFilterByNameTextChange(event.target.value);
+  }
+
   render() {
     return (
       <Fragment>
@@ -12,6 +21,7 @@ class SearchByName extends Component {
           name="Filter locations by name:"
           aria-label="Filter locations by name:"
           value={this.props.filterByNameText}
+          onChange={this.handleFilterByNameTextChange}
         ></input>
       </Fragment>
     );

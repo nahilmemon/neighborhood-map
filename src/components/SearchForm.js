@@ -11,10 +11,12 @@ class SearchForm extends Component {
         <form className="padding-inline-start">
           <SearchByName
             filterByNameText={this.props.filterByNameText}
+            onFilterByNameTextChange={this.props.onFilterByNameTextChange}
           />
           <SearchByCategory
             locationCategories={this.props.locationCategories}
             filterByCategoryOption={this.props.filterByCategoryOption}
+            onFilterByCategoryOptionChange={this.props.onFilterByCategoryOptionChange}
           />
         </form>
       </section>

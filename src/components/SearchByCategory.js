@@ -1,6 +1,15 @@
 import React, { Component, Fragment } from 'react';
 
 class SearchByCategory extends Component {
+  constructor(props) {
+    super(props);
+    this.handleFilterByCategoryOptionChange = this.handleFilterByCategoryOptionChange.bind(this);
+  }
+
+  handleFilterByCategoryOptionChange(event) {
+    this.props.onFilterByCategoryOptionChange(event.target.value);
+  }
+
   render() {
     return (
       <Fragment>
@@ -10,6 +19,7 @@ class SearchByCategory extends Component {
           name="Filter locations by category:"
           aria-label="Filter locations by category:"
           value={this.props.filterByCategoryOption}
+          onChange={this.handleFilterByCategoryOptionChange}
         >
           {/* Default option - signifies not to filter by category */}
           <option value="none">None</option>
