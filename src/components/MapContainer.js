@@ -17,6 +17,9 @@ class MapContainer extends Component {
     };
 
     this.createMap = this.createMap.bind(this);
+    this.createAllMarkers = this.createAllMarkers.bind(this);
+    this.displayGivenMarkers = this.displayGivenMarkers.bind(this);
+    this.hideGivenMarkers = this.hideGivenMarkers.bind(this);
   }
 
   componentDidMount() {
@@ -37,8 +40,12 @@ class MapContainer extends Component {
       // Save the promises' results
       this.google = promiseResults[0];
 
-      // Create and display the map
+      // Create the map
       this.createMap(this.google);
+      // Create the markers
+      this.createAllMarkers(this.google, this.props.locationsData);
+      // Display the markers
+      this.displayGivenMarkers(this.google, this.map, this.markers);
     });
   }
 
@@ -57,6 +64,43 @@ class MapContainer extends Component {
       mapTypeControlOptions: {
         style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
       }
+    });
+  }
+
+  // Create the list of markers based on the locationsData
+  createAllMarkers(google, locations) {
+    this.markers = locations.map((location, index) => {
+      return new google.maps.Marker({
+        position: location.location,
+        title: location.name,
+        animation: google.maps.Animation.DROP,
+        // icon: defaultIcon,
+        id: index,
+        description: location.description,
+        descriptionLink: location.descriptionLink
+      });
+    });
+  }
+
+  // Display given markers, where the map is reposition to fit all
+  // the given markers on screen
+  displayGivenMarkers(google, map, markers) {
+    // To store the map's boundaries
+    let mapBoundaries = new google.maps.LatLngBounds();
+    // For each marker, display the marker and extend the map's boundaries
+    // in order to include this marker in the visible area on screen
+    markers.forEach((marker) => {
+      marker.setMap(map);
+      mapBoundaries.extend(marker.position);
+    });
+    // Reposition the map to display all the markers on screen
+    map.fitBounds(mapBoundaries);
+  }
+
+  // Hide given markers
+  hideGivenMarkers(google, map, markers) {
+    markers.forEach((marker) => {
+      marker.setMap(null);
     });
   }
 
