@@ -16,10 +16,12 @@ class MapContainer extends Component {
 
     };
 
-    this.createMap = this.createMap.bind(this);
-    this.createAllMarkers = this.createAllMarkers.bind(this);
-    this.displayGivenMarkers = this.displayGivenMarkers.bind(this);
-    this.hideGivenMarkers = this.hideGivenMarkers.bind(this);
+    // this.createMap = this.createMap.bind(this);
+    // this.createAllMarkers = this.createAllMarkers.bind(this);
+    // this.displayGivenMarkers = this.displayGivenMarkers.bind(this);
+    // this.hideGivenMarkers = this.hideGivenMarkers.bind(this);
+    // this.createInfoWindow = this.createInfoWindow.bind(this);
+    // this.populateInfoWindow = this.populateInfoWindow.bind(this);
   }
 
   componentDidMount() {
@@ -42,6 +44,8 @@ class MapContainer extends Component {
 
       // Create the map
       this.createMap(this.google);
+      // Create the infoWindow
+      this.createInfoWindow(this.google);
       // Create the markers
       this.createAllMarkers(this.google, this.props.locationsData);
       // Display the markers
@@ -55,7 +59,7 @@ class MapContainer extends Component {
   }
 
   // Create map instance
-  createMap(google) {
+  createMap = (google) => {
     this.map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 24.5172938, lng: 54.370662},
       zoom: 13,
@@ -68,9 +72,9 @@ class MapContainer extends Component {
   }
 
   // Create the list of markers based on the locationsData
-  createAllMarkers(google, locations) {
+  createAllMarkers = (google, locations) => {
     this.markers = locations.map((location, index) => {
-      return new google.maps.Marker({
+      let marker = new google.maps.Marker({
         position: location.location,
         title: location.name,
         animation: google.maps.Animation.DROP,
@@ -79,12 +83,20 @@ class MapContainer extends Component {
         description: location.description,
         descriptionLink: location.descriptionLink
       });
+
+      // Add an event listener so that when a marker is clicked,
+      // an infoWindow describing the marker's properties will display
+      marker.addListener('click', () => {
+        this.populateInfoWindow(this.map, marker, this.infoWindow);
+      });
+
+      return marker;
     });
   }
 
   // Display given markers, where the map is reposition to fit all
   // the given markers on screen
-  displayGivenMarkers(google, map, markers) {
+  displayGivenMarkers = (google, map, markers) => {
     // To store the map's boundaries
     let mapBoundaries = new google.maps.LatLngBounds();
     // For each marker, display the marker and extend the map's boundaries
@@ -98,10 +110,48 @@ class MapContainer extends Component {
   }
 
   // Hide given markers
-  hideGivenMarkers(google, map, markers) {
+  hideGivenMarkers = (google, map, markers) => {
     markers.forEach((marker) => {
       marker.setMap(null);
     });
+  }
+
+  // Create the info window to display information about a selected place
+  createInfoWindow = (google) => {
+    this.infoWindow = new google.maps.InfoWindow({
+      maxWidth: 245
+    });
+  }
+
+  // Populate the infoWindow with information regarding the given marker.
+  // Note: this is set to only display one infoWindow on screen at a time.
+  populateInfoWindow = (map, givenMarker, infoWindow) => {
+    // Populate the infoWindow if the given marker is different from the
+    // infoWindow's current marker
+    if (infoWindow.marker !== givenMarker) {
+      // Set the infoWindow's marker to the given marker
+      infoWindow.marker = givenMarker;
+
+      // Set the contents of the infoWindow
+      infoWindow.setContent(`
+        <div class="info-window">
+          <h4>${givenMarker.title}</h4>
+          <p>
+            ${givenMarker.description}
+            (<a href="${givenMarker.descriptionLink}" target="_blank">Source</a>)
+          </p>
+        </div>
+      `);
+
+      // Open and display the infoWindow
+      infoWindow.open(map, givenMarker);
+
+      // Add an event listener to clear the infoWindow's marker when
+      // the close button is clicked
+      infoWindow.addListener('closeclick', function() {
+        infoWindow.marker = null;
+      });
+    }
   }
 
   render() {
