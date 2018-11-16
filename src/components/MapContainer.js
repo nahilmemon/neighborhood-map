@@ -17,11 +17,6 @@ class MapContainer extends Component {
     };
 
     // this.createMap = this.createMap.bind(this);
-    // this.createAllMarkers = this.createAllMarkers.bind(this);
-    // this.displayGivenMarkers = this.displayGivenMarkers.bind(this);
-    // this.hideGivenMarkers = this.hideGivenMarkers.bind(this);
-    // this.createInfoWindow = this.createInfoWindow.bind(this);
-    // this.populateInfoWindow = this.populateInfoWindow.bind(this);
   }
 
   componentDidMount() {
@@ -44,6 +39,11 @@ class MapContainer extends Component {
 
       // Create the map
       this.createMap(this.google);
+      // Create the marker icons for the default and focused scenarios
+      // Get the CSS variables from the root element
+      let rootStyles = getComputedStyle(document.body);
+      this.defaultMarkerIcon = this.createColoredMarkerIcon(this.google, rootStyles.getPropertyValue('--primary-light-color'));
+      this.focusedMarkerIcon = this.createColoredMarkerIcon(this.google, rootStyles.getPropertyValue('--primary-dark-color'));
       // Create the infoWindow
       this.createInfoWindow(this.google);
       // Create the markers
@@ -71,6 +71,25 @@ class MapContainer extends Component {
     });
   }
 
+  // Create a marker icon whose color is the color given
+  // Note: color is given in the following format: '#xxxxxx'
+  createColoredMarkerIcon = (google, color) => {
+    // Convert color format from '#xxxxxx' to 'xxxxxx'
+    color = color.trim().substr(1);
+    // Create a marker image using an asset from Google
+    return new google.maps.MarkerImage(
+      `http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|${color}|40|_|%E2%80%A2`,
+      // Make the marker 21px x 34px in size
+      new google.maps.Size(21, 34),
+      // Make the origin of the marker (0, 0)
+      new google.maps.Point(0, 0),
+      // Anchor the marker at (10, 34)
+      new google.maps.Point(10, 34),
+      // Make the marker 21px x 34px in size
+      new google.maps.Size(21,34)
+    );
+  }
+
   // Create the list of markers based on the locationsData
   createAllMarkers = (google, locations) => {
     this.markers = locations.map((location, index) => {
@@ -78,7 +97,7 @@ class MapContainer extends Component {
         position: location.location,
         title: location.name,
         animation: google.maps.Animation.DROP,
-        // icon: defaultIcon,
+        icon: this.defaultMarkerIcon,
         id: index,
         description: location.description,
         descriptionLink: location.descriptionLink
@@ -87,7 +106,19 @@ class MapContainer extends Component {
       // Add an event listener so that when a marker is clicked,
       // an infoWindow describing the marker's properties will display
       marker.addListener('click', () => {
+        marker.setIcon(this.focusedMarkerIcon);
         this.populateInfoWindow(this.map, marker, this.infoWindow);
+      });
+
+      // Add mouse event listeners so that hover on the marker changes
+      // its color
+      marker.addListener('mouseover', () => {
+        marker.setIcon(this.focusedMarkerIcon);
+      });
+      marker.addListener('mouseout', () => {
+        if (this.infoWindow.marker !== marker) {
+          marker.setIcon(this.defaultMarkerIcon);
+        }
       });
 
       return marker;
@@ -129,6 +160,14 @@ class MapContainer extends Component {
     // Populate the infoWindow if the given marker is different from the
     // infoWindow's current marker
     if (infoWindow.marker !== givenMarker) {
+      // Reset the style of the infoWindow's previous marker
+      if (infoWindow.marker !== undefined && infoWindow.marker !== null) {
+        infoWindow.marker.setIcon(this.defaultMarkerIcon);
+      }
+
+      // Change the style of the given marker
+      givenMarker.setIcon(this.focusedMarkerIcon);
+
       // Set the infoWindow's marker to the given marker
       infoWindow.marker = givenMarker;
 
@@ -148,7 +187,13 @@ class MapContainer extends Component {
 
       // Add an event listener to clear the infoWindow's marker when
       // the close button is clicked
-      infoWindow.addListener('closeclick', function() {
+      infoWindow.addListener('closeclick', () => {
+        // Reset the style of the infoWindow's current marker
+        if (infoWindow.marker !== undefined && infoWindow.marker !== null) {
+          infoWindow.marker.setIcon(this.defaultMarkerIcon);
+        }
+        // Remove the marker from the infoWindow (thus effectively closing
+        // the infoWindow)
         infoWindow.marker = null;
       });
     }
