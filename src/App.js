@@ -37,7 +37,9 @@ class App extends Component {
 
     this.handleFilterByNameTextChange = this.handleFilterByNameTextChange.bind(this);
     this.handleFilterByCategoryOptionChange = this.handleFilterByCategoryOptionChange.bind(this);
-    this.handleButtonClickToToggleComponentDisplay = this.handleButtonClickToToggleComponentDisplay.bind(this);
+    this.handleSideBarButtonClick = this.handleSideBarButtonClick.bind(this);
+    this.handleOpenModalButtonClick = this.handleOpenModalButtonClick.bind(this);
+    this.handleCloseModalButtonClick = this.handleCloseModalButtonClick.bind(this);
   }
 
   componentDidMount() {
@@ -104,12 +106,23 @@ class App extends Component {
     });
   }
 
-  // Toggle the display of the input component when a button is clicked
-  handleButtonClickToToggleComponentDisplay(componentName) {
-    let componentNameDisplayProperty = `show${componentName}`;
-    this.setState((state) => ({
-      [`show${componentName}`]: !state[`show${componentName}`]
+  handleSideBarButtonClick() {
+    this.setState(state => ({
+      showSideBar: !state.showSideBar
     }));
+  }
+
+  handleOpenModalButtonClick() {
+    this.setState({ showAboutModal: true }, ()=>{
+      this.closeModalButtonNode.focus();
+    });
+  }
+
+  handleCloseModalButtonClick() {
+    // shift focus to open modal button
+    this.setState({ showAboutModal: false }, ()=>{
+      this.openModalButtonNode.focus();
+    });
   }
 
   render() {
@@ -130,7 +143,9 @@ class App extends Component {
     return (
       <Fragment>
         <Header
-          onButtonClick={this.handleButtonClickToToggleComponentDisplay}
+          onSideBarButtonClick={this.handleSideBarButtonClick}
+          onOpenModalButtonClick={this.handleOpenModalButtonClick}
+          openModalButtonNodeRef={node => this.openModalButtonNode = node}
         />
         <main>
           {this.state.showSideBar &&
@@ -153,10 +168,13 @@ class App extends Component {
             ></map>
           </section>
         </main>
-        <AboutModal
-          showAboutModal={this.state.showAboutModal}
-          onCloseButtonClick={this.handleButtonClickToToggleComponentDisplay}
-        />
+        {this.state.showAboutModal &&
+          <AboutModal
+            showAboutModal={this.state.showAboutModal}
+            onCloseModalButtonClick={this.handleCloseModalButtonClick}
+            closeModalButtonNodeRef={node => this.closeModalButtonNode = node}
+          />
+        }
       </Fragment>
     );
   }

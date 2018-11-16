@@ -3,22 +3,77 @@ import React, { Component, Fragment } from 'react';
 class AboutModal extends Component {
   constructor(props) {
     super(props);
-    this.handleCloseButtonClick = this.handleCloseButtonClick.bind(this);
+
+    this.state = {
+      modalClassName: 'modal modal-effect modal-show'
+    }
+
+    this.handleCloseModalButtonClick = this.handleCloseModalButtonClick.bind(this);
+    this.handleKeyDownEvent = this.handleKeyDownEvent.bind(this);
+    this.findFocusableElementsWithinModal = this.findFocusableElementsWithinModal.bind(this);
   }
 
-  handleCloseButtonClick(event) {
-    this.props.onCloseButtonClick(event.target.value);
+  componentDidMount() {
+    // Find all the  first and last focusable elements within the modal
+    this.findFocusableElementsWithinModal();
+  }
+
+  handleCloseModalButtonClick(event) {
+    // Display the modal closing animation before actually removing
+    // the modal in App.js
+    this.setState({ modalClassName: 'modal modal-effect' }, () => {
+      setTimeout(this.props.onCloseModalButtonClick, 300);
+    });
+  }
+
+  // Find all the first and last focusable elements within the modal
+  findFocusableElementsWithinModal() {
+    // Find all focusable children
+    let potentiallyFocusableElementsString = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]';
+    let focusableElementsWithinModal = this.modalRef.querySelectorAll(potentiallyFocusableElementsString);
+    // Convert the NodeList to an Array
+    focusableElementsWithinModal = Array.prototype.slice.call(focusableElementsWithinModal);
+
+    this.firstTabStopInModal = focusableElementsWithinModal[0];
+    this.lastTabStopInModal = focusableElementsWithinModal[focusableElementsWithinModal.length - 1];
+  }
+
+  // To handle keydown events while the modal is open
+  handleKeyDownEvent(event) {
+    // Close the modal if the user presses the ESCAPE key
+    if (event.key === 'Escape') {
+      this.handleCloseButtonClick();
+    }
+
+    // Trap the focus within the modal if the user presses
+    // the TAB or SHIFT + TAB keys
+    if (event.key === "Tab") {
+      // Case: SHIFT + TAB keys
+      if (event.shiftKey) {
+        if (document.activeElement === this.firstTabStopInModal) {
+          event.preventDefault();
+          this.lastTabStopInModal.focus();
+        }
+      // Case: TAB key
+      } else {
+        if (document.activeElement === this.lastTabStopInModal) {
+          event.preventDefault();
+          this.firstTabStopInModal.focus();
+        }
+      }
+    }
   }
 
   render() {
-    let modalClassName = this.props.showAboutModal ? 'modal modal-effect modal-show' : 'modal modal-effect';
     return (
       <Fragment>
         <section
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-heading"
-          className={modalClassName}>
+          className={this.state.modalClassName}
+          onKeyDown={this.handleKeyDownEvent}
+          ref={node => this.modalRef = node}>
           <div className="modal-content">
             <div className="modal-header">
               <h2
@@ -31,8 +86,10 @@ class AboutModal extends Component {
                 className="button-close-modal"
                 type="button"
                 value="AboutModal"
-                onClick={this.handleCloseButtonClick}>
+                onClick={this.handleCloseModalButtonClick}
+                ref={this.props.closeModalButtonNodeRef}>
                 ×
+                {/* ref={closeModalButton => closeModalButton && closeModalButton.focus()} */}
               </button>
             </div>
             <div className="modal-body">
@@ -49,7 +106,8 @@ class AboutModal extends Component {
           </div>
         </section>
         <div
-          className="modal-overlay">
+          className="modal-overlay"
+          onClick={this.handleCloseModalButtonClick}>
         </div>
       </Fragment>
     );

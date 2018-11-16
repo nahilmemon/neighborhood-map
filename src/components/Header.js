@@ -3,11 +3,17 @@ import React, { Component } from 'react';
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.handleButtonClick = this.handleButtonClick.bind(this);
+
+    this.handleSideBarButtonClick = this.handleSideBarButtonClick.bind(this);
+    this.handleOpenModalButtonClick = this.handleOpenModalButtonClick.bind(this);
   }
 
-  handleButtonClick(event) {
-    this.props.onButtonClick(event.target.value);
+  handleSideBarButtonClick(event) {
+    this.props.onSideBarButtonClick(event.target.value);
+  }
+
+  handleOpenModalButtonClick(event) {
+    this.props.onOpenModalButtonClick(event.target.value);
   }
 
   render() {
@@ -17,7 +23,7 @@ class Header extends Component {
           className="unstyled-button header-button header-search-button"
           type="button"
           value="SideBar"
-          onClick={this.handleButtonClick}
+          onClick={this.handleSideBarButtonClick}
         >Search</button>
         <h1
           className="site-heading"
@@ -27,7 +33,8 @@ class Header extends Component {
           className="unstyled-button header-button header-about-button button-open-modal"
           type="button"
           value="AboutModal"
-          onClick={this.handleButtonClick}
+          onClick={this.handleOpenModalButtonClick}
+          ref={this.props.openModalButtonNodeRef}
         >About Project</button>
       </header>
     );
