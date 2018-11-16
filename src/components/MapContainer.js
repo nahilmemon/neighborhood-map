@@ -177,7 +177,7 @@ class MapContainer extends Component {
           <h4>${givenMarker.title}</h4>
           <p>
             ${givenMarker.description}
-            (<a href="${givenMarker.descriptionLink}" target="_blank">Source</a>)
+            (<a href="${givenMarker.descriptionLink}">Source</a>)
           </p>
         </div>
       `);
