@@ -137,6 +137,7 @@ class App extends Component {
               onFilterByNameTextChange={this.handleFilterByNameTextChange}
               onFilterByCategoryOptionChange={this.handleFilterByCategoryOptionChange}
               onLocationListItemClick={this.handleLocationListItemClick}
+              currentlyFocusedLocationId={this.state.currentlyFocusedLocationId}
             />
           }
           <MapContainer

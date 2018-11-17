@@ -14,6 +14,7 @@ class SearchResultsList extends Component {
                 key={location.name}
                 location={location}
                 onLocationListItemClick={this.props.onLocationListItemClick}
+                currentlyFocusedLocationId={this.props.currentlyFocusedLocationId}
               />
             );
           })}

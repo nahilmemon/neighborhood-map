@@ -13,11 +13,14 @@ class LocationListItem extends Component {
 
   render() {
     const location = this.props.location;
+    let buttonClassName = (this.props.currentlyFocusedLocationId === location.id) ?
+      "unstyled-button search-results-entry search-results-entry-selected" :
+      "unstyled-button search-results-entry";
     return (
       <li>
         {/*search-results-entry-selected*/}
         <button
-          className="unstyled-button search-results-entry"
+          className={buttonClassName}
           onClick={this.handleLocationListItemClick}
           value={location.id}>
           <h4>{location.name}</h4>

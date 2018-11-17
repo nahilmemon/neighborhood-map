@@ -17,6 +17,7 @@ class SideBar extends Component {
         <SearchResultsList
           locationsData={this.props.locationsData}
           onLocationListItemClick={this.props.onLocationListItemClick}
+          currentlyFocusedLocationId={this.props.currentlyFocusedLocationId}
         />
       </aside>
     );
