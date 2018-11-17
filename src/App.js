@@ -22,7 +22,8 @@ class App extends Component {
       showSideBar: (window.innerWidth > 600) ? true : false,
       showAboutModal: false,
       filterByNameText: '',
-      filterByCategoryOption: 'none'
+      filterByCategoryOption: 'none',
+      currentlyFocusedLocationId: null
     };
 
     // To store compulsory information about each location
@@ -40,6 +41,7 @@ class App extends Component {
     this.handleOpenModalButtonClick = this.handleOpenModalButtonClick.bind(this);
     this.handleCloseModalButtonClick = this.handleCloseModalButtonClick.bind(this);
     this.filterLocations = this.filterLocations.bind(this);
+    this.handleLocationListItemClick = this.handleLocationListItemClick.bind(this);
   }
 
   componentDidMount() {
@@ -107,6 +109,12 @@ class App extends Component {
     return filteredLocations;
   }
 
+  handleLocationListItemClick(locationId) {
+    this.setState({
+      currentlyFocusedLocationId: locationId
+    });
+  }
+
   render() {
     // Determine which locations to show based on the user-selected
     // inputs in the search form.
@@ -128,6 +136,7 @@ class App extends Component {
               filterByCategoryOption={this.state.filterByCategoryOption}
               onFilterByNameTextChange={this.handleFilterByNameTextChange}
               onFilterByCategoryOptionChange={this.handleFilterByCategoryOptionChange}
+              onLocationListItemClick={this.handleLocationListItemClick}
             />
           }
           <MapContainer
@@ -135,6 +144,7 @@ class App extends Component {
             filterByNameText={this.state.filterByNameText}
             filterByCategoryOption={this.state.filterByCategoryOption}
             filterLocations={this.filterLocations}
+            currentlyFocusedLocationId={this.state.currentlyFocusedLocationId}
           />
         </main>
         {this.state.showAboutModal &&

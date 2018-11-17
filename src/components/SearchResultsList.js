@@ -13,6 +13,7 @@ class SearchResultsList extends Component {
               <LocationListItem
                 key={location.name}
                 location={location}
+                onLocationListItemClick={this.props.onLocationListItemClick}
               />
             );
           })}

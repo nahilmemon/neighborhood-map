@@ -48,6 +48,8 @@ class MapContainer extends Component {
       this.createInfoWindow(this.google);
       // Create and display the markers
       this.createAllMarkers(this.google, this.map, this.props.locationsData);
+      // Reposition the map to fit all the markers
+      this.displayGivenMarkers(this.google, this.map, this.markers);
     });
   }
 
@@ -98,7 +100,7 @@ class MapContainer extends Component {
         name: location.name,
         animation: google.maps.Animation.DROP,
         icon: this.defaultMarkerIcon,
-        id: index,
+        id: location.id,
         description: location.description,
         descriptionLink: location.descriptionLink,
         category: location.category
@@ -212,9 +214,30 @@ class MapContainer extends Component {
     }
   }
 
+  // If the user clicks on a list item in the side bar component, then
+  // focus the corresponding marker and open an info window there about it
+  focusMarkerOfCurrentlyFocusedLocation = (map, infoWindow, currentlyFocusedLocationId, markers) => {
+    // Find the marker to focus
+    let markerToFocus = markers.filter((marker) => {
+      return marker.id === currentlyFocusedLocationId
+    })[0];
+    console.log(markerToFocus);
+    // Change the icon color of this marker
+    markerToFocus.setIcon(this.focusedMarkerIcon);
+    // Populate the infoWindow with this marker's info and display the
+    // infoWindow
+    this.populateInfoWindow(map, markerToFocus, infoWindow);
+  }
+
   render() {
     // Only display the filtered location markers
     this.displayFilteredMarkers(this.google, this.map, this.markers);
+
+    // If the user has clicked on a list item in the side bar component,
+    // then focus the corresponding marker and display an infoWindow about it
+    if (this.markers) {
+      this.focusMarkerOfCurrentlyFocusedLocation(this.map, this.infoWindow, this.props.currentlyFocusedLocationId, this.markers);
+    }
 
     return (
       <section className="map-container">
