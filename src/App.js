@@ -39,6 +39,7 @@ class App extends Component {
     this.handleSideBarButtonClick = this.handleSideBarButtonClick.bind(this);
     this.handleOpenModalButtonClick = this.handleOpenModalButtonClick.bind(this);
     this.handleCloseModalButtonClick = this.handleCloseModalButtonClick.bind(this);
+    this.filterLocations = this.filterLocations.bind(this);
   }
 
   componentDidMount() {
@@ -87,20 +88,29 @@ class App extends Component {
     });
   }
 
+  filterLocations(allLocations, filterByNameText, filterByCategoryOption){
+    // Determine which locations to show based on the user-selected
+    // inputs in the search form.
+    let filteredLocations = allLocations;
+    // Filter the locations by name if the user gave an input
+    if (filterByNameText !== '') {
+      filteredLocations = filteredLocations.filter(location => {
+        return location.name.toLowerCase().includes(filterByNameText.toLowerCase());
+      });
+    }
+    // Filter the locations by category if one is selected
+    if (filterByCategoryOption !== 'none') {
+      filteredLocations = filteredLocations.filter(location => {
+        return location.category.toLowerCase() === filterByCategoryOption;
+      });
+    }
+    return filteredLocations;
+  }
+
   render() {
     // Determine which locations to show based on the user-selected
     // inputs in the search form.
-    let filteredLocations = this.locationsData;
-    if (this.state.filterByNameText !== '') {
-      filteredLocations = filteredLocations.filter(location => {
-        return location.name.toLowerCase().includes(this.state.filterByNameText.toLowerCase());
-      });
-    }
-    if (this.state.filterByCategoryOption !== 'none') {
-      filteredLocations = filteredLocations.filter(location => {
-        return location.category.toLowerCase() === this.state.filterByCategoryOption;
-      });
-    }
+    let filteredLocations = this.filterLocations(this.locationsData, this.state.filterByNameText, this.state.filterByCategoryOption);
 
     return (
       <Fragment>
@@ -122,6 +132,9 @@ class App extends Component {
           }
           <MapContainer
             locationsData={this.locationsData}
+            filterByNameText={this.state.filterByNameText}
+            filterByCategoryOption={this.state.filterByCategoryOption}
+            filterLocations={this.filterLocations}
           />
         </main>
         {this.state.showAboutModal &&

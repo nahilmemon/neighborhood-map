@@ -46,10 +46,8 @@ class MapContainer extends Component {
       this.focusedMarkerIcon = this.createColoredMarkerIcon(this.google, rootStyles.getPropertyValue('--primary-dark-color'));
       // Create the infoWindow
       this.createInfoWindow(this.google);
-      // Create the markers
-      this.createAllMarkers(this.google, this.props.locationsData);
-      // Display the markers
-      this.displayGivenMarkers(this.google, this.map, this.markers);
+      // Create and display the markers
+      this.createAllMarkers(this.google, this.map, this.props.locationsData);
     });
   }
 
@@ -91,16 +89,19 @@ class MapContainer extends Component {
   }
 
   // Create the list of markers based on the locationsData
-  createAllMarkers = (google, locations) => {
+  createAllMarkers = (google, map, locations) => {
     this.markers = locations.map((location, index) => {
       let marker = new google.maps.Marker({
+        map: map,
         position: location.location,
-        title: location.name,
+        visible: true,
+        name: location.name,
         animation: google.maps.Animation.DROP,
         icon: this.defaultMarkerIcon,
         id: index,
         description: location.description,
-        descriptionLink: location.descriptionLink
+        descriptionLink: location.descriptionLink,
+        category: location.category
       });
 
       // Add an event listener so that when a marker is clicked,
@@ -133,7 +134,7 @@ class MapContainer extends Component {
     // For each marker, display the marker and extend the map's boundaries
     // in order to include this marker in the visible area on screen
     markers.forEach((marker) => {
-      marker.setMap(map);
+      marker.setVisible(true);
       mapBoundaries.extend(marker.position);
     });
     // Reposition the map to display all the markers on screen
@@ -143,7 +144,7 @@ class MapContainer extends Component {
   // Hide given markers
   hideGivenMarkers = (google, map, markers) => {
     markers.forEach((marker) => {
-      marker.setMap(null);
+      marker.setVisible(false);
     });
   }
 
@@ -174,7 +175,7 @@ class MapContainer extends Component {
       // Set the contents of the infoWindow
       infoWindow.setContent(`
         <div class="info-window">
-          <h4>${givenMarker.title}</h4>
+          <h4>${givenMarker.name}</h4>
           <p>
             ${givenMarker.description}
             (<a href="${givenMarker.descriptionLink}">Source</a>)
@@ -199,7 +200,22 @@ class MapContainer extends Component {
     }
   }
 
+  // Only display the markers that match the filtered locations based on
+  // the user-selected inputs in the SideBar component
+  displayFilteredMarkers = (google, map, markers) => {
+    if (markers) {
+      this.hideGivenMarkers(google, map, markers);
+      let filteredMarkers = this.props.filterLocations(markers, this.props.filterByNameText, this.props.filterByCategoryOption);
+      if (filteredMarkers.length > 0) {
+        this.displayGivenMarkers(google, map, filteredMarkers);
+      }
+    }
+  }
+
   render() {
+    // Only display the filtered location markers
+    this.displayFilteredMarkers(this.google, this.map, this.markers);
+
     return (
       <section className="map-container">
         <map
