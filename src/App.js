@@ -41,7 +41,7 @@ class App extends Component {
     this.handleOpenModalButtonClick = this.handleOpenModalButtonClick.bind(this);
     this.handleCloseModalButtonClick = this.handleCloseModalButtonClick.bind(this);
     this.filterLocations = this.filterLocations.bind(this);
-    this.handleLocationListItemClick = this.handleLocationListItemClick.bind(this);
+    this.handleActiveLocationChange = this.handleActiveLocationChange.bind(this);
   }
 
   componentDidMount() {
@@ -109,7 +109,7 @@ class App extends Component {
     return filteredLocations;
   }
 
-  handleLocationListItemClick(locationId) {
+  handleActiveLocationChange(locationId) {
     this.setState({
       currentlyFocusedLocationId: locationId
     });
@@ -136,7 +136,7 @@ class App extends Component {
               filterByCategoryOption={this.state.filterByCategoryOption}
               onFilterByNameTextChange={this.handleFilterByNameTextChange}
               onFilterByCategoryOptionChange={this.handleFilterByCategoryOptionChange}
-              onLocationListItemClick={this.handleLocationListItemClick}
+              onLocationListItemClick={this.handleActiveLocationChange}
               currentlyFocusedLocationId={this.state.currentlyFocusedLocationId}
             />
           }
@@ -146,6 +146,7 @@ class App extends Component {
             filterByCategoryOption={this.state.filterByCategoryOption}
             filterLocations={this.filterLocations}
             currentlyFocusedLocationId={this.state.currentlyFocusedLocationId}
+            onActiveMarkerChange={this.handleActiveLocationChange}
           />
         </main>
         {this.state.showAboutModal &&

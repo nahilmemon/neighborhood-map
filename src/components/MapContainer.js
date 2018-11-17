@@ -111,6 +111,8 @@ class MapContainer extends Component {
       marker.addListener('click', () => {
         marker.setIcon(this.focusedMarkerIcon);
         this.populateInfoWindow(this.map, marker, this.infoWindow);
+        // Also make the corresponding list item in the side bar active
+        this.props.onActiveMarkerChange(marker.id);
       });
 
       // Add mouse event listeners so that hover on the marker changes
@@ -195,6 +197,9 @@ class MapContainer extends Component {
         if (infoWindow.marker !== undefined && infoWindow.marker !== null) {
           infoWindow.marker.setIcon(this.defaultMarkerIcon);
         }
+        // Update the side bar so that this marker's corresponding list
+        // item is no longer active
+        this.props.onActiveMarkerChange(null);
         // Remove the marker from the infoWindow (thus effectively closing
         // the infoWindow)
         infoWindow.marker = null;
@@ -220,13 +225,17 @@ class MapContainer extends Component {
     // Find the marker to focus
     let markerToFocus = markers.filter((marker) => {
       return marker.id === currentlyFocusedLocationId
-    })[0];
-    console.log(markerToFocus);
-    // Change the icon color of this marker
-    markerToFocus.setIcon(this.focusedMarkerIcon);
-    // Populate the infoWindow with this marker's info and display the
-    // infoWindow
-    this.populateInfoWindow(map, markerToFocus, infoWindow);
+    });
+    // If a result was found (i.e. if currentlyFocusedLocationId !== null),
+    // then focus the corresponding marker and populate the infoWindow
+    if (markerToFocus.length > 0) {
+      markerToFocus = markerToFocus[0];
+      // Change the icon color of this marker
+      markerToFocus.setIcon(this.focusedMarkerIcon);
+      // Populate the infoWindow with this marker's info and display the
+      // infoWindow
+      this.populateInfoWindow(map, markerToFocus, infoWindow);
+    }
   }
 
   render() {
