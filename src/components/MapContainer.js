@@ -209,7 +209,13 @@ class MapContainer extends Component {
 
   // Only display the markers that match the filtered locations based on
   // the user-selected inputs in the SideBar component
-  displayFilteredMarkers = (google, map, markers) => {
+  displayFilteredMarkers = (google, map, markers, infoWindow) => {
+    // First close the infoWindow if it's already been created
+    if (infoWindow) {
+      infoWindow.close();
+    }
+
+    // Then filter the markers and toggle their visibility accordingly
     if (markers) {
       this.hideGivenMarkers(google, map, markers);
       let filteredMarkers = this.props.filterLocations(markers, this.props.filterByNameText, this.props.filterByCategoryOption);
@@ -240,7 +246,7 @@ class MapContainer extends Component {
 
   render() {
     // Only display the filtered location markers
-    this.displayFilteredMarkers(this.google, this.map, this.markers);
+    this.displayFilteredMarkers(this.google, this.map, this.markers, this.infoWindow);
 
     // If the user has clicked on a list item in the side bar component,
     // then focus the corresponding marker and display an infoWindow about it
