@@ -218,11 +218,11 @@ class MapContainer extends Component {
       // If there are markers in the filtered results, then only display them
       if (filteredMarkers.length > 0) {
         this.displayGivenMarkers(google, map, filteredMarkers);
-        // Close the infoWindow if it's already been created and the
-        // related marker is no longer visiible after filtration
-        if (infoWindow && infoWindow.marker && infoWindow.marker.visible === false) {
-          infoWindow.close();
-        }
+      }
+      // Close the infoWindow if it's already been created and the
+      // related marker is no longer visiible after filtration
+      if (infoWindow && infoWindow.marker && infoWindow.marker.visible === false) {
+        infoWindow.close();
       }
     }
   }
