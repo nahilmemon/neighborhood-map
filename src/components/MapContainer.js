@@ -58,6 +58,44 @@ class MapContainer extends Component {
     axios.cancelAll();
   }
 
+  componentDidUpdate(prevProps) {
+    // If the user has changed any of the inputs in the filter section
+    // of the side bar component, then update the markers so that only
+    // the markers matching the filtration results are visible. Also
+    // close the infoWindow and unfocus the currently focused marker and
+    // corresponding list item in the side bar if this marker/li is no
+    // longer a part of the visible markers/li.
+    if (this.props.filterByNameText !== prevProps.filterByNameText ||
+      this.props.filterByCategoryOption !== prevProps.filterByCategoryOption) {
+      // Only display the filtered location markers
+      this.displayFilteredMarkers(this.google, this.map, this.markers, this.infoWindow);
+    }
+
+    // If the currently focused location has changed, then update the markers
+    // so that the corresponding marker is now focused and the infoWindow
+    // opens with information about this marker or so that the previously
+    // focused marker is no longer focused and the infoWindow is closed.
+    if (this.props.currentlyFocusedLocationId !== prevProps.currentlyFocusedLocationId) {
+      // If the user has clicked on a list item in the side bar component,
+      // then focus the corresponding marker and display an infoWindow about it
+      if (this.markers) {
+        this.focusMarkerOfCurrentlyFocusedLocation(this.map, this.infoWindow, this.props.currentlyFocusedLocationId, this.markers);
+      }
+    }
+  }
+
+  // When the active marker needs to change, then alter the appearance of
+  // the marker accordingly and call the parent component's
+  // onActiveMarkerChange function
+  onActiveMarkerChange = (marker, id) => {
+    if (id !== null) {
+      marker.setIcon(this.focusedMarkerIcon);
+    } else {
+      marker.setIcon(this.defaultMarkerIcon);
+    }
+    this.props.onActiveMarkerChange(id);
+  }
+
   // Create map instance
   createMap = (google) => {
     this.map = new google.maps.Map(document.getElementById('map'), {
@@ -97,6 +135,7 @@ class MapContainer extends Component {
         map: map,
         position: location.location,
         visible: true,
+        title: location.name,
         name: location.name,
         animation: google.maps.Animation.DROP,
         icon: this.defaultMarkerIcon,
@@ -112,7 +151,7 @@ class MapContainer extends Component {
         marker.setIcon(this.focusedMarkerIcon);
         this.populateInfoWindow(this.map, marker, this.infoWindow);
         // Also make the corresponding list item in the side bar active
-        this.props.onActiveMarkerChange(marker.id);
+        this.onActiveMarkerChange(marker, marker.id);
       });
 
       // Add mouse event listeners so that hover on the marker changes
@@ -199,7 +238,7 @@ class MapContainer extends Component {
         }
         // Update the side bar so that this marker's corresponding list
         // item is no longer active
-        this.props.onActiveMarkerChange(null);
+        this.props.onActiveMarkerChange(infoWindow.marker, null);
         // Remove the marker from the infoWindow (thus effectively closing
         // the infoWindow)
         infoWindow.marker = null;
@@ -223,6 +262,7 @@ class MapContainer extends Component {
       // related marker is no longer visiible after filtration
       if (infoWindow && infoWindow.marker && infoWindow.marker.visible === false) {
         infoWindow.close();
+        this.onActiveMarkerChange(infoWindow.marker, null);
       }
     }
   }
@@ -247,15 +287,6 @@ class MapContainer extends Component {
   }
 
   render() {
-    // Only display the filtered location markers
-    this.displayFilteredMarkers(this.google, this.map, this.markers, this.infoWindow);
-
-    // If the user has clicked on a list item in the side bar component,
-    // then focus the corresponding marker and display an infoWindow about it
-    if (this.markers) {
-      this.focusMarkerOfCurrentlyFocusedLocation(this.map, this.infoWindow, this.props.currentlyFocusedLocationId, this.markers);
-    }
-
     return (
       <section className="map-container">
         <map
