@@ -12,6 +12,9 @@
     --side-bar-max-width: 300px;
     --side-bar-padding-x: 1em;
 
+    /* Map */
+    --marker-size: 50px;
+
     /* ==== Color Palette ==== */
     --primary-color: #ef9a9a;
     --primary-light-color: #ffcccb;
@@ -421,6 +424,36 @@
     right: 0;
     bottom: 0;
     top: 0;
+  }
+
+  .marker-button {
+    height: var(--marker-size);
+    width: var(--marker-size);
+    transition: all 0.25s ease-in-out;
+    color: var(--primary-color);
+    position: absolute;
+  }
+
+  .marker-button:hover,
+  .marker-button:focus {
+    outline: none;
+    /*box-shadow: inset 0px 0px 0px 3px var(--primary-dark-color-overlay);*/
+    color: var(--primary-dark-color);;
+    transition: all 0.25s ease-in-out;
+  }
+
+  .marker-image {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
+
+  .marker-button svg path {
+    fill: currentColor;
   }
 
 /* ====================== Modal Content ====================== */

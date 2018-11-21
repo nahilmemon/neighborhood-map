@@ -8,6 +8,7 @@ import { mapStyles } from '../mapStyles.js';
 // API helpers
 // import * as FoursquareAPI from '../API/FoursquareAPI.js';
 import loadGoogleMapsAPI from '../API/loadGoogleMapsAPI.js';
+import defineCustomMapMarkerClass from '../API/defineCustomMapMarkerClass.js';
 
 class MapContainer extends Component {
   constructor(props) {
@@ -50,6 +51,18 @@ class MapContainer extends Component {
       this.createAllMarkers(this.google, this.map, this.props.locationsData);
       // Reposition the map to fit all the markers
       this.displayGivenMarkers(this.google, this.map, this.markers);
+
+      this.CustomMapMarkerClass = defineCustomMapMarkerClass();
+
+      // Create custom map markers
+      let marker = new this.CustomMapMarkerClass(
+        new this.google.maps.LatLng(24.0988807, 54.4201307),
+        this.map
+      );
+
+      marker.addListener("click", () => {
+        console.log('clicked marker: ', marker);
+      });
     });
   }
 
