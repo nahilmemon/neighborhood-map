@@ -4,12 +4,20 @@
 // with the keyboard.
 function defineCustomMapMarkerClass() {
   class CustomMapMarker extends window.google.maps.OverlayView {
-    constructor(geographicalPosition, map) {
+    constructor(markerProperties) {
       super();
       this.google = window.google;
-      this.geographicalPosition = geographicalPosition;
-      this.map = map;
+      this.map = markerProperties.map;
       this.setMap(this.map);
+
+      this.position = markerProperties.position;
+      this.title = markerProperties.name;
+      this.name = markerProperties.name;
+      this.id = markerProperties.id;
+      this.description = markerProperties.description;
+      this.descriptionLink = markerProperties.descriptionLink;
+      this.category = markerProperties.category;
+
       // Width/height of the marker button and inner svg icon to be created
       this.markerSize = parseInt(getComputedStyle(document.body).getPropertyValue('--marker-size'));
       // To store the marker's html
@@ -32,6 +40,7 @@ function defineCustomMapMarkerClass() {
 
       this.markerButton = document.createElement("button");
       this.markerButton.setAttribute('type', 'button');
+      this.markerButton.setAttribute('title', this.title);
       this.markerButton.classList.add('unstyled-button', 'marker-button');
       this.markerButton.innerHTML = this.markerIconSVG;
 
@@ -52,7 +61,11 @@ function defineCustomMapMarkerClass() {
     positionMarkerButton() {
       // Use the projection from the overlay to determine the top-left corner position
       // of the marker button in pixels
-      const topLeftCornerPixelPosition = this.getProjection().fromLatLngToDivPixel(this.geographicalPosition);
+      const geographicalPosition = new this.google.maps.LatLng(
+        this.position.lat,
+        this.position.lng
+      );
+      const topLeftCornerPixelPosition = this.getProjection().fromLatLngToDivPixel(geographicalPosition);
       // Offset the marker's position so that the marker icon's tip aligns with the
       // marker's geographical position
       let markerIconOffset = 0.5*this.markerSize;
@@ -95,6 +108,7 @@ function defineCustomMapMarkerClass() {
     hide() {
       if (this.markerButton) {
         this.markerButton.style.visibility = 'hidden';
+        this.visible = false;
       }
     }
 
@@ -102,7 +116,18 @@ function defineCustomMapMarkerClass() {
     show() {
       if (this.markerButton) {
         this.markerButton.style.visibility = 'visible';
+        this.visible = true;
       }
+    }
+
+    // Make the marker button appear focused
+    setFocusedAppearance() {
+      this.markerButton.classList.add('marker-button-focused');
+    }
+
+    // Make the marker button appear not-focused/blurred
+    setBlurredAppearance() {
+      this.markerButton.classList.remove('marker-button-focused');
     }
   }
 

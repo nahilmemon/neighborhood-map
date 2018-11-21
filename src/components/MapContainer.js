@@ -13,11 +13,6 @@ import defineCustomMapMarkerClass from '../API/defineCustomMapMarkerClass.js';
 class MapContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    };
-
-    // this.createMap = this.createMap.bind(this);
   }
 
   componentDidMount() {
@@ -40,29 +35,17 @@ class MapContainer extends Component {
 
       // Create the map
       this.createMap(this.google);
-      // Create the marker icons for the default and focused scenarios
-      // Get the CSS variables from the root element
-      let rootStyles = getComputedStyle(document.body);
-      this.defaultMarkerIcon = this.createColoredMarkerIcon(this.google, rootStyles.getPropertyValue('--primary-light-color'));
-      this.focusedMarkerIcon = this.createColoredMarkerIcon(this.google, rootStyles.getPropertyValue('--primary-dark-color'));
+
+      // Create the custom marker class to be able to make and manipulate
+      // custom markers
+      this.CustomMapMarkerClass = defineCustomMapMarkerClass();
+
       // Create the infoWindow
       this.createInfoWindow(this.google);
       // Create and display the markers
       this.createAllMarkers(this.google, this.map, this.props.locationsData);
       // Reposition the map to fit all the markers
       this.displayGivenMarkers(this.google, this.map, this.markers);
-
-      this.CustomMapMarkerClass = defineCustomMapMarkerClass();
-
-      // Create custom map markers
-      let marker = new this.CustomMapMarkerClass(
-        new this.google.maps.LatLng(24.0988807, 54.4201307),
-        this.map
-      );
-
-      marker.addListener("click", () => {
-        console.log('clicked marker: ', marker);
-      });
     });
   }
 
@@ -102,9 +85,9 @@ class MapContainer extends Component {
   // onActiveMarkerChange function
   onActiveMarkerChange = (marker, id) => {
     if (id !== null) {
-      marker.setIcon(this.focusedMarkerIcon);
+      marker.setFocusedAppearance();
     } else {
-      marker.setIcon(this.defaultMarkerIcon);
+      marker.setBlurredAppearance();
     }
     this.props.onActiveMarkerChange(id);
   }
@@ -122,36 +105,15 @@ class MapContainer extends Component {
     });
   }
 
-  // Create a marker icon whose color is the color given
-  // Note: color is given in the following format: '#xxxxxx'
-  createColoredMarkerIcon = (google, color) => {
-    // Convert color format from '#xxxxxx' to 'xxxxxx'
-    color = color.trim().substr(1);
-    // Create a marker image using an asset from Google
-    return new google.maps.MarkerImage(
-      `http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|${color}|40|_|%E2%80%A2`,
-      // Make the marker 21px x 34px in size
-      new google.maps.Size(21, 34),
-      // Make the origin of the marker (0, 0)
-      new google.maps.Point(0, 0),
-      // Anchor the marker at (10, 34)
-      new google.maps.Point(10, 34),
-      // Make the marker 21px x 34px in size
-      new google.maps.Size(21,34)
-    );
-  }
-
   // Create the list of markers based on the locationsData
   createAllMarkers = (google, map, locations) => {
     this.markers = locations.map((location, index) => {
-      let marker = new google.maps.Marker({
+      let marker = new this.CustomMapMarkerClass({
         map: map,
         position: location.location,
         visible: true,
         title: location.name,
         name: location.name,
-        animation: google.maps.Animation.DROP,
-        icon: this.defaultMarkerIcon,
         id: location.id,
         description: location.description,
         descriptionLink: location.descriptionLink,
@@ -161,21 +123,9 @@ class MapContainer extends Component {
       // Add an event listener so that when a marker is clicked,
       // an infoWindow describing the marker's properties will display
       marker.addListener('click', () => {
-        marker.setIcon(this.focusedMarkerIcon);
         this.populateInfoWindow(this.map, marker, this.infoWindow);
         // Also make the corresponding list item in the side bar active
         this.onActiveMarkerChange(marker, marker.id);
-      });
-
-      // Add mouse event listeners so that hover on the marker changes
-      // its color
-      marker.addListener('mouseover', () => {
-        marker.setIcon(this.focusedMarkerIcon);
-      });
-      marker.addListener('mouseout', () => {
-        if (this.infoWindow.marker !== marker) {
-          marker.setIcon(this.defaultMarkerIcon);
-        }
       });
 
       return marker;
@@ -190,7 +140,7 @@ class MapContainer extends Component {
     // For each marker, display the marker and extend the map's boundaries
     // in order to include this marker in the visible area on screen
     markers.forEach((marker) => {
-      marker.setVisible(true);
+      marker.show();
       mapBoundaries.extend(marker.position);
     });
     // Reposition the map to display all the markers on screen
@@ -200,14 +150,16 @@ class MapContainer extends Component {
   // Hide given markers
   hideGivenMarkers = (google, map, markers) => {
     markers.forEach((marker) => {
-      marker.setVisible(false);
+      marker.hide();
     });
   }
 
   // Create the info window to display information about a selected place
   createInfoWindow = (google) => {
     this.infoWindow = new google.maps.InfoWindow({
-      maxWidth: 245
+      maxWidth: 245,
+      // Make the infoWindow appear 40px above the marker's anchor point
+      pixelOffset: new google.maps.Size(0, -40)
     });
   }
 
@@ -219,11 +171,11 @@ class MapContainer extends Component {
     if (infoWindow.marker !== givenMarker) {
       // Reset the style of the infoWindow's previous marker
       if (infoWindow.marker !== undefined && infoWindow.marker !== null) {
-        infoWindow.marker.setIcon(this.defaultMarkerIcon);
+        infoWindow.marker.setBlurredAppearance();
       }
 
       // Change the style of the given marker
-      givenMarker.setIcon(this.focusedMarkerIcon);
+      givenMarker.setFocusedAppearance();
 
       // Set the infoWindow's marker to the given marker
       infoWindow.marker = givenMarker;
@@ -240,14 +192,15 @@ class MapContainer extends Component {
       `);
 
       // Open and display the infoWindow
-      infoWindow.open(map, givenMarker);
+      infoWindow.setPosition(givenMarker.position);
+      infoWindow.open(map);
 
       // Add an event listener to clear the infoWindow's marker when
       // the close button is clicked
       infoWindow.addListener('closeclick', () => {
         // Reset the style of the infoWindow's current marker
         if (infoWindow.marker !== undefined && infoWindow.marker !== null) {
-          infoWindow.marker.setIcon(this.defaultMarkerIcon);
+          infoWindow.marker.setBlurredAppearance();
         }
         // Update the side bar so that this marker's corresponding list
         // item is no longer active
@@ -276,6 +229,7 @@ class MapContainer extends Component {
       if (infoWindow && infoWindow.marker && infoWindow.marker.visible === false) {
         infoWindow.close();
         this.onActiveMarkerChange(infoWindow.marker, null);
+        infoWindow.marker = null;
       }
     }
   }
@@ -292,7 +246,7 @@ class MapContainer extends Component {
     if (markerToFocus.length > 0) {
       markerToFocus = markerToFocus[0];
       // Change the icon color of this marker
-      markerToFocus.setIcon(this.focusedMarkerIcon);
+      markerToFocus.setFocusedAppearance();
       // Populate the infoWindow with this marker's info and display the
       // infoWindow
       this.populateInfoWindow(map, markerToFocus, infoWindow);

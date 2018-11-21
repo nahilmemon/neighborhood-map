@@ -434,6 +434,7 @@
     position: absolute;
   }
 
+  .marker-button-focused,
   .marker-button:hover,
   .marker-button:focus {
     outline: none;
