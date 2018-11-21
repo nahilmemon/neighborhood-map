@@ -220,7 +220,7 @@ class MapContainer extends Component {
         <div class="info-window">
           <h4>${givenMarker.name}</h4>
           <p>
-            ${givenMarker.description}
+            "${givenMarker.description}"
             (<a href="${givenMarker.descriptionLink}">Source</a>)
           </p>
         </div>
