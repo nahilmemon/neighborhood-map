@@ -128,6 +128,17 @@ class MapContainer extends Component {
         this.onActiveMarkerChange(marker, marker.id);
       });
 
+      // Add mouse event listeners so that hovering on the marker changes
+      // its color
+      marker.addListener('mouseover', () => {
+        marker.setFocusedAppearance();
+      });
+      marker.addListener('mouseout', () => {
+        if (this.infoWindow.marker !== marker) {
+          marker.setBlurredAppearance();
+        }
+      });
+
       return marker;
     });
   }

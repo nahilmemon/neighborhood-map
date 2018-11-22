@@ -426,21 +426,11 @@
     top: 0;
   }
 
-  .marker-button {
+  .marker-container {
     height: var(--marker-size);
     width: var(--marker-size);
     transition: all 0.25s ease-in-out;
-    color: var(--primary-color);
     position: absolute;
-  }
-
-  .marker-button-focused,
-  .marker-button:hover,
-  .marker-button:focus {
-    outline: none;
-    /*box-shadow: inset 0px 0px 0px 3px var(--primary-dark-color-overlay);*/
-    color: var(--primary-dark-color);;
-    transition: all 0.25s ease-in-out;
   }
 
   .marker-image {
@@ -453,8 +443,16 @@
     left: 0;
   }
 
-  .marker-button svg path {
-    fill: currentColor;
+  .marker-container svg a path {
+    fill: var(--primary-color);
+    transition: all 0.25s ease-in-out;
+  }
+
+  .marker-container svg a.marker-link-focused path
+  .marker-container svg a:hover path,
+  .marker-container svg a:focus path {
+    fill: var(--primary-dark-color);
+    transition: all 0.25s ease-in-out;
   }
 
 /* ====================== Modal Content ====================== */

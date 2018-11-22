@@ -18,8 +18,10 @@ function defineCustomMapMarkerClass() {
       this.descriptionLink = markerProperties.descriptionLink;
       this.category = markerProperties.category;
 
+      // Get the root CSS variables
+      this.rootStyles = getComputedStyle(document.body);
       // Width/height of the marker button and inner svg icon to be created
-      this.markerSize = parseInt(getComputedStyle(document.body).getPropertyValue('--marker-size'));
+      this.markerSize = parseInt(this.rootStyles.getPropertyValue('--marker-size'));
       // To store the marker's html
       this.markerButton = null;
     }
@@ -34,19 +36,34 @@ function defineCustomMapMarkerClass() {
           class="marker-image"
           xmlns="http://www.w3.org/2000/svg"
           fill="#fff"
-          viewBox="0 0 24 21">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          viewBox="0 0 24 21"
+          role="img"
+          aria-label="${this.title} Map Marker. Click for more information about this place.">
+          <title>${this.title}</title>
+          <a
+            href="#"
+            role="button"
+            aria-label="${this.title} Map Marker. Click for more information about this place."
+            tabindex="0">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </a>
         </svg>`;
 
-      this.markerButton = document.createElement("button");
-      this.markerButton.setAttribute('type', 'button');
-      this.markerButton.setAttribute('title', this.title);
-      this.markerButton.classList.add('unstyled-button', 'marker-button');
+      this.markerButton = document.createElement('div');
+      this.markerButton.classList.add('marker-container');
       this.markerButton.innerHTML = this.markerIconSVG;
 
-      // Handle click event listener.
-      this.google.maps.event.addDomListener(this.markerButton, "click", event => {
-        this.google.maps.event.trigger(this, "click");
+      // Handle click event listener
+      this.google.maps.event.addDomListener(this.markerButton, 'click', event => {
+        this.google.maps.event.trigger(this, 'click');
+      });
+
+      // Handle mouse event listeners
+      this.google.maps.event.addDomListener(this.markerButton, 'mouseover', event => {
+        this.google.maps.event.trigger(this, 'mouseover');
+      });
+      this.google.maps.event.addDomListener(this.markerButton, 'mouseout', event => {
+        this.google.maps.event.trigger(this, 'mouseout');
       });
     }
 
@@ -122,12 +139,12 @@ function defineCustomMapMarkerClass() {
 
     // Make the marker button appear focused
     setFocusedAppearance() {
-      this.markerButton.classList.add('marker-button-focused');
+      this.markerButton.querySelector('path').style.fill = this.rootStyles.getPropertyValue('--primary-dark-color');
     }
 
     // Make the marker button appear not-focused/blurred
     setBlurredAppearance() {
-      this.markerButton.classList.remove('marker-button-focused');
+      this.markerButton.querySelector('path').style.fill = this.rootStyles.getPropertyValue('--primary-color');
     }
   }
 
