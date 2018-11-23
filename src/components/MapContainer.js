@@ -33,6 +33,8 @@ class MapContainer extends Component {
       // Save the promises' results
       this.google = promiseResults[0];
 
+      this.filteredMarkers = [];
+
       // Create the map
       this.createMap(this.google);
 
@@ -46,6 +48,10 @@ class MapContainer extends Component {
       this.createAllMarkers(this.google, this.map, this.props.locationsData);
       // Reposition the map to fit all the markers
       this.displayGivenMarkers(this.google, this.map, this.markers);
+
+      // Hide any off screen markers from keyboard users (and everyone else too)
+      this.filteredMarkers = this.markers;
+      this.hideOffScreenMarkers(this.map, this.filteredMarkers);
     });
   }
 
@@ -92,6 +98,23 @@ class MapContainer extends Component {
     this.props.onActiveMarkerChange(id);
   }
 
+  // Hide the marker if it's not visible on the current map display (this
+  // will hide the marker from viewers, keyboard users and screen readers).
+  // Hiding the marker from keyboard users is important so that they cannot
+  // tab onto these markers since tabbing onto an off screen marker causes
+  // the mapDiv to scroll automatically which shifts the controls of the
+  // map and sometimes breaks the map.
+  hideOffScreenMarkers = (map, markers) => {
+    let boundaries = map.getBounds();
+    markers.forEach((marker) => {
+      if (boundaries && boundaries.contains(marker.position)) {
+        marker.show();
+      } else {
+        marker.hide();
+      }
+    });
+  }
+
   // Create map instance
   createMap = (google) => {
     this.map = new google.maps.Map(document.getElementById('map'), {
@@ -102,6 +125,12 @@ class MapContainer extends Component {
       mapTypeControlOptions: {
         style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
       }
+    });
+
+    // Whenever the map is moved around, figure out which markers are off
+    // screen and hide them and show the remaining on screen markers
+    this.map.addListener('bounds_changed', () => {
+      this.hideOffScreenMarkers(this.map, this.filteredMarkers);
     });
   }
 
@@ -224,6 +253,7 @@ class MapContainer extends Component {
       if (filteredMarkers.length > 0) {
         this.displayGivenMarkers(google, map, filteredMarkers);
       }
+      this.filteredMarkers = filteredMarkers;
       // Close the infoWindow if it's already been created and the
       // related marker is no longer visiible after filtration
       if (infoWindow && infoWindow.marker && infoWindow.marker.visible === false) {
