@@ -429,9 +429,9 @@
   .marker-button {
     height: var(--marker-size);
     width: var(--marker-size);
-    transition: all 0.25s ease-in-out;
     color: var(--primary-color);
     position: absolute;
+    pointer-events: none;
   }
 
   .marker-button-focused,
@@ -453,8 +453,13 @@
     left: 0;
   }
 
+  .marker-button svg {
+    pointer-events: none;
+  }
+
   .marker-button svg path {
     fill: currentColor;
+    pointer-events: all;
   }
 
 /* ====================== Modal Content ====================== */
