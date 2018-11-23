@@ -432,6 +432,7 @@
     color: var(--primary-color);
     position: absolute;
     pointer-events: none;
+    transition: color 0.25s ease-in-out;
   }
 
   .marker-button-focused,
@@ -439,8 +440,8 @@
   .marker-button:focus {
     outline: none;
     /*box-shadow: inset 0px 0px 0px 3px var(--primary-dark-color-overlay);*/
-    color: var(--primary-dark-color);;
-    transition: all 0.25s ease-in-out;
+    color: var(--primary-dark-color);
+    transition: color 0.25s ease-in-out;
   }
 
   .marker-image {
