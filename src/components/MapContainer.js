@@ -9,6 +9,7 @@ import { mapStyles } from '../mapStyles.js';
 // import * as FoursquareAPI from '../API/FoursquareAPI.js';
 import loadGoogleMapsAPI from '../API/loadGoogleMapsAPI.js';
 import defineCustomMapMarkerClass from '../API/defineCustomMapMarkerClass.js';
+import defineCustomInfoWindowClass from '../API/defineCustomInfoWindowClass.js';
 
 class MapContainer extends Component {
   constructor(props) {
@@ -38,9 +39,10 @@ class MapContainer extends Component {
       // Create the map
       this.createMap(this.google);
 
-      // Create the custom marker class to be able to make and manipulate
-      // custom markers
+      // Create the custom marker and infoWindow classes to be able to make
+      // and manipulate custom markers and infoWindows
       this.CustomMapMarkerClass = defineCustomMapMarkerClass();
+      this.CustomInfoWindowClass = defineCustomInfoWindowClass();
 
       // Create the infoWindow
       this.createInfoWindow(this.google);
@@ -52,6 +54,17 @@ class MapContainer extends Component {
       // Hide any off screen markers from keyboard users (and everyone else too)
       this.filteredMarkers = this.markers;
       this.hideOffScreenMarkers(this.map, this.filteredMarkers);
+
+      // Test custom infoWindow
+      let content = document.createElement('div');
+      content.setAttribute('id', 'content');
+      content.innerText = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, autem dicta dolorum aliquid molestiae accusamus ea, tempore ipsam eligendi impedit? Totam, fuga veritatis! Nam nemo ea culpa debitis ex enim! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, autem dicta dolorum aliquid molestiae accusamus ea, tempore ipsam eligendi impedit? Totam, fuga veritatis! Nam nemo ea culpa debitis ex enim!';
+      let popup = new this.CustomInfoWindowClass({
+        position: new this.google.maps.LatLng(24.0988807, 54.4201307),
+        title: 'Hello World!',
+        content: content
+      });
+      popup.setMap(this.map);
     });
   }
 

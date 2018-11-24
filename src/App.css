@@ -104,7 +104,7 @@
   input,
   select,
   option {
-    font: 1em/1.25 'Montserrat', sans-serif;
+    font: 1rem/1.25 'Montserrat', sans-serif;
     color: var(--secondary-dark-color);
   }
 
@@ -115,43 +115,43 @@
   }
 
   h1 {
-    font-size: 2em;
+    font-size: 2rem;
     line-height: 1.25;
   }
 
   h2 {
-    font-size: 1.625em;
+    font-size: 1.625rem;
     line-height: 1.15384615;
   }
 
   h3 {
-    font-size: 1.375em;
+    font-size: 1.375rem;
     line-height: 1.13636364;
   }
 
   h4 {
-    font-size: 1.125em;
+    font-size: 1.125rem;
     line-height: 1.11111111;
   }
 
   @media (min-width: 768px) {
     body {
-      font-size: 1em;
+      font-size: 1rem;
       line-height: 1.375;
     }
 
     h1 {
-      font-size: 2.5em;
+      font-size: 2.5rem;
       line-height: 1.125;
     }
 
     h2 {
-      font-size: 2em;
+      font-size: 2rem;
       line-height: 1.25;
     }
 
     h3 {
-      font-size: 1.5em;
+      font-size: 1.5rem;
       line-height: 1.25;
     }
 
@@ -162,17 +162,17 @@
 
   @media (min-width: 992px) {
     h1 {
-      font-size: 3em;
+      font-size: 3rem;
       line-height: 1.05;
     }
 
     h2 {
-      font-size: 2.25em;
+      font-size: 2.25rem;
       line-height: 1.25;
     }
 
     h3 {
-      font-size: 1.75em;
+      font-size: 1.75rem;
       line-height: 1.25;
     }
   }
@@ -426,6 +426,7 @@
     top: 0;
   }
 
+  /* ==== Marker Button ==== */
   .marker-button {
     height: var(--marker-size);
     width: var(--marker-size);
@@ -461,6 +462,162 @@
   .marker-button svg path {
     fill: currentColor;
     pointer-events: all;
+  }
+
+  /* ==== Info Window ==== */
+  /* Part of the following styling method for drawing the info window
+   * is taken from the Google Maps API examples section:
+   * https://developers.google.com/maps/documentation/javascript/examples/overlay-popup
+   */
+
+  /* In this case, even if the side bar and map are both open simultaneously,
+   * there's enough space to reach the maximum info window size. So we don't
+   * need to take into consideration the 300px wide side bar too. The
+   * height of the info window will most likely be large at this screen width,
+   * we should try to avoid overlapping the the map buttons.
+   * Note: 40px = width of one map's zoom in/out and fullscreen buttons. Another
+   * 15px is added for spacing between the info window and the buttons.
+   */
+  .info-window-container {
+    height: 0;
+    position: absolute;
+    width: calc(100vw - 2*(40px + 15px));
+    max-width: 630px;
+    min-width: 300px;
+  }
+
+  /* In this case, the side bar might be open at the same time as the map.
+   * So we need to take into consideration the 300px wide side bar too. The
+   * height of the info window will most likely be small at this screen width,
+   * we don't need to worry too much about overlapping the the map buttons
+   * since the info window will be short enough to fit in between the map
+   * buttons vertically.
+   * Note: Try to create an 8px gap on each side between the info window and
+   * the screen's edges.
+   */
+  @media screen and (max-width: 950px) {
+    .info-window-container {
+      width: calc(100vw - 300px - 2*(8px));
+      max-width: 630px;
+      min-width: 300px;
+    }
+  }
+
+  /* In this case, the side bar and map can't be open at the same time.
+   * So it's okay to make the info window almost as big as the screen.
+   * width. The height of the info window will most likely be small, so
+   * we don't need to worry too much about overlapping the the map buttons
+   * since the info window will be short enough to fit in between the map
+   * buttons vertically.
+   */
+  @media screen and (max-width: 600px) {
+    .info-window-container {
+      width: calc(100vw - 2*(8px));
+      max-width: 630px;
+      min-width: 300px;
+    }
+  }
+
+  /* The following two rule sets style the anchor arrow tip below the info
+   * window.
+   */
+  .info-window-container-anchor-tip {
+    position: absolute;
+    width: 100%;
+    bottom: 24px; /* <== This represents the height of the anchor arrow tip. */
+    left: 0;
+  }
+
+  /* This actually draws the anchor arrow tip.
+   * The following trick to draw the anchor arrow tip is taken from:
+   * https://css-tricks.com/snippets/css/css-triangle/
+   */
+  .info-window-container-anchor-tip::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* Center the anchor arrow tip horizontally against the info window container. */
+    transform: translate(-50%, 0);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent; /* <== This represents the tipWidth/2. */
+    border-right: 10px solid transparent; /* <== This represents the tipWidth/2. */
+    border-top: 24px solid white; /* <== This represents the height of the tip. */
+  }
+
+  /* This is the visible part of the info window that contains the actual info. */
+  .info-window-contents {
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* Reposition the visible part of the info window to be above the anchor
+     * arrow tip.
+     */
+    transform: translate(-50%, -100%);
+    background-color: white;
+    border-radius: 5px;
+    font-family: sans-serif;
+    box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.5);
+    font: 1rem/1.25 'Montserrat', sans-serif;
+    color: var(--secondary-dark-color);
+  }
+
+  .info-window-contents-header {
+    text-align: center;
+    border-radius: 3px 3px 0 0;
+    padding: 1em;
+    background: var(--primary-dark-color);
+    color: var(--secondary-light-color);
+    position: relative;
+  }
+
+  .info-window-contents-header-heading {
+    margin: 0 32px 0;
+  }
+
+  .button-close-info-window {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    color: var(--secondary-light-color);
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 2.5em;
+    min-width: 54px;
+    min-height: 54px;
+    transition: all 0.25s ease-in-out;
+  }
+
+  .button-close-info-window:hover,
+  .button-close-info-window:focus {
+    outline: none;
+    color: var(--primary-dark-color);
+    background-color: var(--secondary-light-color);
+    transition: all 0.25s ease-in-out;
+  }
+
+  .info-window-contents-body {
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 0 1em;
+    border-radius: 0 0 3px 3px;
+    background: var(--secondary-light-color);
+    color: var(--secondary-dark-color);
+    text-align: left;
+    border-top: 1em solid var(--secondary-light-color);
+    border-bottom: 1em solid var(--secondary-light-color);
+  }
+
+  /* In this case, make the height of the info window small enough to
+   * vertically fit in between the map buttons.
+   */
+  @media screen and (max-height: 650px) {
+    .info-window-contents-body {
+      max-height: 150px;
+    }
   }
 
 /* ====================== Modal Content ====================== */
@@ -651,7 +808,13 @@
    */
 
   /* CSS Resources
-   *
+   * http://typecast.com/blog/a-more-modern-scale-for-web-typography
+   * https://tympanus.net/Development/ModalWindowEffects/
+   * https://alligator.io/react/modal-component/
+   * https://assortment.io/posts/accessible-modal-component-react-portals-part-1
+   * https://github.com/udacity/ud891/tree/gh-pages/lesson5-semantics-aria/21-dialog
+   * https://developers.google.com/maps/documentation/javascript/examples/overlay-popup
+   * https://css-tricks.com/snippets/css/css-triangle/
   */
 
   /* JS Resources
