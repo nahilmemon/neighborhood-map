@@ -64,6 +64,7 @@
   a {
     color: var(--primary-color);
     transition: all 0.25s ease-in-out;
+    transition-property: outline, box-shadow;
   }
 
   @media (max-width: 767px) {
@@ -81,6 +82,7 @@
     outline: none;
     box-shadow: 0px 0px 0px 2px var(--primary-dark-color-overlay);
     transition: all 0.25s ease-in-out;
+    transition-property: outline, box-shadow;
   }
 
 /* ====================== Typography ====================== */
@@ -589,6 +591,7 @@
     min-width: 54px;
     min-height: 54px;
     transition: all 0.25s ease-in-out;
+    transition-property: outline, color, background-color;
   }
 
   .button-close-info-window:hover,
@@ -597,6 +600,7 @@
     color: var(--primary-dark-color);
     background-color: var(--secondary-light-color);
     transition: all 0.25s ease-in-out;
+    transition-property: outline, color, background-color;
   }
 
   .info-window-contents-body {

@@ -4,7 +4,6 @@
 function defineCustomInfoWindowClass() {
   class CustomInfoWindow extends window.google.maps.OverlayView {
     constructor(infoWindowProperties) {
-    // constructor(position, content) {
       super();
       this.google = window.google;
 
@@ -15,7 +14,12 @@ function defineCustomInfoWindowClass() {
 
       this.title = infoWindowProperties.title;
       this.content = infoWindowProperties.content;
+
       this.infoWindowContainer = null;
+      this.marker = null;
+
+      this.map = infoWindowProperties.map;
+      this.setMap(this.map);
 
       // Stop clicks and drags occuring on the info window container from
       // bubbling up to the map
@@ -65,9 +69,9 @@ function defineCustomInfoWindowClass() {
           ×
         </button>`;
 
-      let contentBody = this.content;
+      let contentBody = document.createElement('div');
       contentBody.classList.add('info-window-contents-body');
-
+      contentBody.innerHTML = this.content;
 
       infoWindowContents.appendChild(contentHeader);
       infoWindowContents.appendChild(contentBody);
@@ -80,10 +84,17 @@ function defineCustomInfoWindowClass() {
       this.infoWindowContainer.classList.add('info-window-container');
       this.infoWindowContainer.appendChild(infoWindowContainerAnchorTipDiv);
 
-      // Handle click event listener.
-      // this.google.maps.event.addDomListener(this.infoWindowContainer, "click", event => {
-      //   this.google.maps.event.trigger(this, "click");
-      // });
+      // Handle close button click event listener
+      this.google.maps.event.addDomListener(this.infoWindowContainer, "click", event => {
+        if (event.target.classList.contains('button-close-info-window')) {
+          this.google.maps.event.trigger(this, "closeclick", event);
+        }
+      });
+
+      // If there is not set position or the content is null, then hide the info window
+      if (this.position === null || this.content === null) {
+        this.hide();
+      }
     }
 
     // Add the marker button to the overlay image pane
@@ -95,14 +106,22 @@ function defineCustomInfoWindowClass() {
     // its geographical location and the size of the marker, so that the marker's
     // bottom tip touches its geographical location
     positionInfoWindow() {
-      // Use the projection from the overlay to determine the top-left corner position
-      // of the info window container in pixels
-      let topLeftCornerPixelPosition = this.getProjection().fromLatLngToDivPixel(this.position);
-      // Offset the info window container's position so that the anchor tip
-      // touches the top of the corresponding marker button svg icon
-      let tipOffsetY = this.markerHeight - this.tipHeight;
-      this.infoWindowContainer.style.left = `${topLeftCornerPixelPosition.x}px`;
-      this.infoWindowContainer.style.top = `${(topLeftCornerPixelPosition.y - tipOffsetY)}px`;
+      if (this.position !== null) {
+        // Convert the given position from {lat: xx, lng: xx} to an actual google maps
+        // LatLng object
+        const geographicalPosition = new this.google.maps.LatLng(
+          this.position.lat,
+          this.position.lng
+        );
+        // Use the projection from the overlay to determine the top-left corner position
+        // of the info window container in pixels
+        let topLeftCornerPixelPosition = this.getProjection().fromLatLngToDivPixel(geographicalPosition);
+        // Offset the info window container's position so that the anchor tip
+        // touches the top of the corresponding marker button svg icon
+        let tipOffsetY = this.markerHeight - this.tipHeight;
+        this.infoWindowContainer.style.left = `${topLeftCornerPixelPosition.x}px`;
+        this.infoWindowContainer.style.top = `${(topLeftCornerPixelPosition.y - tipOffsetY)}px`;
+      }
     }
 
     // This is called when both the map's panes are ready/available
@@ -139,10 +158,25 @@ function defineCustomInfoWindowClass() {
     }
 
     // Change the contents of the info window
-    setContent(newContent) {
+    // setContent(newContent) {
+    //   this.content = newContent;
+    //   // this.createInfoWindowHTML();
+    //   // this.appendInfoWindowToOverlay();
+    //   // this.draw();
+    // }
+
+    setContent(newTitle, newContent) {
+      this.title = newTitle;
       this.content = newContent;
-      this.createInfoWindowHTML();
-      this.appendInfoWindowToOverlay();
+
+      this.infoWindowContainer.querySelector('.info-window-contents-header-heading').innerText = newTitle;
+      this.infoWindowContainer.querySelector('.info-window-contents-body').innerHTML = newContent;
+    }
+
+    // Change the contents of the info window
+    setPosition(newPosition) {
+      this.position = newPosition;
+
       this.draw();
     }
 

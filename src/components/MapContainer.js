@@ -45,7 +45,7 @@ class MapContainer extends Component {
       this.CustomInfoWindowClass = defineCustomInfoWindowClass();
 
       // Create the infoWindow
-      this.createInfoWindow(this.google);
+      this.createInfoWindow(this.google, this.map);
       // Create and display the markers
       this.createAllMarkers(this.google, this.map, this.props.locationsData);
       // Reposition the map to fit all the markers
@@ -54,17 +54,6 @@ class MapContainer extends Component {
       // Hide any off screen markers from keyboard users (and everyone else too)
       this.filteredMarkers = this.markers;
       this.hideOffScreenMarkers(this.map, this.filteredMarkers);
-
-      // Test custom infoWindow
-      let content = document.createElement('div');
-      content.setAttribute('id', 'content');
-      content.innerText = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, autem dicta dolorum aliquid molestiae accusamus ea, tempore ipsam eligendi impedit? Totam, fuga veritatis! Nam nemo ea culpa debitis ex enim! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, autem dicta dolorum aliquid molestiae accusamus ea, tempore ipsam eligendi impedit? Totam, fuga veritatis! Nam nemo ea culpa debitis ex enim!';
-      let popup = new this.CustomInfoWindowClass({
-        position: new this.google.maps.LatLng(24.0988807, 54.4201307),
-        title: 'Hello World!',
-        content: content
-      });
-      popup.setMap(this.map);
     });
   }
 
@@ -197,12 +186,32 @@ class MapContainer extends Component {
   }
 
   // Create the info window to display information about a selected place
-  createInfoWindow = (google) => {
-    this.infoWindow = new google.maps.InfoWindow({
-      maxWidth: 245,
-      // Make the infoWindow appear 40px above the marker's anchor point
-      pixelOffset: new google.maps.Size(0, -40)
+  createInfoWindow = (google, map) => {
+    // Create a new, empty info window
+    this.infoWindow = new this.CustomInfoWindowClass({
+      position: null,
+      title: '',
+      content: null,
+      map: map
     });
+
+    // Add an event listener to clear the infoWindow's marker when
+    // the close button is clicked
+    this.infoWindow.addListener('closeclick', (event) => {
+      // Reset the style of the infoWindow's current marker
+      if (this.infoWindow.marker !== undefined && this.infoWindow.marker !== null) {
+        this.infoWindow.marker.setBlurredAppearance();
+      }
+      // Update the side bar so that this marker's corresponding list
+      // item is no longer active
+      this.props.onActiveMarkerChange(this.infoWindow.marker, null);
+      // Remove the marker from the infoWindow (thus effectively closing
+      // the infoWindow)
+      this.infoWindow.marker = null;
+      this.infoWindow.hide();
+    });
+
+    this.infoWindow.setMap(this.map);
   }
 
   // Populate the infoWindow with information regarding the given marker.
@@ -223,34 +232,16 @@ class MapContainer extends Component {
       infoWindow.marker = givenMarker;
 
       // Set the contents of the infoWindow
-      infoWindow.setContent(`
-        <div class="info-window">
-          <h4>${givenMarker.name}</h4>
+      infoWindow.setContent(givenMarker.name, `
           <p>
             "${givenMarker.description}"
             (<a href="${givenMarker.descriptionLink}">Source</a>)
           </p>
-        </div>
       `);
 
       // Open and display the infoWindow
       infoWindow.setPosition(givenMarker.position);
-      infoWindow.open(map);
-
-      // Add an event listener to clear the infoWindow's marker when
-      // the close button is clicked
-      infoWindow.addListener('closeclick', () => {
-        // Reset the style of the infoWindow's current marker
-        if (infoWindow.marker !== undefined && infoWindow.marker !== null) {
-          infoWindow.marker.setBlurredAppearance();
-        }
-        // Update the side bar so that this marker's corresponding list
-        // item is no longer active
-        this.props.onActiveMarkerChange(infoWindow.marker, null);
-        // Remove the marker from the infoWindow (thus effectively closing
-        // the infoWindow)
-        infoWindow.marker = null;
-      });
+      infoWindow.show();
     }
   }
 
@@ -270,7 +261,7 @@ class MapContainer extends Component {
       // Close the infoWindow if it's already been created and the
       // related marker is no longer visiible after filtration
       if (infoWindow && infoWindow.marker && infoWindow.marker.visible === false) {
-        infoWindow.close();
+        infoWindow.hide();
         this.onActiveMarkerChange(infoWindow.marker, null);
         infoWindow.marker = null;
       }
