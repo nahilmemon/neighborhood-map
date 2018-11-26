@@ -22,6 +22,11 @@ function defineCustomMapMarkerClass() {
       this.markerSize = parseInt(getComputedStyle(document.body).getPropertyValue('--marker-size'));
       // To store the marker's html
       this.markerButton = null;
+
+      // To remember whether an open info window is attached to this marker
+      // Note: this is used to determine whether to show/hide this marker
+      // in MapContainer.js
+      this.hasOpenInfoWindow = false;
     }
 
     // Create the actual html for displaying the marker button

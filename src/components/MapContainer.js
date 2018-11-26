@@ -109,7 +109,8 @@ class MapContainer extends Component {
   hideOffScreenMarkers = (map, markers) => {
     let boundaries = map.getBounds();
     markers.forEach((marker) => {
-      if (boundaries && boundaries.contains(marker.position)) {
+      if ((boundaries && boundaries.contains(marker.position)) ||
+        marker.hasOpenInfoWindow === true) {
         marker.show();
       } else {
         marker.hide();
@@ -206,8 +207,8 @@ class MapContainer extends Component {
       // Update the side bar so that this marker's corresponding list
       // item is no longer active
       this.props.onActiveMarkerChange(this.infoWindow.marker, null);
-      // Remove the marker from the infoWindow (thus effectively closing
-      // the infoWindow)
+      // Remove the marker from the infoWindow
+      this.infoWindow.marker.hasOpenInfoWindow = false;
       this.infoWindow.marker = null;
       this.infoWindow.hide();
     });
@@ -231,6 +232,7 @@ class MapContainer extends Component {
 
       // Set the infoWindow's marker to the given marker
       infoWindow.marker = givenMarker;
+      infoWindow.marker.hasOpenInfoWindow = true;
 
       // Set the contents of the infoWindow
       infoWindow.setContent(givenMarker.name, `
@@ -264,6 +266,7 @@ class MapContainer extends Component {
       if (infoWindow && infoWindow.marker && infoWindow.marker.visible === false) {
         infoWindow.hide();
         this.onActiveMarkerChange(infoWindow.marker, null);
+        infoWindow.marker.hasOpenInfoWindow = false;
         infoWindow.marker = null;
       }
     }
