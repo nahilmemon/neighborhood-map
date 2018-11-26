@@ -14,6 +14,7 @@
 
     /* Map */
     --marker-size: 50px;
+    --map-inner-padding: calc(2*(40px + 25px));
 
     /* ==== Color Palette ==== */
     --primary-color: #ef9a9a;
@@ -472,51 +473,35 @@
    * https://developers.google.com/maps/documentation/javascript/examples/overlay-popup
    */
 
-  /* In this case, even if the side bar and map are both open simultaneously,
-   * there's enough space to reach the maximum info window size. So we don't
-   * need to take into consideration the 300px wide side bar too. The
-   * height of the info window will most likely be large at this screen width,
-   * we should try to avoid overlapping the the map buttons.
-   * Note: 40px = width of one map's zoom in/out and fullscreen buttons. Another
-   * 15px is added for spacing between the info window and the buttons.
+  /* In this case, even if the side bar and map are both open simultaneously (larger
+   * devices) there's enough space to reach the maximum info window size. On smaller
+   * devices, the map and side bar can't be opened simultaneously. So we don't need
+   * to take into consideration the 300px wide side bar. We should try to avoid
+   * overlapping the the map buttons.
+   * Note: --map-inner-padding = 2*(40px + 25px) where 40px = width of one map's zoom
+   * in/out and fullscreen buttons. Another 25px is added for spacing between the info
+   * window and the (buttons + map padding) (15px spacing and button, 10px spacing
+   * between button and map edge).
    */
   .info-window-container {
     height: 0;
     position: absolute;
-    width: calc(100vw - 2*(40px + 15px));
+    width: calc(100vw - var(--map-inner-padding));
     max-width: 630px;
     min-width: 300px;
   }
 
   /* In this case, the side bar might be open at the same time as the map.
-   * So we need to take into consideration the 300px wide side bar too. The
-   * height of the info window will most likely be small at this screen width,
-   * we don't need to worry too much about overlapping the the map buttons
-   * since the info window will be short enough to fit in between the map
-   * buttons vertically.
-   * Note: Try to create an 8px gap on each side between the info window and
-   * the screen's edges.
+   * So we need to take into consideration the 300px wide side bar too.
+   * We should try to avoid overlapping the the map buttons.
+   * Note: --map-inner-padding = 2*(40px + 25px) where 40px = width of one map's zoom
+   * in/out and fullscreen buttons. Another 25px is added for spacing between the info
+   * window and the (buttons + map padding) (15px spacing and button, 10px spacing
+   * between button and map edge).
    */
-  @media screen and (max-width: 950px) {
+  @media screen and (max-width: 950px) and (min-width: 601px) {
     .info-window-container {
-      width: calc(100vw - 300px - 2*(8px));
-      max-width: 630px;
-      min-width: 300px;
-    }
-  }
-
-  /* In this case, the side bar and map can't be open at the same time.
-   * So it's okay to make the info window almost as big as the screen.
-   * width. The height of the info window will most likely be small, so
-   * we don't need to worry too much about overlapping the the map buttons
-   * since the info window will be short enough to fit in between the map
-   * buttons vertically.
-   */
-  @media screen and (max-width: 600px) {
-    .info-window-container {
-      width: calc(100vw - 2*(8px));
-      max-width: 630px;
-      min-width: 300px;
+      width: calc(100vw - 300px - var(--map-inner-padding));
     }
   }
 
@@ -823,5 +808,5 @@
 
   /* JS Resources
    * https://github.com/ryanwaite28/script-store/blob/master/js/react_resolve_google_maps.js
-   *
+   * https://github.com/atmist/snazzy-info-window/blob/master/src/snazzy-info-window.js
   */

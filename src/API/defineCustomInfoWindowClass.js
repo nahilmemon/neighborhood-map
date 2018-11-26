@@ -157,14 +157,6 @@ function defineCustomInfoWindowClass() {
       }
     }
 
-    // Change the contents of the info window
-    // setContent(newContent) {
-    //   this.content = newContent;
-    //   // this.createInfoWindowHTML();
-    //   // this.appendInfoWindowToOverlay();
-    //   // this.draw();
-    // }
-
     setContent(newTitle, newContent) {
       this.title = newTitle;
       this.content = newContent;
@@ -193,6 +185,7 @@ function defineCustomInfoWindowClass() {
       if (this.infoWindowContainer) {
         this.infoWindowContainer.style.visibility = 'visible';
         this.visible = true;
+        this.panMap();
       }
     }
 
@@ -210,6 +203,76 @@ function defineCustomInfoWindowClass() {
             e.stopPropagation();
           });
         });
+    }
+
+    // The following two functions are a modified version taken from:
+    // https://github.com/atmist/snazzy-info-window/blob/master/src/snazzy-info-window.js
+    // The map inner bounds used for panning and resizing
+    getMapInnerBounds(mapInnerBoundariesOffset) {
+      // Get the actual boundaries of the map
+      const MAP_OUTER_BOUNDARIES = this.map.getDiv().getBoundingClientRect();
+      // Calculate the inner boundaries of the map taking into consideration the desired
+      // inner offset determined above
+      let mapInnerBoundaries = {
+        top: MAP_OUTER_BOUNDARIES.top + mapInnerBoundariesOffset.top,
+        bottom: MAP_OUTER_BOUNDARIES.bottom - mapInnerBoundariesOffset.bottom,
+        left: MAP_OUTER_BOUNDARIES.left + mapInnerBoundariesOffset.left,
+        right: MAP_OUTER_BOUNDARIES.right - mapInnerBoundariesOffset.right
+      };
+      return mapInnerBoundaries;
+    }
+
+    // Pan the map to fit the info window into the viewable area of the map
+    // Note: viewable area of map = actual viewable area - inner edge offsets
+    panMap() {
+      // Get the boundaries of the contents div of the info window container
+      const INFO_WINDOW_CONTENTS_DIV = this.infoWindowContainer.querySelector('.info-window-contents');
+      const INFO_WINDOW_BOUNDARIES = INFO_WINDOW_CONTENTS_DIV.getBoundingClientRect();
+
+      // To store the desired inner edge offsets of the map (like a padding inside the
+      // map so that the info window's edges don't touch the map's edges or buttons)
+      let mapInnerBoundariesOffset = {
+        top: 60,
+        bottom: 60,
+        left: 60,
+        right: 60
+      }
+      // Adjust the inner boundaries if the info window is too small already
+      if (INFO_WINDOW_BOUNDARIES.width <= 300) {
+        const MAP_WIDTH = this.map.getDiv().getBoundingClientRect().width;
+        if (MAP_WIDTH <= 380) {
+          mapInnerBoundariesOffset.left = 0;
+          mapInnerBoundariesOffset.right = 0;
+        } else {
+          mapInnerBoundariesOffset.left = 10;
+        }
+      }
+
+      // Get the map's inner boundaries (the viewable area - inner edge offsets)
+      const MAP_INNER_BOUNDARIES = this.getMapInnerBounds(mapInnerBoundariesOffset);
+
+      // To store the desired pixel shifts to the fit the info window on screen within
+      // the viewable area of the map
+      let horizontalShift = 0;
+      let verticalShift = 0;
+      // Calculate the vertical shift needed to get the info window to display within the
+      // map's viewable boundaries
+      if (MAP_INNER_BOUNDARIES.top >= INFO_WINDOW_BOUNDARIES.top) {
+        verticalShift = INFO_WINDOW_BOUNDARIES.top - MAP_INNER_BOUNDARIES.top;
+      } else if (MAP_INNER_BOUNDARIES.bottom <= INFO_WINDOW_BOUNDARIES.bottom) {
+        verticalShift = INFO_WINDOW_BOUNDARIES.top - (MAP_INNER_BOUNDARIES.bottom - INFO_WINDOW_BOUNDARIES.height);
+      }
+      // Calculate the horizontal shift needed to get the info window to display within the
+      // map's viewable boundaries
+      if (MAP_INNER_BOUNDARIES.left >= INFO_WINDOW_BOUNDARIES.left) {
+        horizontalShift = INFO_WINDOW_BOUNDARIES.left - MAP_INNER_BOUNDARIES.left;
+      } else if (MAP_INNER_BOUNDARIES.right <= INFO_WINDOW_BOUNDARIES.right) {
+        horizontalShift = INFO_WINDOW_BOUNDARIES.left - (MAP_INNER_BOUNDARIES.right - INFO_WINDOW_BOUNDARIES.width);
+      }
+      // If a shift is actually required, then pan the map by the desired shifts
+      if (horizontalShift !== 0 || verticalShift !== 0) {
+        this.map.panBy(horizontalShift, verticalShift);
+      }
     }
   }
 
