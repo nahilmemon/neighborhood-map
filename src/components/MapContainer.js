@@ -126,7 +126,8 @@ class MapContainer extends Component {
       mapTypeControl: true,
       mapTypeControlOptions: {
         style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR
-      }
+      },
+      gestureHandling: 'cooperative'
     });
 
     // Whenever the map is moved around, figure out which markers are off
