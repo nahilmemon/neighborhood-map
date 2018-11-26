@@ -94,8 +94,11 @@ class MapContainer extends Component {
   onActiveMarkerChange = (marker, id) => {
     if (id !== null) {
       marker.setFocusedAppearance();
+      marker.hasOpenInfoWindow = true;
+      marker.show();
     } else {
       marker.setBlurredAppearance();
+      marker.hasOpenInfoWindow = false;
     }
     this.props.onActiveMarkerChange(id);
   }
@@ -110,6 +113,7 @@ class MapContainer extends Component {
     let boundaries = map.getBounds();
     markers.forEach((marker) => {
       if ((boundaries && boundaries.contains(marker.position)) ||
+        // Don't hide the marker if an open info window is attached to it
         marker.hasOpenInfoWindow === true) {
         marker.show();
       } else {
@@ -203,12 +207,12 @@ class MapContainer extends Component {
       // Reset the style of the infoWindow's current marker
       if (this.infoWindow.marker !== undefined && this.infoWindow.marker !== null) {
         this.infoWindow.marker.setBlurredAppearance();
+        this.infoWindow.marker.hasOpenInfoWindow = false;
       }
       // Update the side bar so that this marker's corresponding list
       // item is no longer active
       this.props.onActiveMarkerChange(this.infoWindow.marker, null);
       // Remove the marker from the infoWindow
-      this.infoWindow.marker.hasOpenInfoWindow = false;
       this.infoWindow.marker = null;
       this.infoWindow.hide();
     });
@@ -225,6 +229,7 @@ class MapContainer extends Component {
       // Reset the style of the infoWindow's previous marker
       if (infoWindow.marker !== undefined && infoWindow.marker !== null) {
         infoWindow.marker.setBlurredAppearance();
+        infoWindow.marker.hasOpenInfoWindow = false;
       }
 
       // Change the style of the given marker
@@ -264,9 +269,9 @@ class MapContainer extends Component {
       // Close the infoWindow if it's already been created and the
       // related marker is no longer visiible after filtration
       if (infoWindow && infoWindow.marker && infoWindow.marker.visible === false) {
+        infoWindow.marker.hasOpenInfoWindow = false;
         infoWindow.hide();
         this.onActiveMarkerChange(infoWindow.marker, null);
-        infoWindow.marker.hasOpenInfoWindow = false;
         infoWindow.marker = null;
       }
     }
