@@ -465,6 +465,8 @@
   .marker-button svg path {
     fill: currentColor;
     pointer-events: all;
+    stroke: var(--secondary-dark-color);
+    stroke-width: 0.5;
   }
 
   /* ==== Info Window ==== */
