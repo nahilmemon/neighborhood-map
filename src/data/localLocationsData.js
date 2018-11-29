@@ -1,6 +1,7 @@
 const localLocationsData = [
   {
     "name": "Warehouse 421",
+    "foursquareVenueID": "564f297b498ef0c2b0207e0d",
     "location": {
       "lat": 24.5172938,
       "lng": 54.370662
@@ -12,6 +13,7 @@ const localLocationsData = [
   },
   {
     "name": "Abu Dhabi History Museum and Aquarium",
+    "foursquareVenueID": null,
     "location": {
       "lat": 24.4230547,
       "lng": 54.4719905
@@ -23,6 +25,7 @@ const localLocationsData = [
   },
   {
     "name": "Emirates National Auto Museum",
+    "foursquareVenueID": "4b63e998f964a520d2962ae3",
     "location": {
       "lat": 24.0988807,
       "lng": 54.4201307
@@ -33,7 +36,8 @@ const localLocationsData = [
     "id": 2
   },
   {
-    "name": "Zayed Heritage Centre ",
+    "name": "Zayed Heritage Centre",
+    "foursquareVenueID": "50a0b409e4b0ca91fc434a03",
     "location": {
       "lat": 24.451179,
       "lng": 54.339718
@@ -45,6 +49,7 @@ const localLocationsData = [
   },
   {
     "name": "Heritage Park",
+    "foursquareVenueID": "4f34f7fbe4b064276b1e8690",
     "location": {
       "lat": 24.5072656,
       "lng": 54.3730231
@@ -56,6 +61,7 @@ const localLocationsData = [
   },
   {
     "name": "Heritage Village",
+    "foursquareVenueID": "4b8d2b9bf964a52062eb32e3",
     "location": {
       "lat": 24.4766555,
       "lng": 54.3309679
@@ -67,6 +73,7 @@ const localLocationsData = [
   },
   {
     "name": "Art House Cafe",
+    "foursquareVenueID": "53ff53b9498ef90189445fe5",
     "location": {
       "lat": 24.4605525,
       "lng": 54.3486866
@@ -78,6 +85,7 @@ const localLocationsData = [
   },
   {
     "name": "The Third Place Café",
+    "foursquareVenueID": "534ffca4498e05852c528513",
     "location": {
       "lat": 24.4692429,
       "lng": 54.3368142
@@ -89,6 +97,7 @@ const localLocationsData = [
   },
   {
     "name": "Evergreen Restaurant Veg. (Indian)",
+    "foursquareVenueID": "4f32b596e4b0951ff60a221e",
     "location": {
       "lat": 24.4918787,
       "lng": 54.3703897
@@ -100,6 +109,7 @@ const localLocationsData = [
   },
   {
     "name": "Hankook Restaurant (Korean)",
+    "foursquareVenueID": "4d93647e9213b1f7fa65c746",
     "location": {
       "lat": 24.473643,
       "lng": 54.377121
@@ -111,6 +121,7 @@ const localLocationsData = [
   },
   {
     "name": "Bonna Annee (Ethiopian)",
+    "foursquareVenueID": "4ef9d6348b81ef98d2be07c6",
     "location": {
       "lat": 24.4890989,
       "lng": 54.3810931
@@ -122,6 +133,7 @@ const localLocationsData = [
   },
   {
     "name": "Russian Kitchen House Cafeteria ",
+    "foursquareVenueID": "4d6cca15183a236a6218573a",
     "location": {
       "lat": 24.496769,
       "lng": 54.369262
@@ -133,6 +145,7 @@ const localLocationsData = [
   },
   {
     "name": "Shay Madhboot ",
+    "foursquareVenueID": "56fe5c13498e871da6bb2f15",
     "location": {
       "lat": 24.4466533,
       "lng": 54.4023181
@@ -144,6 +157,7 @@ const localLocationsData = [
   },
   {
     "name": "Villa Toscana",
+    "foursquareVenueID": "5210fad311d25708a1800340",
     "location": {
       "lat": 24.4639964,
       "lng": 54.3279827
@@ -155,6 +169,7 @@ const localLocationsData = [
   },
   {
     "name": "No. 57 Boutique Café",
+    "foursquareVenueID": "54523b5e498e7cffda458644",
     "location": {
       "lat": 24.4519469,
       "lng": 54.3333377
@@ -166,6 +181,7 @@ const localLocationsData = [
   },
   {
     "name": "Osha Gourmet Restaurant",
+    "foursquareVenueID": "54c3a1b1498eaf5142f4189c",
     "location": {
       "lat": 24.4119147,
       "lng": 54.5900271
@@ -177,6 +193,7 @@ const localLocationsData = [
   },
   {
     "name": "Hanoi Naturally Café ",
+    "foursquareVenueID": "51725d04e4b0a0a1bb0eaa31",
     "location": {
       "lat": 24.4957294,
       "lng": 54.4068347
@@ -188,6 +205,7 @@ const localLocationsData = [
   },
   {
     "name": "Bill’s Farm",
+    "foursquareVenueID": "555f0c6e498eee8ce8f232f1",
     "location": {
       "lat": 24.472331,
       "lng": 54.324561
@@ -199,6 +217,7 @@ const localLocationsData = [
   },
   {
     "name": "Living Room Café",
+    "foursquareVenueID": "50042c06e4b000091039f966",
     "location": {
       "lat": 24.4692793,
       "lng": 54.3493235
@@ -210,6 +229,7 @@ const localLocationsData = [
   },
   {
     "name": "Dolmabahce (Turkish)",
+    "foursquareVenueID": "53f5e543498e07b76741ffac",
     "location": {
       "lat": 24.4559301,
       "lng": 54.614716
@@ -221,6 +241,7 @@ const localLocationsData = [
   },
   {
     "name": "Yamanote Atelier's Japanese Bakery",
+    "foursquareVenueID": "5af3b59762845c00249332f5",
     "location": {
       "lat": 24.4355292,
       "lng": 54.4558114
@@ -232,6 +253,7 @@ const localLocationsData = [
   },
   {
     "name": "Keki Japanese Bakery",
+    "foursquareVenueID": "59c1247c09e28327e6efc776",
     "location": {
       "lat": 24.4563811,
       "lng": 54.3548429
@@ -243,6 +265,7 @@ const localLocationsData = [
   },
   {
     "name": "Skinny Genie",
+    "foursquareVenueID": "59f95978f62f2b510adbf8ed",
     "location": {
       "lat": 24.433798,
       "lng": 54.617422
@@ -254,6 +277,7 @@ const localLocationsData = [
   },
   {
     "name": "District 10",
+    "foursquareVenueID": null,
     "location": {
       "lat": 24.4280336,
       "lng": 54.4630653
@@ -265,6 +289,7 @@ const localLocationsData = [
   },
   {
     "name": "Café 302",
+    "foursquareVenueID": "57ad76f4498e385b24b171dd",
     "location": {
       "lat": 24.4924114,
       "lng": 54.3674272
@@ -276,6 +301,7 @@ const localLocationsData = [
   },
   {
     "name": "Al Ulya Portuguese Flavours Café",
+    "foursquareVenueID": "5746fecdcd1084eabd620d13",
     "location": {
       "lat": 24.4728036,
       "lng": 54.3782677
@@ -287,6 +313,7 @@ const localLocationsData = [
   },
   {
     "name": "Umm Al Emarat Park",
+    "foursquareVenueID": "52958c2d11d2ce1a0539c550",
     "location": {
       "lat": 24.4530746,
       "lng": 54.3808034
@@ -298,6 +325,7 @@ const localLocationsData = [
   },
   {
     "name": "Yas Marina Circuit",
+    "foursquareVenueID": "4d33e591b5c78eec97344cbf",
     "location": {
       "lat": 24.4750418,
       "lng": 54.6038935
@@ -309,6 +337,7 @@ const localLocationsData = [
   },
   {
     "name": "Khalifa Park",
+    "foursquareVenueID": "4b4ef121f964a52075f726e3",
     "location": {
       "lat": 24.4255684,
       "lng": 54.4693154
@@ -320,6 +349,7 @@ const localLocationsData = [
   },
   {
     "name": "Mangroves National Park",
+    "foursquareVenueID": "4d3ee7aa84d46ea82c7f135d",
     "location": {
       "lat": 24.456065,
       "lng": 54.4178006
@@ -331,6 +361,7 @@ const localLocationsData = [
   },
   {
     "name": "Craftopia Handicrafts",
+    "foursquareVenueID": null,
     "location": {
       "lat": 24.431277,
       "lng": 54.437245
@@ -342,6 +373,7 @@ const localLocationsData = [
   },
   {
     "name": "Family Skate Park",
+    "foursquareVenueID": "4ce69c79b99754812443f144",
     "location": {
       "lat": 24.4830098,
       "lng": 54.3488075
@@ -353,6 +385,7 @@ const localLocationsData = [
   },
   {
     "name": "Yas Cycles",
+    "foursquareVenueID": null,
     "location": {
       "lat": 24.4137371,
       "lng": 54.3500666
@@ -364,6 +397,7 @@ const localLocationsData = [
   },
   {
     "name": "TechShop",
+    "foursquareVenueID": "56548192498edc1818932a64",
     "location": {
       "lat": 24.455171,
       "lng": 54.6144089
@@ -375,6 +409,7 @@ const localLocationsData = [
   },
   {
     "name": "Kayaking at Eastern Mangroves",
+    "foursquareVenueID": "525ea3e8498ed8c47638c62f",
     "location": {
       "lat": 24.4464999,
       "lng": 54.4401927
@@ -386,6 +421,7 @@ const localLocationsData = [
   },
   {
     "name": "Al Wathba Wetland Reserve",
+    "foursquareVenueID": "534cdb4c498e1c818515135c",
     "location": {
       "lat": 24.2543029,
       "lng": 54.6108662
@@ -397,6 +433,7 @@ const localLocationsData = [
   },
   {
     "name": "Al Wathba Cycle Track",
+    "foursquareVenueID": "531f3a02498e2d2719320439",
     "location": {
       "lat": 24.1559,
       "lng": 54.781146
@@ -408,6 +445,7 @@ const localLocationsData = [
   },
   {
     "name": "Al Rahba Organic Farm",
+    "foursquareVenueID": "583eb0bed4ab737f48fddc13",
     "location": {
       "lat": 24.6118878,
       "lng": 54.6960843
@@ -419,6 +457,7 @@ const localLocationsData = [
   },
   {
     "name": "Masdar City",
+    "foursquareVenueID": "4d0dcb9088a52c0f5a4a0a6e",
     "location": {
       "lat": 24.4266734,
       "lng": 54.614979
@@ -430,6 +469,7 @@ const localLocationsData = [
   },
   {
     "name": "Qasr al Hosn",
+    "foursquareVenueID": "512f5060e4b0a28d8f1f9709",
     "location": {
       "lat": 24.482237,
       "lng": 54.354723
@@ -441,6 +481,7 @@ const localLocationsData = [
   },
   {
     "name": "Thrift Distribution and Books",
+    "foursquareVenueID": "4f5106b9e4b04150a694e0a2",
     "location": {
       "lat": 24.4940872,
       "lng": 54.3724519
@@ -452,6 +493,7 @@ const localLocationsData = [
   },
   {
     "name": "Awani",
+    "foursquareVenueID": "500c68b6e4b03215e6dc73ad",
     "location": {
       "lat": 24.433127,
       "lng": 54.43969
@@ -463,6 +505,7 @@ const localLocationsData = [
   },
   {
     "name": "Abu Waleed",
+    "foursquareVenueID": "50b088c7e4b07ba2ce888227",
     "location": {
       "lat": 24.4959357,
       "lng": 54.3817234
@@ -474,6 +517,7 @@ const localLocationsData = [
   },
   {
     "name": "Koreana Furniture",
+    "foursquareVenueID": "4ed75f5293adde11f8e88958",
     "location": {
       "lat": 24.4717995,
       "lng": 54.3413833
@@ -485,6 +529,7 @@ const localLocationsData = [
   },
   {
     "name": "Exquisite Antiques Gallery",
+    "foursquareVenueID": null,
     "location": {
       "lat": 24.408864,
       "lng": 54.491166
@@ -496,6 +541,7 @@ const localLocationsData = [
   },
   {
     "name": "Iranian Souk",
+    "foursquareVenueID": "4dae9c2a93a0096fbaa31805",
     "location": {
       "lat": 24.5265049,
       "lng": 54.3718113
@@ -507,6 +553,7 @@ const localLocationsData = [
   },
   {
     "name": "Women’s Handicraft Centre",
+    "foursquareVenueID": null,
     "location": {
       "lat": 24.452805,
       "lng": 54.378446
@@ -518,6 +565,7 @@ const localLocationsData = [
   },
   {
     "name": "Craft Corner",
+    "foursquareVenueID": null,
     "location": {
       "lat": 24.486928,
       "lng": 54.356208
@@ -529,6 +577,7 @@ const localLocationsData = [
   },
   {
     "name": "Green Branch Trading",
+    "foursquareVenueID": "4e2fc282b0fbdc2b650488d3",
     "location": {
       "lat": 24.4858472,
       "lng": 54.3635947
@@ -540,6 +589,7 @@ const localLocationsData = [
   },
   {
     "name": "Madinat Zayed Shopping Center",
+    "foursquareVenueID": "4c35e47aa0ced13a86771a6e",
     "location": {
       "lat": 24.4838496,
       "lng": 54.3660213
@@ -551,6 +601,7 @@ const localLocationsData = [
   },
   {
     "name": "Mina Fish Market",
+    "foursquareVenueID": "4bf623114d5f20a179e098fe",
     "location": {
       "lat": 24.5136359,
       "lng": 54.3748794
@@ -562,6 +613,7 @@ const localLocationsData = [
   },
   {
     "name": "Mina Market",
+    "foursquareVenueID": null,
     "location": {
       "lat": 24.5162444,
       "lng": 54.3796504
@@ -573,6 +625,7 @@ const localLocationsData = [
   },
   {
     "name": "The Souk Central Market",
+    "foursquareVenueID": "4cd515f276ab721e8b156b6a",
     "location": {
       "lat": 24.488852,
       "lng": 54.3563142
@@ -584,6 +637,7 @@ const localLocationsData = [
   },
   {
     "name": "Carpet Souk",
+    "foursquareVenueID": "4e5280d518a86770c585487b",
     "location": {
       "lat": 24.5129078,
       "lng": 54.381026
