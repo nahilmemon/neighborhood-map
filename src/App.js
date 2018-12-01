@@ -23,7 +23,9 @@ class App extends Component {
       showAboutModal: false,
       filterByNameText: '',
       filterByCategoryOption: 'none',
-      currentlyFocusedLocationId: null
+      currentlyFocusedLocationId: null,
+      isFoursquareDataLoaded: false,
+      foursquareInfoRetrievalErrorOccurred: false
     };
 
     // To store compulsory information about each location
@@ -70,14 +72,24 @@ class App extends Component {
     this.locationsData.forEach(loc => {
       // If the given location does have information on Foursquare,
       // then update the location's photo and formatted address with
-      // the information available on Foursquare
+      // the information available on Foursquare (otherwise, the default
+      // is that these attributes are set to null)
       if (loc.foursquareVenueID !== null) {
+        // Figure out which location in the unsearchedFoursquareLocations
+        // array matches with the current loc
+        // First find the id of the matching location in the array of
+        // unsearched locations
         let matchingFoursquareLocId = unsearchedFoursquareLocations.findIndex(foursquareLoc => {
           return foursquareLoc.venue.id === loc.foursquareVenueID;
         });
+        // Then find the matching location using the id found above (if
+        // an id was actually found)
         let foursquareLoc;
         if (matchingFoursquareLocId !== undefined && matchingFoursquareLocId !== -1) {
-          foursquareLoc = foursquareLocations[matchingFoursquareLocId];
+          foursquareLoc = unsearchedFoursquareLocations[matchingFoursquareLocId];
+          // Remove the matching location from the unsearchedFoursquareLocations
+          // so that the next searches are faster (as the array becomes
+          // smaller)
           unsearchedFoursquareLocations.splice(matchingFoursquareLocId, 1);
         }
         // If there was a match, then update the location's photo
@@ -96,22 +108,8 @@ class App extends Component {
           if (foursquareLoc.venue.location.formattedAddress &&
             foursquareLoc.venue.location.formattedAddress.length > 2) {
             loc.formattedAddress = foursquareLoc.venue.location.formattedAddress;
-          } else {
-            loc.formattedAddress = null;
           }
         }
-        // Otherwise, update the location's photo and formatted address
-        // to be null
-        else {
-          loc.photo = null;
-          loc.formattedAddress = null;
-        }
-      }
-      // If the given location does not have information on Foursquare,
-      // then update the location's photo and formatted address to be null
-      else {
-        loc.photo = null;
-        loc.formattedAddress = null;
       }
     });
   }
@@ -125,25 +123,27 @@ class App extends Component {
 
     FoursquareAPI.getList(this.getListRequestId, '5c02699bb3c961002ca5ecd8')
       .then((response) => {
-        console.log('Results: ');
-        console.log(response.status);
-        console.log(response.data.response);
         if (response.status === 200) {
           let listOfLocations = response.data.response.list.listItems.items;
           this.saveFoursquareInfo(listOfLocations);
+          // To let the markers and info window in the Map Container
+          // component know that new info has arrived
+          this.setState({
+            isFoursquareDataLoaded: true
+          });
         } else {
           throw new Error('Could not get data from Foursquare API');
         }
       }).catch((error) => {
         console.log('Error in completing: ', this.getListRequestId);
         console.log(error);
+        // To let the Map Container component know about the missing
+        // info and to update the ui accordingly so that the user
+        // can be made aware of the situation
+        this.setState({
+          foursquareInfoRetrievalErrorOccurred: true
+        });
       });
-  }
-
-  // Helper function to find an object in an array whose given key's value
-  // matches the requested key's value
-  findObjectWithKeyValueInArray(object, desiredKey, desiredValue) {
-
   }
 
   handleFilterByNameTextChange(filterByNameText) {
@@ -234,6 +234,8 @@ class App extends Component {
             filterLocations={this.filterLocations}
             currentlyFocusedLocationId={this.state.currentlyFocusedLocationId}
             onActiveMarkerChange={this.handleActiveLocationChange}
+            isFoursquareDataLoaded={this.state.isFoursquareDataLoaded}
+            foursquareInfoRetrievalErrorOccurred={this.state.foursquareInfoRetrievalErrorOccurred}
           />
         </main>
         {this.state.showAboutModal &&
