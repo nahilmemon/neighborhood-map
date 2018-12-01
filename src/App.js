@@ -8,7 +8,7 @@ import './App.css';
 // Local, initial data
 import { localLocationsData } from './data/localLocationsData.js';
 // API helpers
-// import * as FoursquareAPI from './API/FoursquareAPI.js';
+import * as FoursquareAPI from './API/FoursquareAPI.js';
 // Other components
 import Header from './components/Header.js';
 import SideBar from './components/SideBar.js';
@@ -49,14 +49,101 @@ class App extends Component {
     axiosCancel(axios, {
       debug: false
     });
+
+    // Get information about each location using the Foursquare API and
+    // save this in this.locationsData
+    this.getListItemsFromFoursquare();
   }
 
   componentWillUnmount() {
     // Cancel the fetch request with the given id
-    // axios.cancel(this.searchForVenuesRequestId);
+    axios.cancel(this.getListRequestId);
 
     // Cancel all currently active fetch requests
     axios.cancelAll();
+  }
+
+  // Get information about each location using the Foursquare API and save
+  // any useful content in this.locationsData
+  saveFoursquareInfo(foursquareLocations) {
+    let unsearchedFoursquareLocations = foursquareLocations;
+    this.locationsData.forEach(loc => {
+      // If the given location does have information on Foursquare,
+      // then update the location's photo and formatted address with
+      // the information available on Foursquare
+      if (loc.foursquareVenueID !== null) {
+        let matchingFoursquareLocId = unsearchedFoursquareLocations.findIndex(foursquareLoc => {
+          return foursquareLoc.venue.id === loc.foursquareVenueID;
+        });
+        let foursquareLoc;
+        if (matchingFoursquareLocId !== undefined && matchingFoursquareLocId !== -1) {
+          foursquareLoc = foursquareLocations[matchingFoursquareLocId];
+          unsearchedFoursquareLocations.splice(matchingFoursquareLocId, 1);
+        }
+        // If there was a match, then update the location's photo
+        // and formatted address with the match's information
+        if (foursquareLoc) {
+          // Update the loc's photo attribute
+          if (foursquareLoc.photo) {
+            loc.photo = {
+              prefix: foursquareLoc.photo.prefix,
+              suffix: foursquareLoc.photo.suffix,
+              width: foursquareLoc.photo.width,
+              height: foursquareLoc.photo.height,
+            };
+          }
+          // Update the loc's formatted address attribute
+          if (foursquareLoc.venue.location.formattedAddress &&
+            foursquareLoc.venue.location.formattedAddress.length > 2) {
+            loc.formattedAddress = foursquareLoc.venue.location.formattedAddress;
+          } else {
+            loc.formattedAddress = null;
+          }
+        }
+        // Otherwise, update the location's photo and formatted address
+        // to be null
+        else {
+          loc.photo = null;
+          loc.formattedAddress = null;
+        }
+      }
+      // If the given location does not have information on Foursquare,
+      // then update the location's photo and formatted address to be null
+      else {
+        loc.photo = null;
+        loc.formattedAddress = null;
+      }
+    });
+  }
+
+  // Get information about each venue saved in a specific list that I
+  // created on Foursquare
+  getListItemsFromFoursquare() {
+    // To store a cancellation id for axios in case the component
+    // gets unmounted before the fetch request has completed
+    this.getListRequestId = 'getList';
+
+    FoursquareAPI.getList(this.getListRequestId, '5c02699bb3c961002ca5ecd8')
+      .then((response) => {
+        console.log('Results: ');
+        console.log(response.status);
+        console.log(response.data.response);
+        if (response.status === 200) {
+          let listOfLocations = response.data.response.list.listItems.items;
+          this.saveFoursquareInfo(listOfLocations);
+        } else {
+          throw new Error('Could not get data from Foursquare API');
+        }
+      }).catch((error) => {
+        console.log('Error in completing: ', this.getListRequestId);
+        console.log(error);
+      });
+  }
+
+  // Helper function to find an object in an array whose given key's value
+  // matches the requested key's value
+  findObjectWithKeyValueInArray(object, desiredKey, desiredValue) {
+
   }
 
   handleFilterByNameTextChange(filterByNameText) {

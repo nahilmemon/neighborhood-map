@@ -4,7 +4,7 @@ const API = 'https://api.foursquare.com/v2';
 
 const CLIENT_ID = 'A54UP4TD2KHDSEXPGJPMOSQLD02AS2L0LWS1MKDYPLZWKTVW';
 const CLIENT_SECRET = 'JWKH4PIPY3VRV2MBFQPSF3E230F0PRXNCXMZ544XW5Q34RLJ';
-const VERSION = '20181025';
+const VERSION = '20181201';
 
 const API_KEYS = `client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&v=${VERSION}`;
 
@@ -61,4 +61,9 @@ export function getVenuePhotos(requestId, venueId) {
 // Get tips from a speicific venue
 export function getVenueTips(requestId, venueId) {
   return basicFetchTemplate(requestId, `/venues/${venueId}/tips`, 'GET');
+}
+
+// Get the items from a user's list(s)
+export function getList(requestId, listId) {
+  return basicFetchTemplate(requestId, `/lists/${listId}`, 'GET');
 }
