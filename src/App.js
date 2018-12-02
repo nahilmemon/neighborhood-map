@@ -68,7 +68,7 @@ class App extends Component {
   // Get information about each location using the Foursquare API and save
   // any useful content in this.locationsData
   saveFoursquareInfo(foursquareLocations) {
-    let unsearchedFoursquareLocations = foursquareLocations;
+    let unsearchedFoursquareLocations = [...foursquareLocations];
     this.locationsData.forEach(loc => {
       // If the given location does have information on Foursquare,
       // then update the location's photo and formatted address with

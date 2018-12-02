@@ -187,7 +187,7 @@ class MapContainer extends Component {
 
   // Modify markers with information obtained from the Foursquare API
   modifyMarkersWithNewData = (markers, locationsData) => {
-    let unsearchedLocations = locationsData;
+    let unsearchedLocations = [...locationsData];
     markers.forEach(marker => {
       // If the marker's location has information on Foursquare,
       // then update the marker's photo and formatted address with
