@@ -6,7 +6,6 @@ import axiosCancel from 'axios-cancel';
 // Styling
 import { mapStyles } from '../mapStyles.js';
 // API helpers
-// import * as FoursquareAPI from '../API/FoursquareAPI.js';
 import loadGoogleMapsAPI from '../API/loadGoogleMapsAPI.js';
 import defineCustomMapMarkerClass from '../API/defineCustomMapMarkerClass.js';
 import defineCustomInfoWindowClass from '../API/defineCustomInfoWindowClass.js';
@@ -48,6 +47,11 @@ class MapContainer extends Component {
       this.createInfoWindow(this.google, this.map);
       // Create and display the markers
       this.createAllMarkers(this.google, this.map, this.props.locationsData);
+      // If information from the Foursquare API has alreadt been loaded by now,
+      // then update the markers with the newly retrieved information
+      if (this.props.isFoursquareDataLoaded) {
+        this.modifyMarkersWithNewData(this.markers, this.props.locationsData);
+      }
       // Reposition the map to fit all the markers
       this.displayGivenMarkers(this.google, this.map, this.markers);
 
@@ -84,6 +88,15 @@ class MapContainer extends Component {
       // then focus the corresponding marker and display an infoWindow about it
       if (this.markers) {
         this.focusMarkerOfCurrentlyFocusedLocation(this.map, this.infoWindow, this.props.currentlyFocusedLocationId, this.markers);
+      }
+    }
+
+    // If information from the Foursquare API has been loaded, then update the
+    // markers with the newly retrieved information (if the Google API has
+    // already finished loading and the markers have already been created)
+    if (this.props.isFoursquareDataLoaded !== prevProps.isFoursquareDataLoaded) {
+      if (this.markers) {
+        this.modifyMarkersWithNewData(this.markers, this.props.locationsData);
       }
     }
   }
@@ -154,7 +167,10 @@ class MapContainer extends Component {
         id: location.id,
         description: location.description,
         descriptionLink: location.descriptionLink,
-        category: location.category
+        category: location.category,
+        foursquareVenueID: location.foursquareVenueID,
+        photo: location.photo,
+        formattedAddress: location.formattedAddress
       });
 
       // Add an event listener so that when a marker is clicked,
@@ -166,6 +182,43 @@ class MapContainer extends Component {
       });
 
       return marker;
+    });
+  }
+
+  // Modify markers with information obtained from the Foursquare API
+  modifyMarkersWithNewData = (markers, locationsData) => {
+    let unsearchedLocations = locationsData;
+    markers.forEach(marker => {
+      // If the marker's location has information on Foursquare,
+      // then update the marker's photo and formatted address with
+      // the information available on Foursquare (otherwise, the default
+      // is that these attributes are set to null)
+      if (marker.foursquareVenueID !== null) {
+        // Figure out which location matches with the current marker
+        // First find the id of the matching location in the array of
+        // unsearched locations
+        let matchingLocationId = unsearchedLocations.findIndex(location => {
+          return location.foursquareVenueID === marker.foursquareVenueID;
+        });
+        // Then find the matching location using the id found above (if
+        // an id was actually found)
+        let matchingLocation;
+        if (matchingLocationId !== undefined && matchingLocationId !== -1) {
+          matchingLocation = unsearchedLocations[matchingLocationId];
+          // Remove the matching location from the unsearchedLocations
+          // so that the next searches are faster (as the array becomes
+          // smaller)
+          unsearchedLocations.splice(matchingLocationId, 1);
+        }
+        // If there was a match, then update the marker's photo
+        // and formatted address with the matching locations's info
+        if (matchingLocation) {
+          // Update the marker's photo attribute
+          marker.photo = matchingLocation.photo;
+          // Update the marker's formatted address attribute
+          marker.formattedAddress = matchingLocation.formattedAddress;
+        }
+      }
     });
   }
 

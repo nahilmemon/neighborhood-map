@@ -17,6 +17,9 @@ function defineCustomMapMarkerClass() {
       this.description = markerProperties.description;
       this.descriptionLink = markerProperties.descriptionLink;
       this.category = markerProperties.category;
+      this.foursquareVenueID = markerProperties.foursquareVenueID;
+      this.photo = markerProperties.photo;
+      this.formattedAddress = markerProperties.formattedAddress;
 
       // Width/height of the marker button and inner svg icon to be created
       this.markerSize = parseInt(getComputedStyle(document.body).getPropertyValue('--marker-size'));
