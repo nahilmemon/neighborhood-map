@@ -292,13 +292,88 @@ class MapContainer extends Component {
       infoWindow.marker = givenMarker;
       infoWindow.marker.hasOpenInfoWindow = true;
 
-      // Set the contents of the infoWindow
-      infoWindow.setContent(givenMarker.name, `
-          <p>
-            "${givenMarker.description}"
-            (<a href="${givenMarker.descriptionLink}">Source</a>)
-          </p>
-      `);
+      // Determine the contents of the info window
+      // The info window should at least display the marker's
+      // description
+      let contentHTMLString = `<p class="info-window-description">
+          "${givenMarker.description}"
+          (<a href="${givenMarker.descriptionLink}">Source</a>)
+        </p>`;
+      // If there was an error in getting more information from
+      // the Foursquare API, then let the user know within the
+      // info window
+      if (this.props.foursquareInfoRetrievalErrorOccurred) {
+        contentHTMLString += '<p class="api-error-message">Error loading extra, external data from Foursquare. Please try refreshing the page to try again.</p>';
+      }
+      // Otherwise, if the information is still being retrieved,
+      // then display a loading message
+      else if (!this.props.isFoursquareDataLoaded) {
+        contentHTMLString += '<p class="api-error-message">Loading extra, external data from Foursquare. Please wait.</p>';
+      }
+      // Otherwise, if information was successfully retrieved from
+      // the Foursquare API, then add this information to the
+      // info window contents
+      else {
+        // If the given marker has a formatted address, then add
+        // this to the info window contents
+        if (givenMarker.formattedAddress !== null) {
+          contentHTMLString += '<h5 class="address-heading">Address</h5>';
+          for (let i=0; i<givenMarker.formattedAddress.length-1; i++) {
+            contentHTMLString += `<p class="address-line">${givenMarker.formattedAddress[i]},</p>`;
+          }
+          contentHTMLString += `<p class="address-line">${givenMarker.formattedAddress[givenMarker.formattedAddress.length - 1]}</p>`;
+        }
+
+        // If the given marker has a photo, then add this to the
+        // info window contents using the picture element and
+        // srcset and sizes attributes in order to display the
+        // photo responsively
+        if (givenMarker.photo !== null) {
+          // Array of possible image sizes to display on devices of
+          // various sizes and various device pixel ratios
+          let possibleImageSizes = [268, 400, 500, 600, 800, 1000, 1200, 1500, 1800];
+          // To store the srcset attribute. The first size should
+          // theoretically be available on Foursquare
+          let srcsetString = `${givenMarker.photo.prefix}width${possibleImageSizes[0]}${givenMarker.photo.suffix} ${possibleImageSizes[0]}w, `;
+          // For the remaining sizes, first check if the photo
+          // available on Foursquare is large enough compared to
+          // the size desired in the possibleImageSizes array
+          // before adding it to the srcsetString
+          for (let i=1; i<possibleImageSizes.length-1; i++) {
+            if (givenMarker.photo.width >= possibleImageSizes[i]) {
+              srcsetString += `${givenMarker.photo.prefix}width${possibleImageSizes[i]}${givenMarker.photo.suffix} ${possibleImageSizes[i]}w, `;
+            }
+          }
+          // The last item shouldn't have a comma at the end,
+          // hence its outside the for loop
+          if (givenMarker.photo.width >= possibleImageSizes[possibleImageSizes.length - 1]) {
+            srcsetString += `${givenMarker.photo.prefix}width${possibleImageSizes[possibleImageSizes.length - 1]}${givenMarker.photo.suffix} ${possibleImageSizes[possibleImageSizes.length - 1]}w`;
+          }
+
+          // Build and add the html to display the photo responsively
+          // where the default size is 600px in case the browser
+          // does not support the <source> element
+          contentHTMLString += `<picture>
+              <source
+                srcset="${srcsetString}"
+                sizes="
+                  (max-width: 430px) calc(300px - 2*16px),
+                  (max-width: 600px) calc(100vw - 2*(40px + 25px) - 2*16px),
+                  (max-width: 730px) calc(300px - 2*16px),
+                  (max-width: 1000px) calc(100vw - 300px - 2*(40px + 25px) - 2*16px),
+                  (min-width: 1001px) calc(630px - 2*16px)"
+              />
+              <img
+                class="info-window-image"
+                src="${givenMarker.photo.prefix}width600${givenMarker.photo.suffix}"
+                alt=""
+              />
+            </picture>`;
+        }
+      }
+
+      // Set the contents of the info window
+      infoWindow.setContent(givenMarker.name, contentHTMLString);
 
       // Open and display the infoWindow
       infoWindow.setPosition(givenMarker.position);
