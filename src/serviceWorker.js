@@ -26,7 +26,7 @@ export function register(config) {
   if ('serviceWorker' in navigator) {
     console.log('--We\'re creating a service worker even if it\'s dev mode.');
     // The URL constructor is available in all browsers that support SW.
-    const publicUrl = new URL(process.env.PUBLIC_URL, window.location);
+    const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
       // from what our page is served on. This might happen if a CDN is used to
@@ -35,7 +35,9 @@ export function register(config) {
     }
 
     window.addEventListener('load', () => {
+      // This is Create React App's automatically generated service worker file's location
       // const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+      // This is my own custom service worker file's location
       const swUrl = `${process.env.PUBLIC_URL}/service-worker-custom.js`;
 
       if (isLocalhost) {
@@ -64,6 +66,9 @@ function registerValidSW(swUrl, config) {
     .then(registration => {
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
+        if (installingWorker == null) {
+          return;
+        }
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
@@ -104,9 +109,10 @@ function checkValidServiceWorker(swUrl, config) {
   fetch(swUrl)
     .then(response => {
       // Ensure service worker exists, and that we really are getting a JS file.
+      const contentType = response.headers.get('content-type');
       if (
         response.status === 404 ||
-        response.headers.get('content-type').indexOf('javascript') === -1
+        (contentType != null && contentType.indexOf('javascript') === -1)
       ) {
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then(registration => {
