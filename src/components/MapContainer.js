@@ -367,6 +367,7 @@ class MapContainer extends Component {
                 class="info-window-image"
                 src="${givenMarker.photo.prefix}width600${givenMarker.photo.suffix}"
                 alt=""
+                crossorigin="anonymous"
               />
             </picture>`;
         }

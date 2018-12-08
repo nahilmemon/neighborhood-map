@@ -26,6 +26,8 @@ export default function loadGoogleMapsAPI() {
     // the React component which uses loadGoogleMapsAPI()
     script.src = `https://maps.googleapis.com/maps/api/js?libraries=places&key=${API_KEY}&callback=resolveGoogleMapsPromise`;
     script.async = true;
+    script.defer = true;
+    script.crossorigin = "anonymous";
     // Add the script tag to the end of document's body. This will subsequently begin
     // loading the Google Maps API.
     document.body.appendChild(script);
