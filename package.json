@@ -12,7 +12,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build-sw-prod": "node ./src/custom-workbox-sw/build-sw-prod.js",
+    "build-sw-dev": "node ./src/custom-workbox-sw/build-sw-dev.js",
+    "build": "react-scripts build && npm run build-sw-prod",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -24,5 +26,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "workbox-build": "^3.6.3"
+  }
 }

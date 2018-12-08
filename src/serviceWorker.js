@@ -38,7 +38,10 @@ export function register(config) {
       // This is Create React App's automatically generated service worker file's location
       // const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
       // This is my own custom service worker file's location
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker-custom.js`;
+      // const swUrl = `${process.env.PUBLIC_URL}/service-worker-custom.js`;
+      // This is my own custom service worker file's location using workbox
+      // This is the same for both production and development modes
+      const swUrl = `${process.env.PUBLIC_URL}/sw.js`;
 
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.
