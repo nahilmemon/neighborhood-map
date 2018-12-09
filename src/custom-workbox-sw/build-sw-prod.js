@@ -21,7 +21,7 @@ const buildSWProdMode = () => {
     swDest: serviceWorkerDestinationLocation,
     globDirectory: 'build',
     globPatterns: [
-      '**\/*.{js,css,html,png}',
+      '**\/*.{js,css,html,png,svg}',
     ]
   })
   // Then log any resulting warnings created during the above
@@ -33,7 +33,7 @@ const buildSWProdMode = () => {
       A service worker has been generated in ${serviceWorkerDestinationLocation}
       based off of the service worker located in ${serviceWorkerSourceLocation}.
       A total of ${count} files will be precached.
-      This will require ${size/1024} MB storage space.
+      This will require ${size/1024/1024} MB storage space.
     `);
   });
 }

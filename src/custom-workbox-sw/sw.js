@@ -19,6 +19,155 @@ if ('function' === typeof importScripts) {
     // This is where the precache manifest files will be injected
     // by workbox when the new service worker file is built
     workbox.precaching.precacheAndRoute([]);
+
+    // Here are all the custom caching rules for runtime caching
+    // based on the incoming fetch request's url
+
+    // Primarily cache all items in the local origin's static subdirectory
+    workbox.routing.registerRoute(
+      /\/static/,
+      workbox.strategies.cacheFirst()
+    );
+
+
+    // Cache the responses from the Foursquare API for up to 1 day
+    workbox.routing.registerRoute(
+      /.*(?:foursquare)\.com/,
+      workbox.strategies.cacheFirst({
+        cacheName: 'hidden-gems-foursquare',
+        plugins: [
+          new workbox.expiration.Plugin({
+            maxAgeSeconds: 60 * 60 * 24 // 1 day
+          })
+        ]
+      })
+    );
+
+    // Cache up to 10 images referenced by the Foursquare API for up to
+    // 1 day. If offline and an image can't be found in the cache, then
+    // display a fallback offline image.
+    workbox.routing.registerRoute(
+      // Match function
+      ({url, event}) => {
+        if (url.href.includes('fastly.4sqi.net')) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      // Handler function
+      async ({event}) => {
+        try {
+          return await workbox.strategies.staleWhileRevalidate({
+            cacheName: 'hidden-gems-foursquare-images',
+            plugins: [
+              new workbox.cacheableResponse.Plugin({
+                statuses: [0, 200],
+              }),
+              new workbox.expiration.Plugin({
+                maxAgeSeconds: 60 * 60 * 24, // 1 day
+                maxEntries: 10
+              })
+            ]
+          }).handle({event});
+        } catch (error) {
+          console.log('Returning offline-image.png instead of foursquare image.');
+          return caches.match('offline-image.png');
+        }
+      }
+    );
+
+    // Cache the Google Fonts used
+    workbox.routing.registerRoute(
+      // Matching function
+      ({url, event}) => {
+        if (url.href.includes('fonts.googleapis.com') ||
+          url.href.includes('fonts.gstatic.com')) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      // Handler function
+      workbox.strategies.cacheFirst({
+        cacheName: 'hidden-gems-fonts',
+        plugins: [
+          new workbox.cacheableResponse.Plugin({
+            statuses: [0, 200]
+          }),
+          new workbox.expiration.Plugin({
+            maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+            maxEntries: 10
+          })
+        ]
+      })
+    );
+
+    // Cache static files from Google (needed for the map)
+    workbox.routing.registerRoute(
+      /.*(?:gstatic)\.com/,
+      workbox.strategies.staleWhileRevalidate({
+        cacheName: 'hidden-gems-google-static',
+        plugins: [
+          new workbox.cacheableResponse.Plugin({
+            statuses: [0, 200]
+          })
+        ]
+      })
+    );
+
+    // For requests for the Google Maps API, don't cache the background
+    // map vector tiles and satellite imagery tiles. Also, don't cache
+    // js files that won't completely break the map without them when
+    // the user is offline. This is in order to reduce the cache storage
+    // used and try to remain within the storage quota. Although this is
+    // difficult to achieve since all requests for Google Maps are opaque
+    // in nature, which eats up a lot of storage.
+    // Use the staleWhileRevalidate in case there were any errors in
+    // the opaque responses coming back from the Google Maps API
+    workbox.routing.registerRoute(
+      // Matching function
+      ({url, event}) => {
+        if (url.href.includes('googleapis.com/maps-api-v3/') ||
+          url.href.includes('googleapis.com/maps/api')) {
+          if (url.href.includes('onion.js') || url.href.includes('stats.js') ||
+            url.href.includes('marker.js')) {
+            // url.href.includes('marker.js') || url.href.includes('controls.js')) {
+            return false;
+          } else {
+            return true;
+          }
+        } else {
+          return false;
+        }
+      },
+      // Handler function
+      workbox.strategies.staleWhileRevalidate({
+        cacheName: 'hidden-gems-google-maps',
+        plugins: [
+          new workbox.cacheableResponse.Plugin({
+            statuses: [0, 200]
+          })
+        ]
+      })
+    );
+
+    // Default request handler for requests that don't match any
+    // of the above custom routes
+    workbox.routing.setDefaultHandler(({url, event, params}) => {
+      workbox.strategies.networkOnly();
+    });
+
+    // Catch any errors resulting from a route request gone wrong
+    workbox.routing.setCatchHandler(({url, event, params}) => {
+      console.log('Something went wrong when handling the incoming request: ');
+      console.log('url: ', url);
+      console.log('event: ', event);
+      console.log('params: ', params);
+    });
+
+    // Configure navigation requests
+    workbox.routing.registerNavigationRoute('/index.html');
   }
   else {
     console.log('Workbox failed to load. Thus, no offline functionality available. :(');
