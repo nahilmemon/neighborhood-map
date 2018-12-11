@@ -23,9 +23,12 @@
     --secondary-color: #dedede;
     --secondary-light-color: #fff;
     --secondary-dark-color: #000;
-   --primary-color-overlay: rgba(239, 154, 154, 0.8);
+    --primary-color-overlay: rgba(239, 154, 154, 0.8);
     --primary-light-color-overlay: rgba(255, 204, 203, 0.8);
     --primary-dark-color-overlay: rgba(186, 107, 108, 0.8);
+    --secondary-color-overlay: rgba(222, 222, 222, 0.8);
+    --secondary-light-color-overlay: rgba(255, 255, 255, 0.8);
+    --secondary-dark-color-overlay: rgba(0, 0, 0, 0.8);
     /*--primary-color: #cc8f80;
     --primary-light-color: #ffc0af;
     --primary-dark-color: #996154;
@@ -322,6 +325,7 @@
     padding: 5px;
     font-size: 1em;
     border: 1px solid var(--secondary-dark-color);
+    border-bottom: 3px solid var(--secondary-dark-color);
     margin-bottom: 0.5em;
     width: 100%;
     transition: all 0.25s ease-in-out;
@@ -330,12 +334,13 @@
   select:hover,
   select:focus,
   input[type="text"]:hover,
-  input[type="text"]:focus,
-  .search-results-entry:hover,
-  .search-results-entry:focus {
+  input[type="text"]:focus {
     outline: none;
+    text-decoration: underline;
     border: 1px solid var(--primary-dark-color);
-    box-shadow: inset 0px 0px 0px 2px var(--primary-dark-color-overlay);
+    border-bottom: 3px solid var(--primary-dark-color);
+    box-shadow: inset 0px -3px 0px 0px var(--primary-dark-color-overlay),
+      inset 0px 0px 0px 2px var(--primary-dark-color-overlay);
     transition: all 0.25s ease-in-out;
   }
 
@@ -389,6 +394,11 @@
 
   .search-results-entry {
     text-align: center;
+    background: var(--secondary-light-color);
+    color: var(--secondary-dark-color);
+    border: 1px solid var(--secondary-dark-color);
+    border-bottom: 3px solid var(--secondary-dark-color);
+    padding: 0.5rem;
   }
 
   .search-results h4 {
@@ -405,12 +415,19 @@
     transition: all 0.25s ease-in-out;
   }
 
-  .search-results-entry-selected:hover,
-  .search-results-entry-selected:focus {
+  .search-results-entry:hover,
+  .search-results-entry:focus {
     outline: none;
     border: 1px solid var(--primary-dark-color);
-    box-shadow: inset 0px 0px 0px 2px var(--primary-dark-color-overlay);
+    border-bottom: 3px solid var(--primary-dark-color);
+    box-shadow: inset 0px -3px 0px 0px var(--primary-dark-color-overlay),
+      inset 0px 0px 0px 2px var(--primary-dark-color-overlay);
     transition: all 0.25s ease-in-out;
+  }
+
+  .search-results-entry:hover h4,
+  .search-results-entry:focus h4 {
+    text-decoration: underline;
   }
 
 /* ====================== Map ====================== */
@@ -835,3 +852,57 @@
    * https://github.com/ryanwaite28/script-store/blob/master/js/react_resolve_google_maps.js
    * https://github.com/atmist/snazzy-info-window/blob/master/src/snazzy-info-window.js
   */
+
+/* ====================== Update Notification ====================== */
+  #update-site-notification {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100000000;
+    background: var(--primary-color);
+    text-align: center;
+    padding: 0.75em;
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: baseline;
+  }
+
+  #update-site-notification p {
+    font-weight: 600;
+    color: var(--secondary-dark-color);
+    margin-left: 32px;
+    margin-right: 32px;
+  }
+
+  #update-site-notification button {
+    background: var(--secondary-light-color);
+    color: var(--secondary-dark-color);
+    border: 1px solid var(--secondary-dark-color);
+    border-bottom: 3px solid var(--secondary-dark-color);
+    font-weight: 600;
+    padding: 8px;
+  }
+
+  #update-site-notification button:hover,
+  #update-site-notification button:focus {
+    outline: none;
+    text-decoration: underline;
+    border: 1px solid var(--secondary-dark-color);
+    border-bottom: 3px solid var(--secondary-dark-color);
+    box-shadow: inset 0px 0px 0px 2px var(--secondary-dark-color-overlay);
+    transition: all 0.25s ease-in-out;
+  }
+
+  .update-button {
+    margin-right: 32px;
+  }
+
+  @media (max-width: 767px) {
+    #update-site-notification button {
+      min-height: 48px;
+      min-width: 48px;
+    }
+  }
