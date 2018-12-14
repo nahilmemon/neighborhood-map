@@ -202,7 +202,16 @@ if ('function' === typeof importScripts) {
     });
 
     // Configure navigation requests
-    workbox.routing.registerNavigationRoute('/index.html');
+    workbox.routing.registerNavigationRoute('/index.html', {
+      // Based on default Create React App settings
+      blacklist: [
+        // Exclude URLs starting with /_, as they're likely an API call
+        new RegExp('^/_'),
+        // Exclude URLs containing a dot, as they're likely a resource in
+        // public/ and not a SPA route
+        new RegExp('/[^/]+\\.[^/]+$'),
+      ]
+    });
   } else {
     console.log('Workbox failed to load. Thus, no offline functionality available. :(');
   }
