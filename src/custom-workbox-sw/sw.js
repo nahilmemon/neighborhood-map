@@ -1,3 +1,5 @@
+let cacheWhitelist, cacheBlacklist;
+
 if ('function' === typeof importScripts) {
   // Import the workbox libraries using Google's CDN
   importScripts(
@@ -21,6 +23,25 @@ if ('function' === typeof importScripts) {
     // by workbox when the new service worker file is built
     workbox.precaching.precacheAndRoute([]);
 
+    // Store the cache names to use currently
+    cacheWhitelist = {
+      'foursquare-api': 'hidden-gems-foursquare',
+      // 'foursquare-images': 'hidden-gems-foursquare-images',
+      'google-fonts': 'hidden-gems-google-fonts'
+    };
+    // Add the caches generated automatically by workbox to the cache whitelist
+    Object.entries(workbox.core.cacheNames).forEach((cacheEntry) => {
+      cacheWhitelist[cacheEntry[0]] = cacheEntry[1];
+    });
+    // The temporary caches aren't saved in workbox.core.cacheNames,
+    // so add them manually
+    cacheWhitelist['precache-temp'] = `${workbox.core.cacheNames['precache']}-temp`;
+    // Store the previously used cache names that will no longer be used
+    cacheBlacklist = {
+      'google-static': 'hidden-gems-google-static',
+      'google-maps-api': 'hidden-gems-google-maps'
+    };
+
     // Here are all the custom caching rules for runtime caching
     // based on the incoming fetch request's url
 
@@ -35,7 +56,7 @@ if ('function' === typeof importScripts) {
     workbox.routing.registerRoute(
       /.*(?:foursquare)\.com/,
       workbox.strategies.cacheFirst({
-        cacheName: 'hidden-gems-foursquare',
+        cacheName: cacheWhitelist['foursquare-api'],
         plugins: [
           new workbox.expiration.Plugin({
             maxAgeSeconds: 60 * 60 * 24 // 1 day
@@ -61,7 +82,7 @@ if ('function' === typeof importScripts) {
       async ({event}) => {
         try {
           return await workbox.strategies.staleWhileRevalidate({
-            cacheName: 'hidden-gems-foursquare-images',
+            cacheName: cacheWhitelist['foursquare-images'],
             plugins: [
               new workbox.cacheableResponse.Plugin({
                 statuses: [0, 200],
@@ -79,7 +100,7 @@ if ('function' === typeof importScripts) {
         }
       }
     );
-  */
+  //*/
 
     // Cache the Google Fonts used
     workbox.routing.registerRoute(
@@ -94,7 +115,7 @@ if ('function' === typeof importScripts) {
       },
       // Handler function
       workbox.strategies.cacheFirst({
-        cacheName: 'hidden-gems-fonts',
+        cacheName: cacheWhitelist['google-fonts'],
         plugins: [
           new workbox.cacheableResponse.Plugin({
             statuses: [0, 200]
@@ -112,7 +133,7 @@ if ('function' === typeof importScripts) {
     workbox.routing.registerRoute(
       /.*(?:gstatic)\.com/,
       workbox.strategies.staleWhileRevalidate({
-        cacheName: 'hidden-gems-google-static',
+        cacheName: cacheWhitelist['google-static'],
         plugins: [
           new workbox.cacheableResponse.Plugin({
             statuses: [0, 200]
@@ -152,7 +173,7 @@ if ('function' === typeof importScripts) {
       },
       // Handler function
       workbox.strategies.staleWhileRevalidate({
-        cacheName: 'hidden-gems-google-maps',
+        cacheName: cacheWhitelist['google-maps-api'],
         plugins: [
           new workbox.cacheableResponse.Plugin({
             statuses: [0, 200]
@@ -186,6 +207,32 @@ if ('function' === typeof importScripts) {
     console.log('Workbox failed to load. Thus, no offline functionality available. :(');
   }
 }
+
+/**
+ * When a new service worker has activated, delete all the previous cache versions.
+ * Note: if a cache has an expiry plugin attached to it, then it also has metadata
+ * saved about it in IndexDB. The following code doesn't actually delete this
+ * metadata. It only deletes the cache itself. Using workbox's built in function,
+ * expiryPlugin.deleteCacheAndMetadata() didn't seem to do anything though.
+ */
+self.addEventListener('activate', function(event) {
+  if (cacheWhitelist) {
+    // Convert the cacheWhitelist object into an array to make it easier
+    // to filter the resulting array for the current cache in cacheNames
+    let cacheWhitelistArray = Object.values(cacheWhitelist);
+    event.waitUntil(
+      caches.keys().then(function(cacheNames) {
+        return Promise.all(
+          cacheNames.map(function(cacheName) {
+            if (cacheWhitelistArray.indexOf(cacheName) === -1) {
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      })
+    );
+  }
+});
 
 /**
  * When the service worker receives the 'skipWaiting' message,
