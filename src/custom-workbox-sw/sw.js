@@ -1,5 +1,5 @@
 let cacheWhitelist, cacheBlacklist;
-const corsProxyURL = "https://cors-anywhere.herokuapp.com/";
+const corsProxyURL = "https://evening-reef-77906.herokuapp.com/";
 
 if ('function' === typeof importScripts) {
   // Import the workbox libraries using Google's CDN
