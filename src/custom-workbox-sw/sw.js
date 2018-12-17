@@ -1,4 +1,5 @@
 let cacheWhitelist, cacheBlacklist;
+const corsProxyURL = "https://cors-anywhere.herokuapp.com/";
 
 if ('function' === typeof importScripts) {
   // Import the workbox libraries using Google's CDN
@@ -26,8 +27,11 @@ if ('function' === typeof importScripts) {
     // Store the cache names to use currently
     cacheWhitelist = {
       'foursquare-api': 'hidden-gems-foursquare',
-      // 'foursquare-images': 'hidden-gems-foursquare-images',
-      'google-fonts': 'hidden-gems-google-fonts'
+      'foursquare-images': 'hidden-gems-foursquare-images',
+      'google-fonts': 'hidden-gems-google-fonts',
+      'google-static': 'hidden-gems-google-static',
+      'google-maps-api': 'hidden-gems-google-maps',
+      'google-maps-tiles': 'hidden-gems-google-maps-tiles'
     };
     // Add the caches generated automatically by workbox to the cache whitelist
     Object.entries(workbox.core.cacheNames).forEach((cacheEntry) => {
@@ -37,20 +41,83 @@ if ('function' === typeof importScripts) {
     // so add them manually
     cacheWhitelist['precache-temp'] = `${workbox.core.cacheNames['precache']}-temp`;
     // Store the previously used cache names that will no longer be used
-    cacheBlacklist = {
-      'google-static': 'hidden-gems-google-static',
-      'google-maps-api': 'hidden-gems-google-maps'
-    };
+    cacheBlacklist = {};
 
     // Here are all the custom caching rules for runtime caching
     // based on the incoming fetch request's url
+
+    // Store various caching strategies for different URLs (useful
+    // for routes with custom handler callbacks)
+    let cachingStrategies = {
+      'foursquare-images': workbox.strategies.cacheFirst({
+        cacheName: cacheWhitelist['foursquare-images'],
+        plugins: [
+          new workbox.cacheableResponse.Plugin({
+            statuses: [0, 200],
+          }),
+          new workbox.expiration.Plugin({
+            maxAgeSeconds: 60 * 60 * 24, // 1 day
+            maxEntries: 10,
+            purgeOnQuotaError: true //delete cache if no space available
+          })
+        ]
+      }),
+      'google-fonts': workbox.strategies.cacheFirst({
+        cacheName: cacheWhitelist['google-fonts'],
+        plugins: [
+          new workbox.cacheableResponse.Plugin({
+            statuses: [0, 200]
+          }),
+          new workbox.expiration.Plugin({
+            maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+            maxEntries: 10
+          })
+        ]
+      }),
+      'google-static': workbox.strategies.cacheFirst({
+        cacheName: cacheWhitelist['google-static'],
+        plugins: [
+          new workbox.cacheableResponse.Plugin({
+            statuses: [0, 200]
+          }),
+          new workbox.expiration.Plugin({
+            maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+            purgeOnQuotaError: true // delete this cache if no space available
+          })
+        ]
+      }),
+      'google-maps-api': workbox.strategies.staleWhileRevalidate({
+        cacheName: cacheWhitelist['google-maps-api'],
+        plugins: [
+          new workbox.cacheableResponse.Plugin({
+            statuses: [0, 200]
+          }),
+          new workbox.expiration.Plugin({
+            maxAgeSeconds: 60 * 60 * 24 * 30, // 1 month
+            purgeOnQuotaError: true // delete this cache if no space available
+          })
+        ]
+      }),
+      'google-maps-tiles': workbox.strategies.cacheFirst({
+        cacheName: cacheWhitelist['google-maps-tiles'],
+        plugins: [
+          new workbox.cacheableResponse.Plugin({
+            statuses: [0, 200]
+          }),
+          new workbox.expiration.Plugin({
+            maxAgeSeconds: 60 * 60 * 24 * 30, // 1 month
+            maxEntries: 30,
+            purgeOnQuotaError: true // delete this cache if no space available
+          })
+        ]
+      })
+    }
 
     // Primarily cache all items in the local origin's static subdirectory
     workbox.routing.registerRoute(
       /\/static/,
       workbox.strategies.cacheFirst()
     );
-
 
     // Cache the responses from the Foursquare API for up to 1 day
     workbox.routing.registerRoute(
@@ -65,7 +132,6 @@ if ('function' === typeof importScripts) {
       })
     );
 
-  /*
     // Cache up to 10 images referenced by the Foursquare API for up to
     // 1 day. If offline and an image can't be found in the cache, then
     // display a fallback offline image.
@@ -81,33 +147,38 @@ if ('function' === typeof importScripts) {
       // Handler function
       async ({event}) => {
         try {
-          return await workbox.strategies.staleWhileRevalidate({
-            cacheName: cacheWhitelist['foursquare-images'],
-            plugins: [
-              new workbox.cacheableResponse.Plugin({
-                statuses: [0, 200],
-              }),
-              new workbox.expiration.Plugin({
-                maxAgeSeconds: 60 * 60 * 24, // 1 day
-                maxEntries: 10,
-                purgeOnQuotaError: true //delete cache if no space available
-              })
-            ]
-          }).handle({event});
+          // return await cachingStrategies['foursquare-images'].handle({event});
+
+          // Add a proxy url in front of the event.request's url.
+          // The proxy url will add Access-Control-* headers to enable
+          // cors requests in order to avoid getting opaque responses
+          // which eat up a lot of storage space in the cache.
+          const modifiedURL = corsProxyURL + event.request.url;
+          const request = new Request(modifiedURL, {
+            mode: 'cors'
+          });
+
+          const cachedResponse = await caches.match(request, {
+            cacheName: cacheWhitelist['foursquare-images']
+          });
+
+          return cachedResponse || cachingStrategies['foursquare-images'].makeRequest({
+            event,
+            request
+          });
         } catch (error) {
           console.log('Returning offline-image.png instead of foursquare image.');
           return caches.match('offline-image.png');
         }
       }
     );
-  //*/
 
-    // Cache the Google Fonts used
+
+    // Cache the static Google Fonts' font files
     workbox.routing.registerRoute(
       // Matching function
       ({url, event}) => {
-        if (url.href.includes('fonts.googleapis.com') ||
-          url.href.includes('fonts.gstatic.com')) {
+        if (url.href.includes('fonts.gstatic.com')) {
           return true;
         } else {
           return false;
@@ -128,64 +199,129 @@ if ('function' === typeof importScripts) {
       })
     );
 
-  /*
-    // Cache static files from Google (needed for the map)
-    workbox.routing.registerRoute(
-      /.*(?:gstatic)\.com/,
-      workbox.strategies.staleWhileRevalidate({
-        cacheName: cacheWhitelist['google-static'],
-        plugins: [
-          new workbox.cacheableResponse.Plugin({
-            statuses: [0, 200]
-          }),
-          new workbox.expiration.Plugin({
-            maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-            purgeOnQuotaError: true //delete cache if no space available
-          })
-        ]
-      })
-    );
-
-    // For requests for the Google Maps API, don't cache the background
-    // map vector tiles and satellite imagery tiles. Also, don't cache
-    // js files that won't completely break the map without them when
-    // the user is offline. This is in order to reduce the cache storage
-    // used and try to remain within the storage quota. Although this is
-    // difficult to achieve since all requests for Google Maps are opaque
-    // in nature, which eats up a lot of storage.
-    // Use the staleWhileRevalidate in case there were any errors in
-    // the opaque responses coming back from the Google Maps API
+    // Cache the Google Fonts' stylesheets
     workbox.routing.registerRoute(
       // Matching function
       ({url, event}) => {
-        if (url.href.includes('googleapis.com/maps-api-v3/') ||
-          url.href.includes('googleapis.com/maps/api')) {
-          if (url.href.includes('onion.js') || url.href.includes('stats.js') ||
-            url.href.includes('marker.js')) {
-            // url.href.includes('marker.js') || url.href.includes('controls.js')) {
-            return false;
-          } else {
-            return true;
-          }
+        if (url.href.includes('fonts.googleapis.com')) {
+          return true;
         } else {
           return false;
         }
       },
       // Handler function
-      workbox.strategies.staleWhileRevalidate({
-        cacheName: cacheWhitelist['google-maps-api'],
-        plugins: [
-          new workbox.cacheableResponse.Plugin({
-            statuses: [0, 200]
-          }),
-          new workbox.expiration.Plugin({
-            maxAgeSeconds: 60 * 60 * 24 * 30, // 1 month
-            purgeOnQuotaError: true //delete cache if no space available
-          })
-        ]
-      })
+      async ({event}) => {
+        // Add a proxy url in front of the event.request's url.
+        // The proxy url will add Access-Control-* headers to enable
+        // cors requests in order to avoid getting opaque responses
+        // which eat up a lot of storage space in the cache.
+        const modifiedURL = corsProxyURL + event.request.url;
+        const request = new Request(modifiedURL, {
+          mode: 'cors'
+        });
+
+        const cachedResponse = await caches.match(request, {
+          cacheName: cacheWhitelist['google-fonts']
+        });
+
+        return cachedResponse || cachingStrategies['google-fonts'].makeRequest({
+          event,
+          request
+        });
+      }
     );
-  */
+
+    // Cache static files from Google (needed for the map)
+    workbox.routing.registerRoute(
+      /.*(?:gstatic)\.com/,
+      // Handler function
+      async ({event}) => {
+        // Add a proxy url in front of the event.request's url.
+        // The proxy url will add Access-Control-* headers to enable
+        // cors requests in order to avoid getting opaque responses
+        // which eat up a lot of storage space in the cache.
+        const modifiedURL = corsProxyURL + event.request.url;
+        const request = new Request(modifiedURL, {
+          mode: 'cors'
+        });
+
+        const cachedResponse = await caches.match(request, {
+          cacheName: cacheWhitelist['google-static']
+        });
+
+        return cachedResponse || cachingStrategies['google-static'].makeRequest({
+          event,
+          request
+        });
+      }
+    );
+
+    // For requests for the Google Maps API, don't cache the background
+    // map vector tiles and satellite imagery tiles.
+    workbox.routing.registerRoute(
+      // Matching function
+      ({url, event}) => {
+        if (url.href.includes('googleapis.com/maps-api-v3/') ||
+          url.href.includes('googleapis.com/maps/api')) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      // Handler function
+      async ({event}) => {
+        // Add a proxy url in front of the event.request's url.
+        // The proxy url will add Access-Control-* headers to enable
+        // cors requests in order to avoid getting opaque responses
+        // which eat up a lot of storage space in the cache.
+        const modifiedURL = corsProxyURL + event.request.url;
+        const request = new Request(modifiedURL, {
+          mode: 'cors'
+        });
+
+        const cachedResponse = await caches.match(request, {
+          cacheName: cacheWhitelist['google-maps-api']
+        });
+
+        return cachedResponse || cachingStrategies['google-maps-api'].makeRequest({
+          event,
+          request
+        });
+      }
+    );
+
+    // Cache the background map vector tiles separately in order to limit
+    // how many tiles are stored in the cache.
+    workbox.routing.registerRoute(
+      // Matching function
+      ({url, event}) => {
+        if (url.href.includes('googleapis.com/maps/vt')) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      // Handler function
+      async ({event}) => {
+        // Add a proxy url in front of the event.request's url.
+        // The proxy url will add Access-Control-* headers to enable
+        // cors requests in order to avoid getting opaque responses
+        // which eat up a lot of storage space in the cache.
+        const modifiedURL = corsProxyURL + event.request.url;
+        const request = new Request(modifiedURL, {
+          mode: 'cors'
+        });
+
+        const cachedResponse = await caches.match(request, {
+          cacheName: cacheWhitelist['google-maps-tiles']
+        });
+
+        return cachedResponse || cachingStrategies['google-maps-tiles'].makeRequest({
+          event,
+          request
+        });
+      }
+    );
 
     // Default request handler for requests that don't match any
     // of the above custom routes
@@ -195,10 +331,15 @@ if ('function' === typeof importScripts) {
 
     // Catch any errors resulting from a route request gone wrong
     workbox.routing.setCatchHandler(({url, event, params}) => {
-      console.log('Something went wrong when handling the incoming request: ');
-      console.log('url: ', url);
-      console.log('event: ', event);
-      console.log('params: ', params);
+      console.log('Returning offline-image.png instead of foursquare image.');
+      if (url.href.includes('fastly.4sqi.net')) {
+        return caches.match('offline-image.png');
+      } else {
+        console.log('Something went wrong when handling the incoming request: ');
+        console.log('url: ', url);
+        console.log('event: ', event);
+        console.log('params: ', params);
+      }
     });
 
     // Configure navigation requests
