@@ -21,10 +21,10 @@ const isLocalhost = Boolean(
 );
 
 export function register(config) {
-  console.log('--Let\'s create a service worker.');
-  // if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
-  if ('serviceWorker' in navigator) {
-    console.log('--We\'re creating a service worker even if it\'s dev mode.');
+  // Creates service worker only in production mode (from the build folder).
+  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  // Creates service worker in both development mode and production mode.
+  // if ('serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
@@ -38,8 +38,6 @@ export function register(config) {
       // This is Create React App's automatically generated service worker
       // file's location
       // const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
-      // This is my own custom service worker file's location
-      // const swUrl = `${process.env.PUBLIC_URL}/service-worker-custom.js`;
       // This is my own custom service worker file's location using workbox
       // This is the same for both production and development modes
       const swUrl = `${process.env.PUBLIC_URL}/sw.js`;
@@ -103,49 +101,6 @@ function registerValidSW(swUrl, config) {
 
       // Registration was successful
       console.log('ServiceWorker registration successful with scope: ', registration.scope);
-
-    /*
-       // CRA code to check for updates
-      registration.onupdatefound = () => {
-        const installingWorker = registration.installing;
-        // Case 1 maybe?
-        if (installingWorker == null) {
-          return;
-        }
-        installingWorker.onstatechange = () => {
-          if (installingWorker.state === 'installed') {
-            if (navigator.serviceWorker.controller) {
-              console.log('\n\t====== Case 7: CRA detects a service worker update available. ======\n');
-              // At this point, the updated precached content has been fetched,
-              // but the previous service worker will still serve the older
-              // content until all client tabs are closed.
-              console.log(
-                'New content is available and will be used when all ' +
-                  'tabs for this page are closed. See http://bit.ly/CRA-PWA.'
-              );
-
-              updateReady(registration.waiting);
-
-              // Execute callback
-              if (config && config.onUpdate) {
-                config.onUpdate(registration);
-              }
-            } else {
-              // At this point, everything has been precached.
-              // It's the perfect time to display a
-              // "Content is cached for offline use." message.
-              console.log('Content is cached for offline use.');
-
-              // Case 6
-              // Execute callback
-              if (config && config.onSuccess) {
-                config.onSuccess(registration);
-              }
-            }
-          }
-        };
-      };
-    //*/
     })
     .catch(error => {
       console.error('Error during service worker registration:', error);
