@@ -854,7 +854,7 @@
   */
 
 /* ====================== Update Notification ====================== */
-  #update-site-notification {
+  .service-worker-notification {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -870,14 +870,14 @@
     align-items: baseline;
   }
 
-  #update-site-notification p {
+  .service-worker-notification p {
     font-weight: 600;
     color: var(--secondary-dark-color);
     margin-left: 32px;
     margin-right: 32px;
   }
 
-  #update-site-notification button {
+  .service-worker-notification button {
     background: var(--secondary-light-color);
     color: var(--secondary-dark-color);
     border: 1px solid var(--secondary-dark-color);
@@ -886,8 +886,8 @@
     padding: 8px;
   }
 
-  #update-site-notification button:hover,
-  #update-site-notification button:focus {
+  .service-worker-notification button:hover,
+  .service-worker-notification button:focus {
     outline: none;
     text-decoration: underline;
     border: 1px solid var(--secondary-dark-color);
@@ -901,7 +901,7 @@
   }
 
   @media (max-width: 767px) {
-    #update-site-notification button {
+    .service-worker-notification button {
       min-height: 48px;
       min-width: 48px;
     }

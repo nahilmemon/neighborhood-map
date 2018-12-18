@@ -168,6 +168,51 @@ function registerValidSW(swUrl, config) {
     .catch(error => {
       console.error('Error during service worker registration:', error);
     });
+
+  // If the service worker has registered successfully, then show various
+  // notifications according to the state of the webpage and the caches
+  navigator.serviceWorker.ready
+    .then(function(registration) {
+      // Notification 1: Currently offline mode
+      // Show the currently offline mode notification if the user is offline
+      window.addEventListener('offline', (event) => {
+        displayCurrentlyOfflineModeNotification();
+      });
+      // Hide the currently offline mode notification if the user is back online
+      window.addEventListener('online', (event) => {
+        deleteCurrentlyOfflineModeNotification();
+      });
+
+      // Notification 1: Offline ready mode
+      // If the browser has local storage enabled and working properly,
+      // then only show the notification for the first time that the service
+      // worker has been activated and runtime caching has begun.
+      if (isLocalStorageAvailable()) {
+        if(!localStorage.getItem('offlineReadyNotificationShownBefore')) {
+          caches.keys().then(function(cacheNames) {
+            // Runtime caching has begun if there's more than two caches present
+            // (the other two caches belong to the precaching caches).
+            if (cacheNames.length > 2) {
+              // Update the local storage to remember that the notification
+              // has already been shown before and not to show it again.
+              localStorage.setItem('offlineReadyNotificationShownBefore', true);
+              // Display the offline mode ready notification.
+              displayOfflineReadyNotification();
+            }
+          });
+        }
+      }
+      // Otherwise, if local storage is unavailable, then always show the
+      // notification when the user has refreshed the page (after runtime
+      // caching has been enabled).
+      else {
+        caches.keys().then(function(cacheNames) {
+          if (cacheNames.length > 2) {
+            displayOfflineReadyNotification();
+          }
+        });
+      }
+    });
 }
 
 function checkValidServiceWorker(swUrl, config) {
@@ -207,17 +252,38 @@ export function unregister() {
 }
 
 /**
+ * Determine if local storage is available and in a usable state.
+ */
+function isLocalStorageAvailable() {
+  // If it is possible to set and remove an item in the local storage
+  // without throwing any errors, then local storage is available
+  try {
+    let testItem = 'testItem';
+    localStorage.setItem(testItem, testItem);
+    localStorage.removeItem(testItem);
+    return true;
+  }
+  // Otherwise, if an error is thrown, regardless of whether it's
+  // because local storage is available or if there's a lack of
+  // storage space, then return false anyhow since the local
+  // storage won't be in a usable state
+  catch(event) {
+    return false;
+  }
+}
+
+/**
  * Track the installation progress of a currently installing service worker.
  * When the service worker finishes installing (i.e. when its state becomes
  * 'installed'), then trigger the update notification to show to the user.
  */
 function trackInstalling(worker) {
   worker.addEventListener('statechange', function() {
-    if (worker.state == 'installed') {
+    if (worker.state === 'installed') {
       updateReady(worker);
     }
   });
-};
+}
 
 /**
  * Display a notification to the user to update the webpage.
@@ -247,14 +313,15 @@ function updateReady(worker) {
       return;
     }
   });
-};
+}
 
 /**
- * Create the section that displays the update notification
+ * Create the section that displays the update notification.
  */
 function createUpdateNotificationHTML() {
   let updateSection = document.createElement('section');
   updateSection.id = 'update-site-notification';
+  updateSection.classList.add('service-worker-notification');
 
   let updateDiv = document.createElement('div');
 
@@ -280,7 +347,120 @@ function createUpdateNotificationHTML() {
 }
 
 /**
- * Delete the update notification section
+ * Create the section that displays the currently offline notification.
+ */
+function createCurrentlyOfflineModeNotificationHTML() {
+  let currentlyOfflineModeSection = document.createElement('section');
+  currentlyOfflineModeSection.id = 'currently-offline-notification';
+  currentlyOfflineModeSection.classList.add('service-worker-notification');
+
+  let offlineMessage = document.createElement('p');
+  offlineMessage.innerText = 'Currently offline. Map functionality may be limited.';
+
+  let dismissButton = document.createElement('button');
+  dismissButton.innerText = 'Dismiss';
+  dismissButton.classList.add('dismiss-button');
+
+  currentlyOfflineModeSection.append(offlineMessage);
+  currentlyOfflineModeSection.append(dismissButton);
+
+  let firstDOMElement = document.querySelector('#root');
+  document.body.insertBefore(currentlyOfflineModeSection, firstDOMElement);
+}
+
+/**
+ * Display a notification to the user that he/she is currently offline.
+ * Dismiss will hide the notification.
+ * Automatically hide the notification after a certain amount of time.
+ */
+function displayCurrentlyOfflineModeNotification() {
+  // Create the currently offline mode notification section to display
+  // on the webpage.
+  createCurrentlyOfflineModeNotificationHTML();
+
+  const OFFLINE_MODE_SECTION = document.getElementById('currently-offline-notification');
+  // If the user clicks the dismiss button, then delete the offline mode
+  // notification html.
+  OFFLINE_MODE_SECTION.addEventListener('click', function(event) {
+    if (event.target.classList.contains('dismiss-button')) {
+      deleteHTML(OFFLINE_MODE_SECTION);
+      return;
+    }
+  });
+}
+
+/**
+ * Delete currently offline mode notification html.
+ */
+function deleteCurrentlyOfflineModeNotification() {
+  const OFFLINE_MODE_SECTION = document.getElementById('currently-offline-notification');
+  if (OFFLINE_MODE_SECTION) {
+    deleteHTML(OFFLINE_MODE_SECTION);
+  }
+}
+
+/**
+ * Create the section that displays the offline ready notification.
+ */
+function createOfflineReadyNotificationHTML() {
+  let offlineReadySection = document.createElement('section');
+  offlineReadySection.id = 'offline-ready-notification';
+  offlineReadySection.classList.add('service-worker-notification');
+
+  let offlineReadyMessage = document.createElement('p');
+  offlineReadyMessage.innerText = 'This site can work offline (map functionality may be limited).';
+
+  let dismissButton = document.createElement('button');
+  dismissButton.innerText = 'Dismiss';
+  dismissButton.classList.add('dismiss-button');
+
+  offlineReadySection.append(offlineReadyMessage);
+  offlineReadySection.append(dismissButton);
+
+  let firstDOMElement = document.querySelector('#root');
+  document.body.insertBefore(offlineReadySection, firstDOMElement);
+}
+
+/**
+ * Display a notification to the user that he/she is currently offline.
+ * Dismiss will hide the notification.
+ * Automatically hide the notification after a certain amount of time.
+ */
+function displayOfflineReadyNotification() {
+  // Create the offline ready notification section to display
+  // on the webpage.
+  createOfflineReadyNotificationHTML();
+
+  const OFFLINE_READY_SECTION = document.getElementById('offline-ready-notification');
+  // If the user clicks the dismiss button, then delete the offline ready
+  // notification html.
+  OFFLINE_READY_SECTION.addEventListener('click', function(event) {
+    if (event.target.classList.contains('dismiss-button')) {
+      deleteHTML(OFFLINE_READY_SECTION);
+      return;
+    }
+  });
+  // Delete the offline ready notification html automatically after 10 sec.
+  setTimeout(() => {
+    const OFFLINE_READY_SECTION = document.getElementById('offline-ready-notification');
+    if (OFFLINE_READY_SECTION) {
+      deleteHTML(OFFLINE_READY_SECTION);
+    }
+  }, 10000);
+}
+
+/**
+ * Delete currently offline mode notification html.
+ */
+function deleteOfflineReadyNotification() {
+  const OFFLINE_READY_SECTION = document.getElementById('offline-ready-notification');
+  if (OFFLINE_READY_SECTION) {
+    deleteHTML(OFFLINE_READY_SECTION);
+  }
+}
+
+/**
+ * Delete the given element's html.
  */
 function deleteHTML(element) {
   element.parentNode.removeChild(element);
