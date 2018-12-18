@@ -906,3 +906,7 @@
       min-width: 48px;
     }
   }
+
+  .hide {
+    display: none;
+  }

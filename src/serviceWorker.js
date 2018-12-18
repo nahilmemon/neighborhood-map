@@ -56,24 +56,6 @@ export function register(config) {
             'This web app is being served cache-first by a service ' +
               'worker. To learn more, visit http://bit.ly/CRA-PWA'
           );
-
-          // Case 5: service worker's .skipWaiting() was called, meaning
-          // the service worker controlling the page has changed.
-          // Respond to this by reloading the page to let it effectively
-          // take control of the page and update its contents accordingly.
-          // Ensure refresh is only called once.
-          // This works around a bug in "force update on reload" in dev
-          // tools to avoid infinitely reloading the page.
-          let refreshing;
-          navigator.serviceWorker.addEventListener('controllerchange',
-            function() {
-              if (refreshing) {
-                return;
-              }
-              refreshing = true;
-              window.location.reload();
-            }
-          );
         });
       } else {
         // Is not localhost. Just register service worker
@@ -177,13 +159,17 @@ function registerValidSW(swUrl, config) {
       // Show the currently offline mode notification if the user is offline
       window.addEventListener('offline', (event) => {
         displayCurrentlyOfflineModeNotification();
+        // Also hide the update notification if it's also open.
+        hideUpdateNotificationHTML();
       });
       // Hide the currently offline mode notification if the user is back online
       window.addEventListener('online', (event) => {
         deleteCurrentlyOfflineModeNotification();
+        // Also show the update notification if it's also open.
+        showUpdateNotificationHTML();
       });
 
-      // Notification 1: Offline ready mode
+      // Notification 2: Offline ready mode
       // If the browser has local storage enabled and working properly,
       // then only show the notification for the first time that the service
       // worker has been activated and runtime caching has begun.
@@ -212,6 +198,25 @@ function registerValidSW(swUrl, config) {
           }
         });
       }
+
+      // Notification 3: Update ready
+      // Case 5: service worker's .skipWaiting() was called, meaning
+      // the service worker controlling the page has changed.
+      // Respond to this by reloading the page to let it effectively
+      // take control of the page and update its contents accordingly.
+      // Ensure refresh is only called once.
+      // This works around a bug in "force update on reload" in dev
+      // tools to avoid infinitely reloading the page.
+      let refreshing;
+      navigator.serviceWorker.addEventListener('controllerchange',
+        function() {
+          if (refreshing) {
+            return;
+          }
+          refreshing = true;
+          window.location.reload();
+        }
+      );
     });
 }
 
@@ -347,6 +352,26 @@ function createUpdateNotificationHTML() {
 }
 
 /**
+ * Hide update notification html if it already exists.
+ */
+function hideUpdateNotificationHTML() {
+  const UPDATE_SECTION = document.getElementById('update-site-notification');
+  if (UPDATE_SECTION) {
+    UPDATE_SECTION.classList.add('hide');
+  }
+}
+
+/**
+ * Show update notification html if it already exists.
+ */
+function showUpdateNotificationHTML() {
+  const UPDATE_SECTION = document.getElementById('update-site-notification');
+  if (UPDATE_SECTION) {
+    UPDATE_SECTION.classList.remove('hide');
+  }
+}
+
+/**
  * Create the section that displays the currently offline notification.
  */
 function createCurrentlyOfflineModeNotificationHTML() {
@@ -447,16 +472,6 @@ function displayOfflineReadyNotification() {
       deleteHTML(OFFLINE_READY_SECTION);
     }
   }, 10000);
-}
-
-/**
- * Delete currently offline mode notification html.
- */
-function deleteOfflineReadyNotification() {
-  const OFFLINE_READY_SECTION = document.getElementById('offline-ready-notification');
-  if (OFFLINE_READY_SECTION) {
-    deleteHTML(OFFLINE_READY_SECTION);
-  }
 }
 
 /**
