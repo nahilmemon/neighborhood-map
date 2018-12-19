@@ -59,6 +59,34 @@ export function register(config) {
         // Is not localhost. Just register service worker
         registerValidSW(swUrl, config);
       }
+
+      // Notification 1: Currently offline mode
+      // Show the currently offline mode notification if the user is offline
+      // upon page load
+      if (!navigator.onLine) {
+        displayCurrentlyOfflineModeNotification();
+        // Also hide the update notification if it's also open.
+        hideUpdateNotificationHTML();
+      }
+      // Hide the currently offline mode notification if the user is online
+      // upon page load
+      if (navigator.onLine) {
+        deleteCurrentlyOfflineModeNotification();
+        // Also show the update notification if it's also open.
+        showUpdateNotificationHTML();
+      }
+      // Show the currently offline mode notification if the user goes offline
+      window.addEventListener('offline', (event) => {
+        displayCurrentlyOfflineModeNotification();
+        // Also hide the update notification if it's also open.
+        hideUpdateNotificationHTML();
+      });
+      // Hide the currently offline mode notification if the user goes online
+      window.addEventListener('online', (event) => {
+        deleteCurrentlyOfflineModeNotification();
+        // Also show the update notification if it's also open.
+        showUpdateNotificationHTML();
+      });
     });
   }
 }
@@ -110,19 +138,7 @@ function registerValidSW(swUrl, config) {
   // notifications according to the state of the webpage and the caches
   navigator.serviceWorker.ready
     .then(function(registration) {
-      // Notification 1: Currently offline mode
-      // Show the currently offline mode notification if the user is offline
-      window.addEventListener('offline', (event) => {
-        displayCurrentlyOfflineModeNotification();
-        // Also hide the update notification if it's also open.
-        hideUpdateNotificationHTML();
-      });
-      // Hide the currently offline mode notification if the user is back online
-      window.addEventListener('online', (event) => {
-        deleteCurrentlyOfflineModeNotification();
-        // Also show the update notification if it's also open.
-        showUpdateNotificationHTML();
-      });
+
 
       // Notification 2: Offline ready mode
       // If the browser has local storage enabled and working properly,
