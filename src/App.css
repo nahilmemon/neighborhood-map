@@ -651,6 +651,15 @@
     margin: 0.5em auto 0;
   }
 
+  /* ==== Hide undesired map controls when offline ==== */
+  [title*="Drag Pegman"],
+  [title*="Show street map"],
+  [title*="Show satellite imagery"],
+  [title*="Show imagery"] {
+    display: none !important;
+  }
+
+
 /* ====================== Modal Content ====================== */
   /* Note: Modal CSS and JS inspired by
     - https://tympanus.net/Development/ModalWindowEffects/
