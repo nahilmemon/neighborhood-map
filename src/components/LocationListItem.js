@@ -1,10 +1,29 @@
+// React
 import React, { Component } from 'react';
+// Packages
+import PropTypes from 'prop-types';
 
 class LocationListItem extends Component {
   constructor(props) {
     super(props);
 
     this.handleLocationListItemClick = this.handleLocationListItemClick.bind(this);
+  }
+
+  static propTypes = {
+    location: PropTypes.object.isRequired,
+    onLocationListItemClick: PropTypes.func.isRequired,
+    currentlyFocusedLocationId: PropTypes.oneOfType([
+        PropTypes.number,
+        function(props, propName, componentName) {
+          if (/!null/.test(props[propName])) {
+            return new Error(
+              `${componentName}'s prop: ${propName} has invalid value of ${props[propName]}.`
+              + ` Value should equal null.`
+            );
+          }
+        }
+      ])
   }
 
   handleLocationListItemClick() {

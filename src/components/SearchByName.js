@@ -1,9 +1,17 @@
+// React
 import React, { Component, Fragment } from 'react';
+// Packages
+import PropTypes from 'prop-types';
 
 class SearchByName extends Component {
   constructor(props) {
     super(props);
     this.handleFilterByNameTextChange = this.handleFilterByNameTextChange.bind(this);
+  }
+
+  static propTypes = {
+    filterByNameText: PropTypes.string.isRequired,
+    onFilterByNameTextChange: PropTypes.func.isRequired
   }
 
   handleFilterByNameTextChange(event) {

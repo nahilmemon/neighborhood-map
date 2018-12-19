@@ -1,6 +1,7 @@
 // React
 import React, { Component } from 'react';
 // Packages
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import axiosCancel from 'axios-cancel';
 // Styling
@@ -18,6 +19,27 @@ class MapContainer extends Component {
     this.state = {
       isLoaded: false
     };
+  }
+
+  static propTypes = {
+    locationsData: PropTypes.arrayOf(PropTypes.object).isRequired,
+    filterByNameText: PropTypes.string.isRequired,
+    filterByCategoryOption: PropTypes.string.isRequired,
+    filterLocations: PropTypes.func.isRequired,
+    currentlyFocusedLocationId: PropTypes.oneOfType([
+        PropTypes.number,
+        function(props, propName, componentName) {
+          if (/!null/.test(props[propName])) {
+            return new Error(
+              `${componentName}'s prop: ${propName} has invalid value of ${props[propName]}.`
+              + ` Value should equal null.`
+            );
+          }
+        }
+      ]),
+    onActiveMarkerChange: PropTypes.func.isRequired,
+    isFoursquareDataLoaded: PropTypes.bool.isRequired,
+    foursquareInfoRetrievalErrorOccurred: PropTypes.bool.isRequired
   }
 
   componentDidMount() {

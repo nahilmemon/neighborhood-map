@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Header extends Component {
   constructor(props) {
@@ -6,6 +7,12 @@ class Header extends Component {
 
     this.handleSideBarButtonClick = this.handleSideBarButtonClick.bind(this);
     this.handleOpenModalButtonClick = this.handleOpenModalButtonClick.bind(this);
+  }
+
+  static propTypes = {
+    onSideBarButtonClick: PropTypes.func.isRequired,
+    onOpenModalButtonClick: PropTypes.func.isRequired,
+    openModalButtonNodeRef: PropTypes.func.isRequired
   }
 
   handleSideBarButtonClick(event) {

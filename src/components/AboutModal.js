@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 
 class AboutModal extends Component {
   constructor(props) {
@@ -11,6 +12,12 @@ class AboutModal extends Component {
     this.handleCloseModalButtonClick = this.handleCloseModalButtonClick.bind(this);
     this.handleKeyDownEvent = this.handleKeyDownEvent.bind(this);
     this.findFocusableElementsWithinModal = this.findFocusableElementsWithinModal.bind(this);
+  }
+
+  static propTypes = {
+    showAboutModal: PropTypes.bool.isRequired,
+    onCloseModalButtonClick: PropTypes.func.isRequired,
+    closeModalButtonNodeRef: PropTypes.func.isRequired
   }
 
   componentDidMount() {

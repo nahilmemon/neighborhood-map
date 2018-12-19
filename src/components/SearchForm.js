@@ -1,9 +1,20 @@
+// React
 import React, { Component } from 'react';
-
+// Packages
+import PropTypes from 'prop-types';
+// Components
 import SearchByName from './SearchByName.js';
 import SearchByCategory from './SearchByCategory.js';
 
 class SearchForm extends Component {
+  static propTypes = {
+    locationCategories: PropTypes.arrayOf(PropTypes.string).isRequired,
+    filterByNameText: PropTypes.string.isRequired,
+    filterByCategoryOption: PropTypes.string.isRequired,
+    onFilterByNameTextChange: PropTypes.func.isRequired,
+    onFilterByCategoryOptionChange: PropTypes.func.isRequired
+  }
+
   render() {
     return (
       <section>

@@ -1,9 +1,18 @@
+// React
 import React, { Component, Fragment } from 'react';
+// Packages
+import PropTypes from 'prop-types';
 
 class SearchByCategory extends Component {
   constructor(props) {
     super(props);
     this.handleFilterByCategoryOptionChange = this.handleFilterByCategoryOptionChange.bind(this);
+  }
+
+  static propTypes = {
+    locationCategories: PropTypes.arrayOf(PropTypes.string).isRequired,
+    filterByCategoryOption: PropTypes.string.isRequired,
+    onFilterByCategoryOptionChange: PropTypes.func.isRequired
   }
 
   handleFilterByCategoryOptionChange(event) {
