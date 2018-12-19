@@ -9,10 +9,15 @@ import { mapStyles } from '../mapStyles.js';
 import loadGoogleMapsAPI from '../API/loadGoogleMapsAPI.js';
 import defineCustomMapMarkerClass from '../API/defineCustomMapMarkerClass.js';
 import defineCustomInfoWindowClass from '../API/defineCustomInfoWindowClass.js';
+// Images
+import loadingGif from '../icons/loading.gif';
 
 class MapContainer extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isLoaded: false
+    };
   }
 
   componentDidMount() {
@@ -29,6 +34,12 @@ class MapContainer extends Component {
     Promise.all([
       loadGoogleMapsAPIPromise
     ])
+    .then((promiseResults) => {
+      this.setState({
+        isLoaded: true
+      });
+      return promiseResults;
+    })
     .then((promiseResults) => {
       // Save the promises' results
       this.google = promiseResults[0];
@@ -425,17 +436,30 @@ class MapContainer extends Component {
   }
 
   render() {
-    return (
-      <section className="map-container">
-        <map
-          id="map"
-          className="map"
-          name="map"
-          tabIndex="0"
-          aria-label="Map showing the locations of some hidden gems in Abu Dhabi, UAE."
-        ></map>
-      </section>
-    );
+    if (this.state.isLoaded === false) {
+      // Note: this loading gif was taken from:
+      // https://www.behance.net/gallery/31234507/Open-source-Loading-GIF-Icons-Vol-1
+      return (
+        <section className="map-container loading-mode">
+          <img
+            className="loading-gif"
+            src={loadingGif}
+            alt="Loading Google Maps..." />
+        </section>
+      );
+    } else {
+      return (
+        <section className="map-container">
+          <map
+            id="map"
+            className="map"
+            name="map"
+            tabIndex="0"
+            aria-label="Map showing the locations of some hidden gems in Abu Dhabi, UAE."
+          ></map>
+        </section>
+      );
+    }
   }
 }
 

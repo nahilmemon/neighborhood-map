@@ -22,7 +22,7 @@ const buildSWDevMode = () => {
     swDest: serviceWorkerDestinationLocation,
     globDirectory: 'build',
     globPatterns: [
-      '**\/*.{js,css,html,png,svg}',
+      '**\/*.{js,css,html,png,svg,gif}',
     ]
   })
   // Then log any resulting warnings created during the above
