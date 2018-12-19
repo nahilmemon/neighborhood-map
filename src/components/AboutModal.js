@@ -93,14 +93,18 @@ class AboutModal extends Component {
               </button>
             </div>
             <div className="modal-body">
+              <h3>About this Site</h3>
               <p>Are you planning on visiting Abu Dhabi, UAE? Need some tips on where to go, but don't want to do the full-on touristy things?</p>
               <p>Or do you live here and have nothing to do? Have you exhausted all your typical hangout places?</p>
-              <p>Here's a couple of hidden gems to explore. You can use the side bar to filter locations or create an optimized route if you plan to do a quick tour in the city and visit a couple of these places.</p>
-              <p>Note: This site was created using the following APIs:</p>
+              <p>Here's a couple of hidden gems to explore. You can use the side bar to filter locations by name or type.</p>
+              <h3>Resources Used</h3>
+              <p>This site was created using the following APIs:</p>
               <ul>
                 <li>Google Maps</li>
                 <li>Foursquare</li>
               </ul>
+              <p>A list of other resources used can be found <a href="https://github.com/nahilmemon/neighborhood-map#resources-used">here</a>.</p>
+              <h3>Site Code</h3>
               <p>The code for this project can be found <a href="https://github.com/nahilmemon/neighborhood-map">here</a>.</p>
             </div>
           </div>

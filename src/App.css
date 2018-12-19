@@ -688,7 +688,6 @@
     display: none !important;
   }
 
-
 /* ====================== Modal Content ====================== */
   /* Note: Modal CSS and JS inspired by
     - https://tympanus.net/Development/ModalWindowEffects/
@@ -807,11 +806,16 @@
   .modal-body {
     max-height: 60vh;
     overflow-y: auto;
-    padding: 2em;
+    padding: 0 2em 1em;
     text-align: center;
     background: var(--secondary-light-color);
     color: var(--secondary-dark-color);
     text-align: left;
+  }
+
+  .modal-body h3 {
+    font-weight: 600;
+    margin-bottom: 0;
   }
 
 /* ====================== Image Links ====================== */
