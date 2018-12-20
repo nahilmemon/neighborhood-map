@@ -331,10 +331,10 @@
     transition: all 0.25s ease-in-out;
   }
 
-  select:hover,
-  select:focus,
-  input[type="text"]:hover,
-  input[type="text"]:focus {
+  select:hover:not([disabled]),
+  select:focus:not([disabled]),
+  input[type="text"]:hover:not([disabled]),
+  input[type="text"]:focus:not([disabled]) {
     outline: none;
     text-decoration: underline;
     border: 1px solid var(--primary-dark-color);
@@ -350,6 +350,12 @@
       min-height: 48px;
       min-width: 48px;
     }
+  }
+
+  select[disabled],
+  input[type="text"][disabled] {
+    background: var(--secondary-color);
+    cursor: not-allowed;
   }
 
 /* ====================== Side Bar ====================== */

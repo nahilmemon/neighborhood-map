@@ -2,6 +2,8 @@
 import React, { Component, Fragment } from 'react';
 // Packages
 import PropTypes from 'prop-types';
+// Images
+import loadingGif from '../icons/tiny-loading.gif';
 
 class SearchByCategory extends Component {
   constructor(props) {
@@ -12,7 +14,8 @@ class SearchByCategory extends Component {
   static propTypes = {
     locationCategories: PropTypes.arrayOf(PropTypes.string).isRequired,
     filterByCategoryOption: PropTypes.string.isRequired,
-    onFilterByCategoryOptionChange: PropTypes.func.isRequired
+    onFilterByCategoryOptionChange: PropTypes.func.isRequired,
+    isMapLoaded: PropTypes.bool.isRequired
   }
 
   handleFilterByCategoryOptionChange(event) {
@@ -20,10 +23,37 @@ class SearchByCategory extends Component {
   }
 
   render() {
-    return (
-      <Fragment>
-        <h3 className="side-bar-heading">Filter by Category</h3>
-        <select
+    let select;
+    // Disable the input if the map, its markers, and the info window haven't
+    // fully loaded yet
+    if (this.props.isMapLoaded === false) {
+      select = <select
+          className="filter-locations-by-category-input"
+          name="Filter locations by category:"
+          aria-label="Filter locations by category:"
+          value={this.props.filterByCategoryOption}
+          onChange={this.handleFilterByCategoryOptionChange}
+          disabled
+        >
+          {/* Default option - signifies not to filter by category */}
+          <option value="none">None</option>
+          {/* Get other options dynamically from the
+          this.props.locationCategories array */}
+          {this.props.locationCategories.map((category) => {
+            return(
+              <option
+                key={category}
+                value={category.toLowerCase()}
+              >
+                {category}
+              </option>
+            );
+          })}
+        </select>
+    }
+    // Otherwise, enable the button
+    else {
+      select = <select
           className="filter-locations-by-category-input"
           name="Filter locations by category:"
           aria-label="Filter locations by category:"
@@ -45,6 +75,11 @@ class SearchByCategory extends Component {
             );
           })}
         </select>
+    }
+    return (
+      <Fragment>
+        <h3 className="side-bar-heading">Filter by Category</h3>
+        {select}
       </Fragment>
     );
   }

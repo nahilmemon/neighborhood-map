@@ -12,7 +12,8 @@ class SearchForm extends Component {
     filterByNameText: PropTypes.string.isRequired,
     filterByCategoryOption: PropTypes.string.isRequired,
     onFilterByNameTextChange: PropTypes.func.isRequired,
-    onFilterByCategoryOptionChange: PropTypes.func.isRequired
+    onFilterByCategoryOptionChange: PropTypes.func.isRequired,
+    isMapLoaded: PropTypes.bool.isRequired
   }
 
   render() {
@@ -23,11 +24,13 @@ class SearchForm extends Component {
           <SearchByName
             filterByNameText={this.props.filterByNameText}
             onFilterByNameTextChange={this.props.onFilterByNameTextChange}
+            isMapLoaded={this.props.isMapLoaded}
           />
           <SearchByCategory
             locationCategories={this.props.locationCategories}
             filterByCategoryOption={this.props.filterByCategoryOption}
             onFilterByCategoryOptionChange={this.props.onFilterByCategoryOptionChange}
+            isMapLoaded={this.props.isMapLoaded}
           />
         </form>
       </section>

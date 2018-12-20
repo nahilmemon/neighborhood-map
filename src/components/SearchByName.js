@@ -2,6 +2,8 @@
 import React, { Component, Fragment } from 'react';
 // Packages
 import PropTypes from 'prop-types';
+// Images
+import loadingGif from '../icons/tiny-loading.gif';
 
 class SearchByName extends Component {
   constructor(props) {
@@ -11,7 +13,8 @@ class SearchByName extends Component {
 
   static propTypes = {
     filterByNameText: PropTypes.string.isRequired,
-    onFilterByNameTextChange: PropTypes.func.isRequired
+    onFilterByNameTextChange: PropTypes.func.isRequired,
+    isMapLoaded: PropTypes.bool.isRequired
   }
 
   handleFilterByNameTextChange(event) {
@@ -19,10 +22,11 @@ class SearchByName extends Component {
   }
 
   render() {
-    return (
-      <Fragment>
-        <h3 className="side-bar-heading">Filter by Name</h3>
-        <input
+    let input;
+    // Disable the input if the map, its markers, and the info window haven't
+    // fully loaded yet
+    if (this.props.isMapLoaded === false) {
+      input = <input
           className="filter-locations-by-name-input"
           type="text"
           placeholder="Filter locations by name:"
@@ -30,7 +34,25 @@ class SearchByName extends Component {
           aria-label="Filter locations by name:"
           value={this.props.filterByNameText}
           onChange={this.handleFilterByNameTextChange}
-        ></input>
+          disabled
+        ></input>;
+    }
+    // Otherwise, enable the button
+    else {
+      input = <input
+          className="filter-locations-by-name-input"
+          type="text"
+          placeholder="Filter locations by name:"
+          name="Filter locations by name:"
+          aria-label="Filter locations by name:"
+          value={this.props.filterByNameText}
+          onChange={this.handleFilterByNameTextChange}
+        ></input>;
+    }
+    return (
+      <Fragment>
+        <h3 className="side-bar-heading">Filter by Name</h3>
+        {input}
       </Fragment>
     );
   }
