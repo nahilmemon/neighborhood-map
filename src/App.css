@@ -873,29 +873,7 @@
     }
   }
 
-/* ====================== Resources Used ====================== */
-  /* Note: All icons taken from:
-   * https://www.materialui.co/icons
-   * https://www.behance.net/gallery/31234507/Open-source-Loading-GIF-Icons-Vol-1
-   * http://gifs.duhnnae.com/2017/apr/14927052542-Science-Gears-loadinggears-loading-gear-3-3-gif.php
-   */
-
-  /* CSS Resources
-   * http://typecast.com/blog/a-more-modern-scale-for-web-typography
-   * https://tympanus.net/Development/ModalWindowEffects/
-   * https://alligator.io/react/modal-component/
-   * https://assortment.io/posts/accessible-modal-component-react-portals-part-1
-   * https://github.com/udacity/ud891/tree/gh-pages/lesson5-semantics-aria/21-dialog
-   * https://developers.google.com/maps/documentation/javascript/examples/overlay-popup
-   * https://css-tricks.com/snippets/css/css-triangle/
-  */
-
-  /* JS Resources
-   * https://github.com/ryanwaite28/script-store/blob/master/js/react_resolve_google_maps.js
-   * https://github.com/atmist/snazzy-info-window/blob/master/src/snazzy-info-window.js
-  */
-
-/* ====================== Update Notification ====================== */
+/* ====================== Service Worker Notifications ====================== */
   .service-worker-notification {
     position: fixed;
     bottom: 0;
