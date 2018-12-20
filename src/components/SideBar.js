@@ -25,7 +25,8 @@ class SideBar extends Component {
             );
           }
         }
-      ])
+      ]),
+    isMapLoaded: PropTypes.bool.isRequired
   }
 
   render() {
@@ -42,6 +43,7 @@ class SideBar extends Component {
           locationsData={this.props.locationsData}
           onLocationListItemClick={this.props.onLocationListItemClick}
           currentlyFocusedLocationId={this.props.currentlyFocusedLocationId}
+          isMapLoaded={this.props.isMapLoaded}
         />
       </aside>
     );

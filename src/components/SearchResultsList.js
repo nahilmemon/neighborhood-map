@@ -19,7 +19,8 @@ class SearchResultsList extends Component {
             );
           }
         }
-      ])
+      ]),
+    isMapLoaded: PropTypes.bool.isRequired
   }
 
   render() {
@@ -34,6 +35,7 @@ class SearchResultsList extends Component {
                 location={location}
                 onLocationListItemClick={this.props.onLocationListItemClick}
                 currentlyFocusedLocationId={this.props.currentlyFocusedLocationId}
+                isMapLoaded={this.props.isMapLoaded}
               />
             );
           })}

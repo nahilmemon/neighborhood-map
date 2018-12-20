@@ -40,7 +40,9 @@ class MapContainer extends Component {
       ]),
     onActiveMarkerChange: PropTypes.func.isRequired,
     isFoursquareDataLoaded: PropTypes.bool.isRequired,
-    foursquareInfoRetrievalErrorOccurred: PropTypes.bool.isRequired
+    foursquareInfoRetrievalErrorOccurred: PropTypes.bool.isRequired,
+    onMapLoadedEvent: PropTypes.func.isRequired,
+    isMapLoaded: PropTypes.bool.isRequired
   }
 
   componentDidMount() {
@@ -57,12 +59,6 @@ class MapContainer extends Component {
     Promise.all([
       loadGoogleMapsAPIPromise
     ])
-    .then((promiseResults) => {
-      this.setState({
-        isLoaded: true
-      });
-      return promiseResults;
-    })
     .then((promiseResults) => {
       // Save the promises' results
       this.google = promiseResults[0];
@@ -93,7 +89,11 @@ class MapContainer extends Component {
       this.filteredMarkers = this.markers;
       this.hideOffScreenMarkers(this.map, this.filteredMarkers);
 
-      return promiseResults;
+      // Remove the loading gif off of the map. Note that the map is still actually
+      // loading its tiles and whatnot.
+      this.setState({
+        isLoaded: true
+      });
     })
     .catch((error) => {
       console.log('Error loading google maps in map container', error);
@@ -141,6 +141,12 @@ class MapContainer extends Component {
         this.modifyMarkersWithNewData(this.markers, this.props.locationsData);
       }
     }
+  }
+
+  // Tell the parent component(s) that the map, its markers, and the info window
+  // have fully loaded
+  handleMapLoadedEvent = (isMapLoaded) => {
+    this.props.onMapLoadedEvent(isMapLoaded);
   }
 
   // When the active marker needs to change, then alter the appearance of
@@ -194,6 +200,15 @@ class MapContainer extends Component {
     // screen and hide them and show the remaining on screen markers
     this.map.addListener('bounds_changed', () => {
       this.hideOffScreenMarkers(this.map, this.filteredMarkers);
+    });
+
+    // Figure out the first time that the map has become idle.
+    // Note: at this point, the custom map markers and custom info window have
+    // definitely loaded, but the tiles and controls tend not to have loaded yet.
+    // I'm using the idle event instead of the tilesloaded event since I only
+    // need to know when I can start using the map markers and the info window.
+    this.google.maps.event.addListenerOnce(this.map, 'idle', () => {
+      this.handleMapLoadedEvent(true);
     });
   }
 
@@ -479,6 +494,13 @@ class MapContainer extends Component {
       // https://www.behance.net/gallery/31234507/Open-source-Loading-GIF-Icons-Vol-1
       return (
         <section className="map-container loading-mode">
+          <map
+            id="map"
+            className="map hide-map"
+            name="map"
+            tabIndex="0"
+            aria-label="Map showing the locations of some hidden gems in Abu Dhabi, UAE."
+          ></map>
           <img
             className="loading-gif"
             src={loadingGif}

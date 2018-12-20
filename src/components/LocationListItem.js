@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 // Packages
 import PropTypes from 'prop-types';
+// Images
+import loadingGif from '../icons/tiny-loading.gif';
 
 class LocationListItem extends Component {
   constructor(props) {
@@ -23,7 +25,8 @@ class LocationListItem extends Component {
             );
           }
         }
-      ])
+      ]),
+    isMapLoaded: PropTypes.bool.isRequired
   }
 
   handleLocationListItemClick() {
@@ -35,18 +38,43 @@ class LocationListItem extends Component {
     let buttonClassName = (this.props.currentlyFocusedLocationId === location.id) ?
       "unstyled-button search-results-entry search-results-entry-selected" :
       "unstyled-button search-results-entry";
-    return (
-      <li>
-        {/*search-results-entry-selected*/}
-        <button
-          className={buttonClassName}
-          onClick={this.handleLocationListItemClick}
-          value={location.id}>
-          <h4>{location.name}</h4>
-          <p>{location.category}</p>
-        </button>
-      </li>
-    );
+
+    // Disable the button if the map, its markers, and the info window haven't
+    // fully loaded yet
+    if (this.props.isMapLoaded === false) {
+      return (
+        <li>
+          {/*search-results-entry-selected*/}
+          <button
+            className={buttonClassName}
+            onClick={this.handleLocationListItemClick}
+            value={location.id}
+            disabled>
+            <h4>{location.name}</h4>
+            <p>{location.category}</p>
+            <img
+              className="tiny-loading-gif"
+              src={loadingGif}
+              alt="Waiting for Google Maps to load..." />
+          </button>
+        </li>
+      );
+    }
+    // Otherwise, enable the button
+    else {
+      return (
+        <li>
+          {/*search-results-entry-selected*/}
+          <button
+            className={buttonClassName}
+            onClick={this.handleLocationListItemClick}
+            value={location.id}>
+            <h4>{location.name}</h4>
+            <p>{location.category}</p>
+          </button>
+        </li>
+      );
+    }
   }
 }
 

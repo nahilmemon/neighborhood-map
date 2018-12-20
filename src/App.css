@@ -415,8 +415,8 @@
     transition: all 0.25s ease-in-out;
   }
 
-  .search-results-entry:hover,
-  .search-results-entry:focus {
+  .search-results-entry:hover:not([disabled]),
+  .search-results-entry:focus:not([disabled]) {
     outline: none;
     border: 1px solid var(--primary-dark-color);
     border-bottom: 3px solid var(--primary-dark-color);
@@ -425,9 +425,38 @@
     transition: all 0.25s ease-in-out;
   }
 
-  .search-results-entry:hover h4,
-  .search-results-entry:focus h4 {
+  .search-results-entry:hover:not([disabled]) h4,
+  .search-results-entry:focus:not([disabled]) h4 {
     text-decoration: underline;
+  }
+
+  .search-results-entry[disabled] {
+    background: var(--secondary-color);
+    cursor: not-allowed;
+  }
+
+  .tiny-loading-gif {
+    margin: 0 auto;
+    height: auto;
+    display: block;
+    position: relative;
+    text-align: center;
+    text-decoration: underline;
+  }
+
+  /* Show the alt text nicely in case the image is broken.
+   * Hide the broken image icon as well.
+   */
+  .tiny-loading-gif[alt]:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--secondary-light-color);
+    content: attr(alt);
+    font-size: 1em;
+    font-weight: 600;
   }
 
 /* ====================== Map ====================== */
@@ -449,6 +478,10 @@
   }
 
   /* ==== Loading/Error Modes ==== */
+  .hide-map {
+    display: none;
+  }
+
   .loading-mode,
   .error-mode {
     display: flex;
@@ -474,7 +507,9 @@
     text-decoration: underline;
   }
 
-  /* Show alt text nicely in case image is broken */
+  /* Show the alt text nicely in case the image is broken.
+   * Hide the broken image icon as well.
+   */
   .loading-gif[alt]:after {
     position: absolute;
     top: 0;

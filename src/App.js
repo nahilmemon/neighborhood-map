@@ -25,7 +25,8 @@ class App extends Component {
       filterByCategoryOption: 'none',
       currentlyFocusedLocationId: null,
       isFoursquareDataLoaded: false,
-      foursquareInfoRetrievalErrorOccurred: false
+      foursquareInfoRetrievalErrorOccurred: false,
+      isMapLoaded: false
     };
 
     // To store compulsory information about each location
@@ -44,6 +45,7 @@ class App extends Component {
     this.handleCloseModalButtonClick = this.handleCloseModalButtonClick.bind(this);
     this.filterLocations = this.filterLocations.bind(this);
     this.handleActiveLocationChange = this.handleActiveLocationChange.bind(this);
+    this.handleMapLoadedEvent = this.handleMapLoadedEvent.bind(this);
   }
 
   componentDidMount() {
@@ -202,6 +204,12 @@ class App extends Component {
     });
   }
 
+  handleMapLoadedEvent(hasMapLoaded) {
+    this.setState({
+      isMapLoaded: hasMapLoaded
+    });
+  }
+
   render() {
     // Determine which locations to show based on the user-selected
     // inputs in the search form.
@@ -225,6 +233,7 @@ class App extends Component {
               onFilterByCategoryOptionChange={this.handleFilterByCategoryOptionChange}
               onLocationListItemClick={this.handleActiveLocationChange}
               currentlyFocusedLocationId={this.state.currentlyFocusedLocationId}
+              isMapLoaded={this.state.isMapLoaded}
             />
           }
           <MapContainer
@@ -236,6 +245,8 @@ class App extends Component {
             onActiveMarkerChange={this.handleActiveLocationChange}
             isFoursquareDataLoaded={this.state.isFoursquareDataLoaded}
             foursquareInfoRetrievalErrorOccurred={this.state.foursquareInfoRetrievalErrorOccurred}
+            onMapLoadedEvent={this.handleMapLoadedEvent}
+            isMapLoaded={this.state.isMapLoaded}
           />
         </main>
         {this.state.showAboutModal &&
