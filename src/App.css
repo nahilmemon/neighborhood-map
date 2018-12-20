@@ -448,11 +448,20 @@
     top: 0;
   }
 
-  /* ==== Loading GIF ==== */
-  .loading-mode {
+  /* ==== Loading/Error Modes ==== */
+  .loading-mode,
+  .error-mode {
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: var(--secondary-light-color);
+    color: var(--secondary-dark-color);
+  }
+
+  .error-message {
+    max-width: 280px;
+    text-align: center;
+    font-weight: 600;
   }
 
   .loading-gif {

@@ -17,7 +17,8 @@ class MapContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoaded: false
+      isLoaded: false,
+      error: false
     };
   }
 
@@ -91,6 +92,14 @@ class MapContainer extends Component {
       // Hide any off screen markers from keyboard users (and everyone else too)
       this.filteredMarkers = this.markers;
       this.hideOffScreenMarkers(this.map, this.filteredMarkers);
+
+      return promiseResults;
+    })
+    .catch((error) => {
+      console.log('Error loading google maps in map container', error);
+      this.setState({
+        error: true
+      });
     });
   }
 
@@ -458,7 +467,14 @@ class MapContainer extends Component {
   }
 
   render() {
-    if (this.state.isLoaded === false) {
+    if (this.state.error === true) {
+      return (
+        <section className="map-container error-mode">
+          <p className="error-message">Error in loading Google Maps. Please check your internet connection.</p>
+        </section>
+      );
+    }
+    else if (this.state.isLoaded === false) {
       // Note: this loading gif was taken from:
       // https://www.behance.net/gallery/31234507/Open-source-Loading-GIF-Icons-Vol-1
       return (
