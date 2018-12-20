@@ -119,7 +119,7 @@ function defineCustomMapMarkerClass() {
     // Hide the marker button
     hide() {
       if (this.markerButton) {
-        this.markerButton.style.visibility = 'hidden';
+        this.markerButton.style.display = 'none';
         this.visible = false;
       }
     }
@@ -127,7 +127,7 @@ function defineCustomMapMarkerClass() {
     // Show the marker button
     show() {
       if (this.markerButton) {
-        this.markerButton.style.visibility = 'visible';
+        this.markerButton.style.display = 'block';
         this.visible = true;
       }
     }

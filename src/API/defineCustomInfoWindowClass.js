@@ -175,7 +175,7 @@ function defineCustomInfoWindowClass() {
     // Hide the info window container
     hide() {
       if (this.infoWindowContainer) {
-        this.infoWindowContainer.style.visibility = 'hidden';
+        this.infoWindowContainer.style.display = 'none';
         this.visible = false;
       }
     }
@@ -183,7 +183,7 @@ function defineCustomInfoWindowClass() {
     // Show the info window container
     show() {
       if (this.infoWindowContainer) {
-        this.infoWindowContainer.style.visibility = 'visible';
+        this.infoWindowContainer.style.display = 'block';
         this.visible = true;
         this.panMap();
       }
