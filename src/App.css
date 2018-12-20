@@ -868,61 +868,6 @@
     margin-bottom: 0;
   }
 
-/* ====================== Image Links ====================== */
-  .link-with-image {
-    transition: all 0.25s ease-in-out;
-    cursor: pointer;
-    padding: 0;
-    border: none;
-    overflow: hidden;
-    display: inline-block;
-    background-repeat: no-repeat;
-    background-size: cover;
-    margin-bottom: 2em;
-    text-decoration: underline;
-  }
-
-  .link-with-image img {
-    width: 100%;
-    height: auto;
-    display: block;
-    position: relative;
-    text-align: center;
-    text-decoration: underline;
-  }
-
-  .link-with-image img:after {
-    display: block;
-    z-index: 2;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    content: attr(alt);
-    background-color: var(--secondary-light-color);
-  }
-
-  .link-with-image-preview {
-    min-width: 136px;
-  }
-
-  .link-with-image-buy {
-    min-width: 165px;
-  }
-
-  .link-with-image:hover,
-  .link-with-image:focus {
-    outline: none;
-    transform: scale(1.02);
-  }
-
-  @media (max-width: 600px) {
-    .link-with-image {
-      margin-bottom: 1em;
-    }
-  }
-
 /* ====================== Service Worker Notifications ====================== */
   .service-worker-notification {
     position: fixed;
