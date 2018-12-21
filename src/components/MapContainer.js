@@ -52,55 +52,51 @@ class MapContainer extends Component {
     });
 
     // Load Google Maps API
-    let loadGoogleMapsAPIPromise = loadGoogleMapsAPI();
+    loadGoogleMapsAPI()
+      // After all the necessary data has been loaded,
+      // create and display the map
+      .then((promiseResults) => {
+        // Save the promises' results
+        this.google = promiseResults;
 
-    // After all the necessary data has been loaded,
-    // create and display the map
-    Promise.all([
-      loadGoogleMapsAPIPromise
-    ])
-    .then((promiseResults) => {
-      // Save the promises' results
-      this.google = promiseResults[0];
+        this.filteredMarkers = [];
 
-      this.filteredMarkers = [];
+        // Create the map
+        this.createMap(this.google);
 
-      // Create the map
-      this.createMap(this.google);
+        // Create the custom marker and infoWindow classes to be able to make
+        // and manipulate custom markers and infoWindows
+        this.CustomMapMarkerClass = defineCustomMapMarkerClass();
+        this.CustomInfoWindowClass = defineCustomInfoWindowClass();
 
-      // Create the custom marker and infoWindow classes to be able to make
-      // and manipulate custom markers and infoWindows
-      this.CustomMapMarkerClass = defineCustomMapMarkerClass();
-      this.CustomInfoWindowClass = defineCustomInfoWindowClass();
+        // Create the infoWindow
+        this.createInfoWindow(this.google, this.map);
+        // Create and display the markers
+        this.createAllMarkers(this.google, this.map, this.props.locationsData);
+        // If information from the Foursquare API has alreadt been loaded by now,
+        // then update the markers with the newly retrieved information
+        if (this.props.isFoursquareDataLoaded) {
+          this.modifyMarkersWithNewData(this.markers, this.props.locationsData);
+        }
+        // Reposition the map to fit all the markers
+        this.displayGivenMarkers(this.google, this.map, this.markers);
 
-      // Create the infoWindow
-      this.createInfoWindow(this.google, this.map);
-      // Create and display the markers
-      this.createAllMarkers(this.google, this.map, this.props.locationsData);
-      // If information from the Foursquare API has alreadt been loaded by now,
-      // then update the markers with the newly retrieved information
-      if (this.props.isFoursquareDataLoaded) {
-        this.modifyMarkersWithNewData(this.markers, this.props.locationsData);
-      }
-      // Reposition the map to fit all the markers
-      this.displayGivenMarkers(this.google, this.map, this.markers);
+        // Hide any off screen markers from keyboard users (and everyone else too)
+        this.filteredMarkers = this.markers;
+        this.hideOffScreenMarkers(this.map, this.filteredMarkers);
 
-      // Hide any off screen markers from keyboard users (and everyone else too)
-      this.filteredMarkers = this.markers;
-      this.hideOffScreenMarkers(this.map, this.filteredMarkers);
-
-      // Remove the loading gif off of the map. Note that the map is still actually
-      // loading its tiles and whatnot.
-      this.setState({
-        isLoaded: true
+        // Remove the loading gif off of the map. Note that the map is still actually
+        // loading its tiles and whatnot.
+        this.setState({
+          isLoaded: true
+        });
+      })
+      .catch((error) => {
+        console.log('Error loading google maps in map container', error);
+        this.setState({
+          error: true
+        });
       });
-    })
-    .catch((error) => {
-      console.log('Error loading google maps in map container', error);
-      this.setState({
-        error: true
-      });
-    });
   }
 
   componentWillUnmount() {
