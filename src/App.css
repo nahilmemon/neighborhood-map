@@ -303,7 +303,7 @@
   main {
     flex: 2;
 
-    background: green;
+    background: var(--secondary-light-color);
 
     display: flex;
     flex-flow: row wrap;
@@ -365,6 +365,7 @@
     flex: 0 0 var(--side-bar-max-width);
     order: 2;
     overflow: auto;
+    height: 100%;
   }
 
   @media screen and (max-width: 600px) {
