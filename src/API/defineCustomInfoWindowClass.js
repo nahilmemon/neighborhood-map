@@ -20,10 +20,6 @@ function defineCustomInfoWindowClass() {
 
       this.map = infoWindowProperties.map;
       this.setMap(this.map);
-
-      // Stop clicks and drags occuring on the info window container from
-      // bubbling up to the map
-      // this.stopEventPropagation();
     }
 
     // Create the actual html for displaying the info window based on the
@@ -201,22 +197,6 @@ function defineCustomInfoWindowClass() {
         this.visible = true;
         this.panMap();
       }
-    }
-
-    // This stops all click and drag events occuring on the info window
-    // container from bubbling up to the map
-    stopEventPropagation() {
-      this.infoWindowContainer.style.cursor = 'auto';
-      // Stop event propagation from occurring for all of the events listed
-      // in the following array by adding an event listener and calling
-      // event.stopPropagation
-      ['click', 'dblclick', 'contextmenu', 'wheel', 'mousedown', 'touchstart',
-        'pointerdown']
-        .forEach(function(event) {
-          this.infoWindowContainer.addEventListener(event, function(e) {
-            e.stopPropagation();
-          });
-        });
     }
 
     // The following two functions are a modified version taken from:
