@@ -91,7 +91,7 @@ function defineCustomInfoWindowClass() {
         }
       });
 
-      // If there is not set position or the content is null, then hide the info window
+      // If there is no set position or the content is null, then hide the info window
       if (this.position === null || this.content === null) {
         this.hide();
       }
@@ -121,6 +121,20 @@ function defineCustomInfoWindowClass() {
         let tipOffsetY = this.markerHeight - this.tipHeight;
         this.infoWindowContainer.style.left = `${topLeftCornerPixelPosition.x}px`;
         this.infoWindowContainer.style.top = `${(topLeftCornerPixelPosition.y - tipOffsetY)}px`;
+      }
+      // Change the position of the info window in the DOM so that it appears right
+      // after the associated marker. Consequently, the next tabbable element after
+      // clicking on the marker becomes the info window's close button, then all the
+      // tabbable elements in the info window, and then the next marker on the map,
+      // which is desired.
+      if (this.marker) {
+        let associatedMarkerDOMElement = this.marker.markerButton;
+        // The div containing all the markers
+        let parentNode = associatedMarkerDOMElement.parentNode;
+        // The next marker after the associated marker
+        let nextMarkerNode = associatedMarkerDOMElement.nextElementSibling;
+        // Add the info window before the next marker (after the associated marker)
+        parentNode.insertBefore(this.infoWindowContainer, nextMarkerNode);
       }
     }
 

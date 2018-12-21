@@ -73,7 +73,7 @@ class MapContainer extends Component {
         this.createInfoWindow(this.google, this.map);
         // Create and display the markers
         this.createAllMarkers(this.google, this.map, this.props.locationsData);
-        // If information from the Foursquare API has alreadt been loaded by now,
+        // If information from the Foursquare API has already been loaded by now,
         // then update the markers with the newly retrieved information
         if (this.props.isFoursquareDataLoaded) {
           this.modifyMarkersWithNewData(this.markers, this.props.locationsData);
@@ -275,7 +275,7 @@ class MapContainer extends Component {
     });
   }
 
-  // Display given markers, where the map is reposition to fit all
+  // Display given markers, where the map is repositioned to fit all
   // the given markers on screen
   displayGivenMarkers = (google, map, markers) => {
     // To store the map's boundaries

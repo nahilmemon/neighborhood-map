@@ -589,6 +589,7 @@
     width: calc(100vw - var(--map-inner-padding));
     max-width: 630px;
     min-width: 300px;
+    z-index: 105;
   }
 
   /* In this case, the side bar might be open at the same time as the map.
