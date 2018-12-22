@@ -195,7 +195,7 @@ function defineCustomInfoWindowClass() {
       if (this.infoWindowContainer) {
         this.infoWindowContainer.style.display = 'block';
         this.visible = true;
-        // this.panMap();
+        this.panMap();
       }
     }
 
@@ -204,7 +204,8 @@ function defineCustomInfoWindowClass() {
     // The map inner bounds used for panning and resizing
     getMapInnerBounds(mapInnerBoundariesOffset) {
       // Get the actual boundaries of the map
-      const MAP_OUTER_BOUNDARIES = this.map.getDiv().getBoundingClientRect();
+      const MAP_CONTAINER_DIV = document.querySelector('.map-container');
+      const MAP_OUTER_BOUNDARIES = MAP_CONTAINER_DIV.getBoundingClientRect();
       // Calculate the inner boundaries of the map taking into consideration the desired
       // inner offset determined above
       let mapInnerBoundaries = {
