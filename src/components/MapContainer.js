@@ -286,6 +286,15 @@ class MapContainer extends Component {
       marker.show();
       mapBoundaries.extend(marker.position);
     });
+    // Before repositioning the map, add an event listener for when the map
+    // bounds have changed. If so, then ensure that the map isn't zoomed out
+    // too much (happens in MS Edge where the zoom level becomes 0 after
+    // map.fitbound(mapBoundaries) is called).
+    google.maps.event.addListenerOnce(map, 'bounds_changed', function() {
+      if (map.getZoom() < 9) {
+        map.setZoom(9);
+      }
+    });
     // Reposition the map to display all the markers on screen
     map.fitBounds(mapBoundaries);
   }

@@ -64,7 +64,7 @@ function defineCustomMapMarkerClass() {
 
     // Add the marker button to the overlay image pane
     appendMarkerButtonToOverlay() {
-      this.getPanes().overlayImage.appendChild(this.markerButton);
+      this.getPanes().overlayMouseTarget.appendChild(this.markerButton);
     }
 
     // Determine the position of the marker button, taking into consideration

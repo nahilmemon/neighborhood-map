@@ -95,7 +95,7 @@ function defineCustomInfoWindowClass() {
 
     // Add the marker button to the overlay image pane
     appendInfoWindowToOverlay() {
-      this.getPanes().floatPane.appendChild(this.infoWindowContainer);
+      this.getPanes().overlayMouseTarget.appendChild(this.infoWindowContainer);
     }
 
     // Determine the position of the info window, taking into consideration
