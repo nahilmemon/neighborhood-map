@@ -141,6 +141,14 @@ function defineCustomMapMarkerClass() {
     setBlurredAppearance() {
       this.markerButton.classList.remove('marker-button-focused');
     }
+
+    focusMarkerButtonNode() {
+      this.markerButton.focus();
+    }
+
+    blurMarkerButtonNode() {
+      this.markerButton.blur();
+    }
   }
 
   return CustomMapMarker;

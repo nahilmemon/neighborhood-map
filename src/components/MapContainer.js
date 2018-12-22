@@ -322,6 +322,7 @@ class MapContainer extends Component {
       // Reset the style of the infoWindow's current marker
       if (this.infoWindow.marker !== undefined && this.infoWindow.marker !== null) {
         this.infoWindow.marker.setBlurredAppearance();
+        this.infoWindow.marker.focusMarkerButtonNode();
         this.infoWindow.marker.hasOpenInfoWindow = false;
       }
       // Update the side bar so that this marker's corresponding list

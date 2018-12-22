@@ -195,7 +195,7 @@ function defineCustomInfoWindowClass() {
       if (this.infoWindowContainer) {
         this.infoWindowContainer.style.display = 'block';
         this.visible = true;
-        this.panMap();
+        // this.panMap();
       }
     }
 
