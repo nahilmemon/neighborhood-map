@@ -37,24 +37,11 @@ function defineCustomMapMarkerClass() {
     // Notes: events are bubbled up so that other actions can be performed
     // outside this class definition (e.g. in the MapContainer.js component).
     createMarkerHTML() {
-      this.markerIconSVG =
-        `<svg
-          class="marker-image"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="#fff"
-          viewBox="0 0 24 21"
-          role="img"
-          aria-label="${this.title} Map Marker. Click for more information about this place.">
-          <title>${this.title}</title>
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-        </svg>`;
-
       this.markerButton = document.createElement("button");
       this.markerButton.setAttribute('type', 'button');
       this.markerButton.setAttribute('title', this.title);
       this.markerButton.setAttribute('aria-label', `${this.title} Map Marker. Click for more information about this place.`);
-      this.markerButton.classList.add('unstyled-button', 'marker-button');
-      this.markerButton.innerHTML = this.markerIconSVG;
+      this.markerButton.classList.add('unstyled-button', 'marker-button', 'marker-shape');
 
       // Handle click event listener.
       this.google.maps.event.addDomListener(this.markerButton, "click", event => {
@@ -81,8 +68,8 @@ function defineCustomMapMarkerClass() {
       // Offset the marker's position so that the marker icon's tip aligns with the
       // marker's geographical position
       let markerIconOffset = 0.5*this.markerSize;
-      this.markerButton.style.left = `${topLeftCornerPixelPosition.x - markerIconOffset}px`;
-      this.markerButton.style.top = `${topLeftCornerPixelPosition.y - 2*markerIconOffset}px`;
+      this.markerButton.style.left = `${topLeftCornerPixelPosition.x - markerIconOffset - 0.5}px`;
+      this.markerButton.style.top = `${topLeftCornerPixelPosition.y - 2*markerIconOffset - 10}px`;
     }
 
     // This is called when both the map's panes are ready/available

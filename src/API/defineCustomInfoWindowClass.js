@@ -115,8 +115,8 @@ function defineCustomInfoWindowClass() {
         // Offset the info window container's position so that the anchor tip
         // touches the top of the corresponding marker button svg icon
         let tipOffsetY = this.markerHeight - this.tipHeight;
-        this.infoWindowContainer.style.left = `${topLeftCornerPixelPosition.x}px`;
-        this.infoWindowContainer.style.top = `${(topLeftCornerPixelPosition.y - tipOffsetY)}px`;
+        this.infoWindowContainer.style.left = `${topLeftCornerPixelPosition.x - 0.5}px`;
+        this.infoWindowContainer.style.top = `${(topLeftCornerPixelPosition.y - tipOffsetY - 17)}px`;
       }
       // Change the position of the info window in the DOM so that it appears right
       // after the associated marker. Consequently, the next tabbable element after

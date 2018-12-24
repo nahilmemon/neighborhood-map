@@ -206,6 +206,7 @@ Extra features that were added to the web app included doing the following:
   * [Material UI Icons](https://www.materialui.co/icons)
   * [Open Source Loading GIF Icons](https://www.behance.net/gallery/31234507/Open-source-Loading-GIF-Icons-Vol-1)
   * [Offline image](https://auth0.com/blog/introduction-to-progressive-apps-part-one/)
+  * [Pure CSS Map Markers](https://codepen.io/katia-trifonova/pen/zwZgdx/)
 * Tutorials
   * [Connecting Foursquare](https://www.youtube.com/watch?v=Dj5hzKBxCBI&t=682s&list=PL4rQq4MQP1crXuPtruu_eijgOUUXhcUCP&index=4)
   * [Google Maps With React JS](https://www.youtube.com/watch?v=5J6fs_BlVC0&feature=youtu.be)
