@@ -27,11 +27,11 @@ class SearchByName extends Component {
     // fully loaded yet
     if (this.props.isMapLoaded === false) {
       input = <input
+          id="filter-locations-by-name-input"
           className="filter-locations-by-name-input"
           type="text"
           placeholder="Filter locations by name:"
           name="Filter locations by name:"
-          aria-label="Filter locations by name:"
           value={this.props.filterByNameText}
           onChange={this.handleFilterByNameTextChange}
           disabled
@@ -40,18 +40,23 @@ class SearchByName extends Component {
     // Otherwise, enable the button
     else {
       input = <input
+          id="filter-locations-by-name-input"
           className="filter-locations-by-name-input"
           type="text"
           placeholder="Filter locations by name:"
           name="Filter locations by name:"
-          aria-label="Filter locations by name:"
           value={this.props.filterByNameText}
           onChange={this.handleFilterByNameTextChange}
         ></input>;
     }
     return (
       <Fragment>
-        <h3 className="side-bar-heading">Filter by Name</h3>
+        <h3 className="side-bar-heading">
+          <label for="filter-locations-by-name-input">
+            Filter <span className="sr-only">Locations</span> by Name.
+            <span className="sr-only">Editing text will immediately filter the list of locations.</span>
+          </label>
+        </h3>
         {input}
       </Fragment>
     );

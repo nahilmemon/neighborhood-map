@@ -25,7 +25,10 @@ class SearchForm extends Component {
           aria-label="Filter Locations Form">
           Filter Locations
         </h2>
-        <form className="padding-inline-start">
+        <form
+          className="padding-inline-start"
+          role="search"
+          aria-labelledby="search-form-heading">
           <SearchByName
             filterByNameText={this.props.filterByNameText}
             onFilterByNameTextChange={this.props.onFilterByNameTextChange}

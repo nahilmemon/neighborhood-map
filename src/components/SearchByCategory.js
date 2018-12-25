@@ -28,9 +28,9 @@ class SearchByCategory extends Component {
     // fully loaded yet
     if (this.props.isMapLoaded === false) {
       select = <select
+          id="filter-locations-by-category-input"
           className="filter-locations-by-category-input"
           name="Filter locations by category:"
-          aria-label="Filter locations by category:"
           value={this.props.filterByCategoryOption}
           onChange={this.handleFilterByCategoryOptionChange}
           disabled
@@ -54,9 +54,9 @@ class SearchByCategory extends Component {
     // Otherwise, enable the button
     else {
       select = <select
+          id="filter-locations-by-category-input"
           className="filter-locations-by-category-input"
           name="Filter locations by category:"
-          aria-label="Filter locations by category:"
           value={this.props.filterByCategoryOption}
           onChange={this.handleFilterByCategoryOptionChange}
         >
@@ -78,7 +78,12 @@ class SearchByCategory extends Component {
     }
     return (
       <Fragment>
-        <h3 className="side-bar-heading">Filter by Category</h3>
+        <h3 className="side-bar-heading">
+          <label for="filter-locations-by-category-input">
+            Filter <span className="sr-only">Locations</span> by Category
+            <span className="sr-only">Selecting an option will immediately filter the list of locations.</span>
+          </label>
+        </h3>
         {select}
       </Fragment>
     );
