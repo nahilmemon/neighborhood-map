@@ -48,6 +48,7 @@ class Header extends Component {
           onClick={this.handleOpenModalButtonClick}
           ref={this.props.openModalButtonNodeRef}
           aria-pressed={this.props.showAboutModal}
+          aria-haspopup="dialog"
         >Open About Project Modal</button>
       </header>
     );

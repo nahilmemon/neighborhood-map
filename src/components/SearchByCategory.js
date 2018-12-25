@@ -79,7 +79,7 @@ class SearchByCategory extends Component {
     return (
       <Fragment>
         <h3 className="side-bar-heading">
-          <label for="filter-locations-by-category-input">
+          <label htmlFor="filter-locations-by-category-input">
             Filter <span className="sr-only">Locations</span> by Category
             <span className="sr-only">Selecting an option will immediately filter the list of locations.</span>
           </label>

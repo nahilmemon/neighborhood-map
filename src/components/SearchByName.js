@@ -52,7 +52,7 @@ class SearchByName extends Component {
     return (
       <Fragment>
         <h3 className="side-bar-heading">
-          <label for="filter-locations-by-name-input">
+          <label htmlFor="filter-locations-by-name-input">
             Filter <span className="sr-only">Locations</span> by Name.
             <span className="sr-only">Editing text will immediately filter the list of locations.</span>
           </label>

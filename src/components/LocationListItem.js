@@ -49,6 +49,8 @@ class LocationListItem extends Component {
             className={buttonClassName}
             onClick={this.handleLocationListItemClick}
             value={location.id}
+            aria-pressed={this.props.currentlyFocusedLocationId === location.id}
+            aria-haspopup="dialog"
             disabled>
             <h4>{location.name}</h4>
             <p>{location.category}</p>
@@ -68,7 +70,9 @@ class LocationListItem extends Component {
           <button
             className={buttonClassName}
             onClick={this.handleLocationListItemClick}
-            value={location.id}>
+            value={location.id}
+            aria-pressed={this.props.currentlyFocusedLocationId === location.id}
+            aria-haspopup="dialog">
             <h4>{location.name}</h4>
             <p>{location.category}</p>
           </button>

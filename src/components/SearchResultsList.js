@@ -26,7 +26,11 @@ class SearchResultsList extends Component {
   render() {
     return (
       <section>
-        <h2 className="side-bar-heading">Locations</h2>
+        <h2
+          id="search-results-heading"
+          className="side-bar-heading">
+          <span className="sr-only">Filtered </span>Locations<span className="sr-only">Results</span>
+        </h2>
         <ul className="search-results">
           {this.props.locationsData.map((location) => {
             return(
