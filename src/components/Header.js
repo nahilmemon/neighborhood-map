@@ -27,7 +27,7 @@ class Header extends Component {
 
   render() {
     return (
-      <header className="header">
+      <header className="header" aria-labelledby="site-heading">
         <button
           className="unstyled-button header-button header-search-button"
           type="button"
@@ -37,6 +37,7 @@ class Header extends Component {
           aria-expanded={this.props.showSideBar}
         >Open Search Locations Form</button>
         <h1
+          id="site-heading"
           className="site-heading"
           aria-label="Abu Dhabi Hidden Gems"
         >Hidden Gems</h1>
