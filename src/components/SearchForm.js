@@ -19,7 +19,12 @@ class SearchForm extends Component {
   render() {
     return (
       <section>
-        <h2 className="side-bar-heading">Filter Locations</h2>
+        <h2
+          id="search-form-heading"
+          className="side-bar-heading"
+          aria-label="Filter Locations Form">
+          Filter Locations
+        </h2>
         <form className="padding-inline-start">
           <SearchByName
             filterByNameText={this.props.filterByNameText}

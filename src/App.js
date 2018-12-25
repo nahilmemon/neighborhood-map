@@ -163,7 +163,29 @@ class App extends Component {
   handleSideBarButtonClick() {
     this.setState(state => ({
       showSideBar: !state.showSideBar
-    }));
+    }), ()=>{
+      // If the sidebar has been opened, then shift focus into the sidebar's search form.
+      if (this.state.showSideBar === true) {
+        let searchFormHeading = document.querySelector('#search-form-heading');
+        // Make the search form heading focusable
+        searchFormHeading.setAttribute('tabindex', '0');
+        // Focus the search form heading
+        searchFormHeading.focus();
+        // Make the search form heading not focusable anymore by keyboard
+        // Note: This is still focusable by mouse click
+        searchFormHeading.setAttribute('tabindex', '-1');
+        // After five seconds, make the search form heading not focusable by mouse
+        // and keyboard. Note: A timeout is being used in order to show the focus
+        // ring around the search form heading for a little while before disappearing.
+        this.removeSearchFormHeadingTabIndexTimer = setTimeout(function(){
+          searchFormHeading.removeAttribute('tabindex');
+        }, 5000);
+      }
+      // Otherwise, if the sidebar has been closed, then clear out the above timer
+      else {
+        clearTimeout(this.removeSearchFormHeadingTabIndexTimer);
+      }
+    });
   }
 
   handleOpenModalButtonClick() {
@@ -221,6 +243,8 @@ class App extends Component {
           onSideBarButtonClick={this.handleSideBarButtonClick}
           onOpenModalButtonClick={this.handleOpenModalButtonClick}
           openModalButtonNodeRef={node => this.openModalButtonNode = node}
+          showSideBar={this.state.showSideBar}
+          showAboutModal={this.state.showAboutModal}
         />
         <main>
           {this.state.showSideBar &&

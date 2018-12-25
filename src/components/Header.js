@@ -12,7 +12,9 @@ class Header extends Component {
   static propTypes = {
     onSideBarButtonClick: PropTypes.func.isRequired,
     onOpenModalButtonClick: PropTypes.func.isRequired,
-    openModalButtonNodeRef: PropTypes.func.isRequired
+    openModalButtonNodeRef: PropTypes.func.isRequired,
+    showSideBar: PropTypes.bool.isRequired,
+    showAboutModal: PropTypes.bool.isRequired
   }
 
   handleSideBarButtonClick(event) {
@@ -31,7 +33,9 @@ class Header extends Component {
           type="button"
           value="SideBar"
           onClick={this.handleSideBarButtonClick}
-        >Search</button>
+          aria-pressed={this.props.showSideBar}
+          aria-expanded={this.props.showSideBar}
+        >Open Search Locations Form</button>
         <h1
           className="site-heading"
           aria-label="Abu Dhabi Hidden Gems"
@@ -42,7 +46,8 @@ class Header extends Component {
           value="AboutModal"
           onClick={this.handleOpenModalButtonClick}
           ref={this.props.openModalButtonNodeRef}
-        >About Project</button>
+          aria-pressed={this.props.showAboutModal}
+        >Open About Project Modal</button>
       </header>
     );
   }
