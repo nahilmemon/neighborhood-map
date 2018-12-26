@@ -504,8 +504,6 @@ class MapContainer extends Component {
             id="map"
             className="map hide-map"
             name="map"
-            tabIndex="0"
-            aria-label="Map showing the locations of some hidden gems in Abu Dhabi, UAE."
           ></map>
           <img
             className="loading-gif"
@@ -514,14 +512,18 @@ class MapContainer extends Component {
         </section>
       );
     } else {
+      // Add an aria-label to the map's focusable div created by the Google
+      // Maps API
+      let focusableMapDiv = document.getElementById('map').querySelector('div[tabindex="0"]');
+      if (focusableMapDiv) {
+        focusableMapDiv.setAttribute('aria-label', 'Map showing the locations of some hidden gems in Abu Dhabi, UAE.');
+      }
       return (
         <section className="map-container">
           <map
             id="map"
             className="map"
             name="map"
-            tabIndex="0"
-            aria-label="Map showing the locations of some hidden gems in Abu Dhabi, UAE."
           ></map>
         </section>
       );

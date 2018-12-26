@@ -501,7 +501,67 @@
     right: 0;
     bottom: 0;
     top: 0;
+    transition: all 0.25s ease-in-out;
   }
+
+  .map div[tabindex="0"]:focus > div {
+    outline: none !important;
+    border: 5px solid var(--primary-color) !important;
+    transition: all 0.25s ease-in-out;
+  }
+
+  /* ==== Map External Links ==== */
+  a[href*="google.com"]:hover,
+  a[href*="google.com"]:focus {
+    box-shadow: 0px 0px 0px 3px var(--primary-color-overlay);
+    transition: all 0.25s ease-in-out;
+    transition-property: outline, box-shadow;
+  }
+
+  .gmnoprint:not(.gm-bundled-control) {
+    background-color: var(--secondary-light-color);
+    color: var(--secondary-dark-color);
+  }
+
+  a[title*="Open this area in Google Maps"]:visited {
+    color: transparent !important;
+  }
+
+  a[title*="Open this area in Google Maps"]:hover,
+  a[title*="Open this area in Google Maps"]:focus {
+    color: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  a[title*="Open this area in Google Maps"]:hover img,
+  a[title*="Open this area in Google Maps"]:focus img {
+    box-shadow: 0px 0px 0px 3px var(--primary-color-overlay);
+    transition: all 0.25s ease-in-out;
+    transition-property: outline, box-shadow;
+  }
+
+  /* ==== Map Controls ==== */
+  [title*="Toggle fullscreen view"]:hover,
+  [title*="Toggle fullscreen view"]:focus,
+  [title*="Zoom in"]:hover,
+  [title*="Zoom in"]:focus,
+  [title*="Zoom out"]:hover,
+  [title*="Zoom out"]:focus {
+    outline: none !important;
+    box-shadow: 0px 0px 0px 3px var(--primary-color-overlay) !important;
+    transition: all 0.25s ease-in-out;
+    transition-property: outline, box-shadow;
+  }
+
+  /* ==== Hide undesired map controls when offline ==== */
+  [title*="Drag Pegman"],
+  [title*="Show street map"],
+  [title*="Show satellite imagery"],
+  [title*="Show imagery"] {
+    display: none !important;
+  }
+
 
   /* ==== Loading/Error Modes ==== */
   .hide-map {
@@ -745,14 +805,6 @@
     height: auto !important;
     display: block;
     margin: 0.5em auto 0;
-  }
-
-  /* ==== Hide undesired map controls when offline ==== */
-  [title*="Drag Pegman"],
-  [title*="Show street map"],
-  [title*="Show satellite imagery"],
-  [title*="Show imagery"] {
-    display: none !important;
   }
 
 /* ====================== Modal Content ====================== */
