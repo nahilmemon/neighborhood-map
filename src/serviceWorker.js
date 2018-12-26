@@ -295,7 +295,7 @@ function updateReady(worker) {
  * Create the section that displays the update notification.
  */
 function createUpdateNotificationHTML() {
-  let updateSection = document.createElement('section');
+  let updateSection = document.createElement('div');
   updateSection.id = 'update-site-notification';
   updateSection.classList.add('service-worker-notification');
 
@@ -318,8 +318,9 @@ function createUpdateNotificationHTML() {
   updateSection.append(updateTextP);
   updateSection.append(updateDiv);
 
-  let firstDOMElement = document.querySelector('#root');
-  document.body.insertBefore(updateSection, firstDOMElement);
+  // let firstDOMElement = document.querySelector('#root');
+  // document.body.insertBefore(updateSection, firstDOMElement);
+  document.querySelector('#service-worker-notification-container').append(updateSection);
 }
 
 /**
@@ -346,7 +347,7 @@ function showUpdateNotificationHTML() {
  * Create the section that displays the currently offline notification.
  */
 function createCurrentlyOfflineModeNotificationHTML() {
-  let currentlyOfflineModeSection = document.createElement('section');
+  let currentlyOfflineModeSection = document.createElement('div');
   currentlyOfflineModeSection.id = 'currently-offline-notification';
   currentlyOfflineModeSection.classList.add('service-worker-notification');
 
@@ -360,14 +361,14 @@ function createCurrentlyOfflineModeNotificationHTML() {
   currentlyOfflineModeSection.append(offlineMessage);
   currentlyOfflineModeSection.append(dismissButton);
 
-  let firstDOMElement = document.querySelector('#root');
-  document.body.insertBefore(currentlyOfflineModeSection, firstDOMElement);
+  // let firstDOMElement = document.querySelector('#root');
+  // document.body.insertBefore(currentlyOfflineModeSection, firstDOMElement);
+  document.querySelector('#service-worker-notification-container').append(currentlyOfflineModeSection);
 }
 
 /**
  * Display a notification to the user that he/she is currently offline.
  * Dismiss will hide the notification.
- * Automatically hide the notification after a certain amount of time.
  */
 function displayCurrentlyOfflineModeNotification() {
   // Create the currently offline mode notification section to display
@@ -399,7 +400,7 @@ function deleteCurrentlyOfflineModeNotification() {
  * Create the section that displays the offline ready notification.
  */
 function createOfflineReadyNotificationHTML() {
-  let offlineReadySection = document.createElement('section');
+  let offlineReadySection = document.createElement('div');
   offlineReadySection.id = 'offline-ready-notification';
   offlineReadySection.classList.add('service-worker-notification');
 
@@ -413,14 +414,14 @@ function createOfflineReadyNotificationHTML() {
   offlineReadySection.append(offlineReadyMessage);
   offlineReadySection.append(dismissButton);
 
-  let firstDOMElement = document.querySelector('#root');
-  document.body.insertBefore(offlineReadySection, firstDOMElement);
+  // let firstDOMElement = document.querySelector('#root');
+  // document.body.insertBefore(offlineReadySection, firstDOMElement);
+  document.querySelector('#service-worker-notification-container').append(offlineReadySection);
 }
 
 /**
  * Display a notification to the user that he/she is currently offline.
  * Dismiss will hide the notification.
- * Automatically hide the notification after a certain amount of time.
  */
 function displayOfflineReadyNotification() {
   // Create the offline ready notification section to display
@@ -436,13 +437,6 @@ function displayOfflineReadyNotification() {
       return;
     }
   });
-  // Delete the offline ready notification html automatically after 10 sec.
-  setTimeout(() => {
-    const OFFLINE_READY_SECTION = document.getElementById('offline-ready-notification');
-    if (OFFLINE_READY_SECTION) {
-      deleteHTML(OFFLINE_READY_SECTION);
-    }
-  }, 10000);
 }
 
 /**

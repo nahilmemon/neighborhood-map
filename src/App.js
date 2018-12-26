@@ -239,6 +239,13 @@ class App extends Component {
 
     return (
       <Fragment>
+        <section
+          id="service-worker-notification-container"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          aria-relevant="all">
+        </section>
         <Header
           onSideBarButtonClick={this.handleSideBarButtonClick}
           onOpenModalButtonClick={this.handleOpenModalButtonClick}
