@@ -246,7 +246,7 @@ class App extends Component {
           showSideBar={this.state.showSideBar}
           showAboutModal={this.state.showAboutModal}
         />
-        <main>
+        <main aria-hidden={this.state.showAboutModal}>
           {this.state.showSideBar &&
             <SideBar
               locationsData={filteredLocations}

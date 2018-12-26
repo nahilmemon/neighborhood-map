@@ -27,7 +27,10 @@ class Header extends Component {
 
   render() {
     return (
-      <header className="header" aria-labelledby="site-heading">
+      <header
+        className="header"
+        aria-labelledby="site-heading"
+        aria-hidden={this.props.showAboutModal}>
         <button
           className="unstyled-button header-button header-search-button"
           type="button"

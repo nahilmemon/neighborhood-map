@@ -49,7 +49,7 @@ class AboutModal extends Component {
   handleKeyDownEvent(event) {
     // Close the modal if the user presses the ESCAPE key
     if (event.key === 'Escape') {
-      this.handleCloseButtonClick();
+      this.handleCloseModalButtonClick();
     }
 
     // Trap the focus within the modal if the user presses
