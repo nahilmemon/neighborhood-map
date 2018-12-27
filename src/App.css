@@ -484,13 +484,12 @@
     right: 0;
     bottom: 0;
     top: 0;
-    transition: all 0.25s ease-in-out;
   }
 
   .map div[tabindex="0"]:focus > div {
     outline: none !important;
     border: 5px solid var(--primary-color) !important;
-    transition: all 0.25s ease-in-out;
+    transition: border 0.25s ease-in-out;
   }
 
   /* ==== Map External Links ==== */
