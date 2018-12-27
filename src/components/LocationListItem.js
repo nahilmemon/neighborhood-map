@@ -49,6 +49,7 @@ class LocationListItem extends Component {
             className={buttonClassName}
             onClick={this.handleLocationListItemClick}
             value={location.id}
+            aria-describedby={`loc-btn-desc-${location.id}`}
             aria-pressed={this.props.currentlyFocusedLocationId === location.id}
             aria-haspopup="dialog"
             disabled>
@@ -58,6 +59,11 @@ class LocationListItem extends Component {
               className="tiny-loading-gif"
               src={loadingGif}
               alt="Waiting for Google Maps to load..." />
+            <p
+              className="hide"
+              id={`loc-btn-desc-${location.id}`}
+              >Click to open an info window with more information about this place.
+            </p>
           </button>
         </li>
       );
@@ -71,10 +77,17 @@ class LocationListItem extends Component {
             className={buttonClassName}
             onClick={this.handleLocationListItemClick}
             value={location.id}
+            aria-describedby={`loc-btn-desc-${location.id}`}
             aria-pressed={this.props.currentlyFocusedLocationId === location.id}
             aria-haspopup="dialog">
             <h4>{location.name}</h4>
             <p>{location.category}</p>
+            <p
+              className="hide"
+              id={`loc-btn-desc-${location.id}`}
+              aria-hidden="true"
+              >Click to open an info window with more information about this place.
+            </p>
           </button>
         </li>
       );

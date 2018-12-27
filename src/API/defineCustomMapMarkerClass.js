@@ -37,11 +37,20 @@ function defineCustomMapMarkerClass() {
     // Notes: events are bubbled up so that other actions can be performed
     // outside this class definition (e.g. in the MapContainer.js component).
     createMarkerHTML() {
-      this.markerButton = document.createElement("button");
+      this.markerButton = document.createElement('button');
       this.markerButton.setAttribute('type', 'button');
       this.markerButton.setAttribute('title', this.title);
-      this.markerButton.setAttribute('aria-label', `${this.title} Map Marker. Click for more information about this place.`);
+      this.markerButton.setAttribute('aria-label', `${this.title} Map Marker`);
+      this.markerButton.setAttribute('aria-pressed', false);
+      this.markerButton.setAttribute('aria-haspopup', 'dialog');
       this.markerButton.classList.add('unstyled-button', 'marker-button', 'marker-shape');
+
+      this.markerButton.innerHTML = `<p
+          id="marker-btn-desc-${this.id}"
+          class="hide"
+          aria-hidden="true">
+          Click to open an info window with more information about this place.</p>`;
+      this.markerButton.setAttribute('aria-describedby', `marker-btn-desc-${this.id}`);
 
       // Handle click event listener.
       this.google.maps.event.addDomListener(this.markerButton, "click", event => {
@@ -122,11 +131,13 @@ function defineCustomMapMarkerClass() {
     // Make the marker button appear focused
     setFocusedAppearance() {
       this.markerButton.classList.add('marker-button-focused');
+      this.markerButton.setAttribute('aria-pressed', true);
     }
 
     // Make the marker button appear not-focused/blurred
     setBlurredAppearance() {
       this.markerButton.classList.remove('marker-button-focused');
+      this.markerButton.setAttribute('aria-pressed', false);
     }
 
     focusMarkerButtonNode() {
