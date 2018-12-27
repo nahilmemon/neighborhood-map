@@ -14,7 +14,8 @@ This single page web app features a list view and map view depicting information
 ## How to Run the Web App
 ### Production Mode
 #### Option A
-1. Go [here]() to view the app in your browser.
+1. Go [here](http://nahilmemon-neighborhood-map.surge.sh/) to view the app in your browser.
+    * Note: This version does not enable a service worker.
 #### Option B
 1. Download the repository.
 2. Open a command prompt terminal and cd (change into the directory) where the repository has been saved.
@@ -26,7 +27,8 @@ This single page web app features a list view and map view depicting information
 5. Start the production server using the following command:
     * `serve -s build -p 8000`
     * Note: if you don't have serve already installed, then you can install serve using the following command: `npm install -g serve`
-6. While the server is running in the background, browse the website at: [http://localhost:8000](http://localhost:8000)
+6. While the server is running in the background, browse the website at: [http://localhost:8000](http://localhost:8000).
+    * Note: This version does enable a service worker.
 ### Development Mode
 1. Download the repository.
 2. Open a command prompt terminal and cd (change into the directory) where the repository has been saved.
@@ -35,7 +37,8 @@ This single page web app features a list view and map view depicting information
     * Note: node.js can be downloaded [here](https://nodejs.org/en/download/) and npm can subsequently be installed using the instructions found [here](https://www.npmjs.com/get-npm)
 4. Start the development server using the following command:
     * `npm start`
-5. While the server is running in the background, browse the website at: [http://localhost:3000](http://localhost:3000)
+5. While the server is running in the background, browse the website at: [http://localhost:3000](http://localhost:3000).
+    * Note: This version does not enable a service worker.
 
 ## Minimum Requirements
 The minimum requirements of this project involved:
@@ -101,7 +104,6 @@ Extra features that were added to the web app included doing the following:
     - Underlining the text in buttons, text input boxes, and select dropdowns upon hover/focus.
     - Changing the stroke thickness of  buttons, text input boxes, and select dropdowns upon hover/focus.
   * Ensuring that all content-related images come with suitable alternate text which properly describes the contents of these images.
-  * Ensuring that all content-related inline SVGs come with suitable titles which properly describe the contents of these SVGs.
   * Ensuring that all headings are detailed so that their purpose can be easily when headings are used as stand alone landmarks on a page by screen readers.
   * Ensuring that all links have a descriptive text or label so that their purpose can be easily when links are used as stand alone landmarks on a page by screen readers.
   * Using semantic elements wherever appropriate.
@@ -112,16 +114,18 @@ Extra features that were added to the web app included doing the following:
 * Made the Google Maps instance more accessible by:
   * Creating a custom map marker class based on the Google Maps API instead of using the built in map markers.
     * This was because the map markers were inaccessible. A user can click on Google's built in map markers to open info windows, but a user cannot access these map markers with a keyboard.
-    * The custom map marker creates the markers as SVG buttons so that they are easily accessible by both mouse and keyboard and so that semantic elements are used instead of just plain images.
+    * The custom map marker creates the markers as buttons, shaped by CSS, so that they are easily accessible by both mouse and keyboard and so that semantic elements are used instead of just plain images.
   * Creating a custom map info window class based on the Google Maps API instead of using the built in info windows.
     * This was because:
-      * Opening the info window does not immediately move focus into the info window.
       * The order of the contents inside the info window was a little illogical when looking at the info window in the DOM.
       * There was a lack of appropriate semantic elements and ARIA descriptors regarding the info window and its contents.
+      * The location of the info window in the DOM was far away from the associated map marker, making it difficult for the user to tab into the info window.
     * The custom info window:
       * Moves focus immediately into the info window if it was opened by clicking on a map marker.
       * Uses a DOM order that matches the visual order of the contents inside the info window.
       * Uses semantic elements and appropriate ARIA descriptors to describe the info window and its contents.
+      * Shifts the location of the info window in the DOM to be immediately after the associated map marker, making the info window contents the next tabbable elements after the associated map marker.
+      * Is created as a polite, live region so that screen reader users can be made aware of content changes regardless of whether the info window has been opened by triggering the map marker buttons or the location list item buttons in the sidebar.
 * Added a modal to display helpful information about the web app with some useful links for more information.
 * Added a loading icon while the Google Maps API's script is being retrieved.
 * Added two different options to filter the location list items and map markers by name or by location category.
