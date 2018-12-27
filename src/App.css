@@ -513,7 +513,7 @@
   /* ==== Map External Links ==== */
   a[href*="google.com"]:hover,
   a[href*="google.com"]:focus {
-    box-shadow: 0px 0px 0px 3px var(--primary-color-overlay);
+    box-shadow: 0px 0px 0px 3px var(--primary-dark-color-overlay);
     transition: all 0.25s ease-in-out;
     transition-property: outline, box-shadow;
   }
@@ -536,7 +536,7 @@
 
   a[title*="Open this area in Google Maps"]:hover img,
   a[title*="Open this area in Google Maps"]:focus img {
-    box-shadow: 0px 0px 0px 3px var(--primary-color-overlay);
+    box-shadow: 0px 0px 0px 3px var(--primary-dark-color-overlay);
     transition: all 0.25s ease-in-out;
     transition-property: outline, box-shadow;
   }
@@ -549,7 +549,7 @@
   [title*="Zoom out"]:hover,
   [title*="Zoom out"]:focus {
     outline: none !important;
-    box-shadow: 0px 0px 0px 3px var(--primary-color-overlay) !important;
+    box-shadow: 0px 0px 0px 3px var(--primary-dark-color-overlay) !important;
     transition: all 0.25s ease-in-out;
     transition-property: outline, box-shadow;
   }

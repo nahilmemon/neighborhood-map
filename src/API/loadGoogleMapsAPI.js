@@ -18,10 +18,7 @@ export default function loadGoogleMapsAPI() {
       }
       // Create a script tag to load the Google Maps API
       const script = document.createElement("script");
-      // developer key
-      const API_KEY = 'AIzaSyB9T_T9LeblH4LOdxALGEExB8mRxQ21PcQ';
-      // production key
-      // const API_KEY = 'AIzaSyBewfjq8ySJBIqlV8NlTRq24smNvaA1tT4';
+      const API_KEY = 'AIzaSyBewfjq8ySJBIqlV8NlTRq24smNvaA1tT4';
       // Note: the callback refers to the window.resolveGoogleMapsPromise callback above.
       // Actual initialization of the map and subsequent actions will take place in
       // the React component which uses loadGoogleMapsAPI()
