@@ -78,6 +78,9 @@ function defineCustomInfoWindowClass() {
 
       this.infoWindowContainer = document.createElement('article');
       this.infoWindowContainer.classList.add('info-window-container');
+      this.infoWindowContainer.setAttribute('aria-live', 'polite');
+      this.infoWindowContainer.setAttribute('aria-relevant', 'additions text');
+      this.infoWindowContainer.setAttribute('aria-atomic', true);
       this.infoWindowContainer.appendChild(infoWindowContainerAnchorTipDiv);
 
       // Handle close button click event listener
@@ -173,6 +176,7 @@ function defineCustomInfoWindowClass() {
 
       this.infoWindowContainer.querySelector('.info-window-contents-header-heading').innerText = newTitle;
       this.infoWindowContainer.querySelector('.info-window-contents-body').innerHTML = newContent;
+      this.infoWindowContainer.querySelector('.button-close-info-window').setAttribute('aria-label', `Close info window describing ${newTitle}`);
     }
 
     // Change the contents of the info window

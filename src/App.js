@@ -242,9 +242,9 @@ class App extends Component {
         <section
           id="service-worker-notification-container"
           role="alert"
-          aria-live="assertive"
+          aria-live="polite"
           aria-atomic="true"
-          aria-relevant="all">
+          aria-relevant="additions text">
         </section>
         <Header
           onSideBarButtonClick={this.handleSideBarButtonClick}
