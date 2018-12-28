@@ -504,6 +504,7 @@ class MapContainer extends Component {
             id="map"
             className="map hide-map"
             name="map"
+            role="application"
           ></map>
           <img
             className="loading-gif"
@@ -524,6 +525,7 @@ class MapContainer extends Component {
             id="map"
             className="map"
             name="map"
+            role="application"
           ></map>
         </section>
       );

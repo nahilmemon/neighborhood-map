@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // Components
 import LocationListItem from './LocationListItem.js';
+// Images
+import loadingGif from '../icons/loading.gif';
 
 class SearchResultsList extends Component {
   static propTypes = {
@@ -24,14 +26,17 @@ class SearchResultsList extends Component {
   }
 
   render() {
-    return (
-      <section>
-        <h2
-          id="search-results-heading"
-          className="side-bar-heading">
-          <span className="sr-only">Filtered </span>Locations<span className="sr-only">Results</span>
-        </h2>
-        <ul className="search-results">
+    // If the map hasn't loaded yet, then show a loading gif in the sidebar
+    // instead of the location list item buttons since the buttons can't be
+    // clicked on until the map has fully loaded.
+    let listResults;
+    if (this.props.isMapLoaded === false) {
+      listResults = <img
+        className="loading-gif"
+        src={loadingGif}
+        alt="Loading Google Maps..." />
+    } else {
+      listResults = <ul className="search-results">
           {this.props.locationsData.map((location) => {
             return(
               <LocationListItem
@@ -43,7 +48,17 @@ class SearchResultsList extends Component {
               />
             );
           })}
-        </ul>
+        </ul>;
+    }
+
+    return (
+      <section>
+        <h2
+          id="search-results-heading"
+          className="side-bar-heading">
+          <span className="sr-only">Filtered </span>Locations<span className="sr-only">Results</span>
+        </h2>
+        {listResults}
       </section>
     );
   }

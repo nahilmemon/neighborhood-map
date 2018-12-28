@@ -39,59 +39,27 @@ class LocationListItem extends Component {
       "unstyled-button search-results-entry search-results-entry-selected" :
       "unstyled-button search-results-entry";
 
-    // Disable the button if the map, its markers, and the info window haven't
-    // fully loaded yet
-    if (this.props.isMapLoaded === false) {
-      return (
-        <li>
-          {/*search-results-entry-selected*/}
-          <button
-            className={buttonClassName}
-            onClick={this.handleLocationListItemClick}
-            value={location.id}
-            aria-describedby={`loc-btn-desc-${location.id}`}
-            aria-pressed={this.props.currentlyFocusedLocationId === location.id}
-            aria-haspopup="dialog"
-            disabled>
-            <h4>{location.name}</h4>
-            <p>{location.category}</p>
-            <img
-              className="tiny-loading-gif"
-              src={loadingGif}
-              alt="Waiting for Google Maps to load..." />
-            <p
-              className="hide"
-              id={`loc-btn-desc-${location.id}`}
-              >Click to open an info window with more information about this place.
-            </p>
-          </button>
-        </li>
-      );
-    }
-    // Otherwise, enable the button
-    else {
-      return (
-        <li>
-          {/*search-results-entry-selected*/}
-          <button
-            className={buttonClassName}
-            onClick={this.handleLocationListItemClick}
-            value={location.id}
-            aria-describedby={`loc-btn-desc-${location.id}`}
-            aria-pressed={this.props.currentlyFocusedLocationId === location.id}
-            aria-haspopup="dialog">
-            <h4>{location.name}</h4>
-            <p>{location.category}</p>
-            <p
-              className="hide"
-              id={`loc-btn-desc-${location.id}`}
-              aria-hidden="true"
-              >Click to open an info window with more information about this place.
-            </p>
-          </button>
-        </li>
-      );
-    }
+    return (
+      <li>
+        {/*search-results-entry-selected*/}
+        <button
+          className={buttonClassName}
+          onClick={this.handleLocationListItemClick}
+          value={location.id}
+          aria-describedby={`loc-btn-desc-${location.id}`}
+          aria-pressed={this.props.currentlyFocusedLocationId === location.id}
+          aria-haspopup="dialog">
+          <h4>{location.name}</h4>
+          <p>{location.category}</p>
+          <p
+            className="hide"
+            id={`loc-btn-desc-${location.id}`}
+            aria-hidden="true"
+            >Click to open an info window with more information about this place.
+          </p>
+        </button>
+      </li>
+    );
   }
 }
 
